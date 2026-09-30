@@ -1083,7 +1083,7 @@
                         tb.innerHTML = salesGlobalList.map((s, index) => {
                             let itemsArr = [];
                             try {
-                                itemsArr = typeof s.itemsJson === 'string' ? JSON.parse(s.itemsJson) : s.itemsJson;
+                                itemsArr = typeof s.items === 'string' ? JSON.parse(s.items) : s.items;
                             } catch (e) {
                                 itemsArr = [];
                             }
@@ -1097,7 +1097,7 @@
                                     <td>${escapeHtml(s.date)}</td>
                                     <td>${escapeHtml(s.party)}</td>
                                     <td>${itemSummary}</td>
-                                    <td style="color:#10B981;font-weight:bold;">₹ ${Number(s.total || 0).toFixed(2)}</td>
+                                    <td style="color:#10B981;font-weight:bold;">₹ ${Number(s.grandTotal || 0).toFixed(2)}</td>
                                     <td>
                                         <button class="btn-invoice" onclick="generateInvoicePDF(${index})">
                                             <i class="fa-solid fa-file-pdf"></i> Invoice
@@ -1167,7 +1167,7 @@
             const exportData = salesGlobalList.map((sale, index) => {
                 let itemsArr = [];
                 try {
-                    itemsArr = typeof sale.itemsJson === 'string' ? JSON.parse(sale.itemsJson) : sale.itemsJson;
+                    itemsArr = typeof sale.items === 'string' ? JSON.parse(sale.items) : sale.items;
                 } catch (error) {}
                 const itemSummary = Array.isArray(itemsArr) ? itemsArr.map(item => `${item.name || 'Item'} (Qty: ${item.qty || 1})`).join(', ') : '';
                 return {
@@ -1176,7 +1176,7 @@
                     'Date': sale.date || '',
                     'Party Name': sale.party || '',
                     'Items': itemSummary,
-                    'Grand Total': Number(sale.total) || 0
+                    'Grand Total': Number(sale.grandTotal) || 0
                 };
             });
             createExcelFile(exportData, 'Total Sales', `Total_Sales_${new Date().toISOString().slice(0, 10)}.xlsx`);
@@ -1214,7 +1214,7 @@
                 const invNo = String(saleRecord.invoiceNo || '');
                 const date = String(saleRecord.date || '');
                 const partyName = String(saleRecord.party || '');
-                const grandTotal = parseFloat(saleRecord.total) || 0;
+                const grandTotal = parseFloat(saleRecord.grandTotal) || 0;
 
                 let pInfo = partiesGlobalList.find(p => String(p.name).trim() === partyName.trim());
                 if (!pInfo) pInfo = { address: 'Surajkund Road, Meerut', mobile: 'N/A', pincode: '250004' };
@@ -1225,7 +1225,7 @@
 
                 let itemsArr = [];
                 try {
-                    itemsArr = typeof saleRecord.itemsJson === 'string' ? JSON.parse(saleRecord.itemsJson) : saleRecord.itemsJson;
+                    itemsArr = typeof saleRecord.items === 'string' ? JSON.parse(saleRecord.items) : saleRecord.items;
                 } catch (e) {
                     itemsArr = [];
                 }

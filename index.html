@@ -4,51 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YDV Sports Mrt</title>
-  <link rel="icon" href="https://i.postimg.cc/PNxvDXKY/image.png">
-
-    <!-- jsPDF Library for PDF Generation -->
+    <link rel="icon" href="https://i.postimg.cc/PNxvDXKY/image.png">
+    
+    <!-- jsPDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-    <!-- Font Awesome for Professional Icons -->
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- SheetJS Excel Export -->
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
         body {
             background: linear-gradient(rgba(10, 20, 35, 0.8), rgba(10, 20, 35, 0.8)), url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=1950&auto=format&fit=crop') no-repeat center center fixed;
-            background-size: cover; min-height: 100vh; display: flex; justify-content: center; align-items: center; color: white;
+            background-size: cover;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
         }
-
         .glass-panel {
-            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 40px; box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
         }
-
-        /* Views */
         #login-view { width: 100%; max-width: 450px; }
         #dashboard-view, #party-view, #item-view, #advance-view, #totalsale-view { display: none; width: 100%; max-width: 1000px; }
-
         .logo-container { text-align: center; margin-bottom: 30px; }
         .logo-container img { width: 90px; height: 90px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); object-fit: cover; background: white; }
         .logo-container h1 { font-size: 28px; font-weight: 700; margin-top: 15px; }
         .logo-container p { font-size: 14px; color: #b3b3b3; margin-top: 5px; }
-
         .input-group { margin-bottom: 20px; position: relative; }
         .input-group label { display: block; font-size: 13px; margin-bottom: 8px; color: #ccc; }
-        .input-group input, .input-group select {
-            width: 100%; padding: 12px 15px; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 8px; color: white; font-size: 15px; outline: none; transition: 0.3s ease;
-        }
+        .input-group input, .input-group select { width: 100%; padding: 12px 15px; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; font-size: 15px; outline: none; transition: 0.3s ease; }
         .input-group input:focus, .input-group select:focus { border-color: #28a745; background: rgba(0, 0, 0, 0.4); }
         .input-group select option { background: #1a202c; color: white; }
         .input-icon { position: absolute; bottom: 12px; left: 12px; color: #aaa; font-size: 16px; }
         .input-with-icon { padding-left: 40px !important; }
-
         .btn { width: 100%; padding: 14px; border: none; border-radius: 8px; background: #10B981; color: white; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 8px; }
         .btn:hover { background: #059669; }
-        
+        .btn:disabled { opacity: 0.65; cursor: not-allowed; }
         .dashboard-header, .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; }
         .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
         .kpi-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 25px; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; }
@@ -56,43 +66,54 @@
         .kpi-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
         .kpi-title i { color: #10B981; font-size: 20px; }
         .kpi-desc { font-size: 13px; color: #aaa; }
-
         .table-container { width: 100%; max-height: 500px; overflow-y: auto; background: rgba(0, 0, 0, 0.2); border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); }
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th, td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; }
-        th { background: rgba(255,255,255,0.05); font-weight: 600; color: #ccc; position: sticky; top: 0; z-index: 1;}
+        th { background: rgba(255,255,255,0.05); font-weight: 600; color: #ccc; position: sticky; top: 0; z-index: 1; }
         td { color: #eee; }
         tr:hover td { background: rgba(255,255,255,0.02); }
-
         .btn-edit { background: #f59e0b; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; margin-right: 5px; }
         .btn-action { background: #3b82f6; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; }
-        .btn-invoice { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px;}
-        .btn-back { background: transparent; color: #ccc; border: 1px solid #ccc; padding: 8px 15px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 6px;}
+        .btn-invoice { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
+        .btn-export { background: #217346; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 7px; transition: 0.3s; }
+        .btn-export:hover { background: #185c37; }
+        .btn-back { background: transparent; color: #ccc; border: 1px solid #ccc; padding: 8px 15px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
         .btn-back:hover { background: rgba(255,255,255,0.1); color: white; }
-
+        .page-actions { display: flex; align-items: center; gap: 10px; }
         .modal { display: none; position: fixed; z-index: 10; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
-        .modal-content { background: #1a202c; border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 30px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto;}
+        .modal-content { background: #1a202c; border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 30px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
         .close-btn { background: transparent; border: none; color: #aaa; font-size: 24px; cursor: pointer; }
+        .close-btn:hover { color: white; }
         .loader { display: none; text-align: center; padding: 20px; color: #10B981; }
         #login-error { display: none; background: rgba(220, 53, 69, 0.2); color: #ff6b6b; padding: 12px; border-radius: 8px; font-size: 14px; margin-bottom: 20px; border: 1px solid rgba(220, 53, 69, 0.3); text-align: center; }
-        
         .forgot-pass { display: block; text-align: right; font-size: 13px; color: #ccc; text-decoration: none; margin-bottom: 20px; transition: 0.3s; }
         .forgot-pass:hover { color: white; text-decoration: underline; }
-
-        .order-cart { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .order-cart { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-bottom: 20px; overflow-x: auto; }
         .order-cart table th, .order-cart table td { padding: 8px; font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .remove-item { color: #ef4444; cursor: pointer; font-weight: bold; background: none; border: none; }
-        .flex-row { display: flex; gap: 10px; align-items: flex-end; margin-bottom: 20px;}
+        .flex-row { display: flex; gap: 10px; align-items: flex-end; margin-bottom: 20px; }
         .flex-row .input-group { margin-bottom: 0; flex: 1; }
-
         .eye-icon { position: absolute; right: 15px; bottom: 12px; cursor: pointer; color: #aaa; font-size: 16px; transition: 0.3s; }
         .eye-icon:hover { color: white; }
+        
+        @media (max-width: 700px) {
+            body { align-items: flex-start; padding: 15px; }
+            .glass-panel { padding: 20px; }
+            .page-header, .dashboard-header { flex-wrap: wrap; gap: 12px; }
+            .page-header h2 { font-size: 18px; order: 2; }
+            .page-actions { width: 100%; justify-content: flex-end; }
+            .flex-row { flex-direction: column; align-items: stretch; }
+            .flex-row .input-group { width: 100% !important; }
+            .flex-row .btn-action { width: 100%; }
+            .table-container { overflow-x: auto; }
+            table { min-width: 700px; }
+        }
     </style>
 </head>
-<body>
 
-    <!-- 1. LOGIN VIEW -->
+<body>
+    <!-- LOGIN VIEW -->
     <div id="login-view" class="glass-panel">
         <div class="logo-container">
             <img src="https://i.postimg.cc/PNxvDXKY/image.png" alt="YDV Sports Mrt Logo">
@@ -111,13 +132,11 @@
             <input type="password" id="password" class="input-with-icon" placeholder="Enter Password">
             <span class="eye-icon" onclick="togglePassword()"><i class="fa-solid fa-eye" id="eye-icon"></i></span>
         </div>
-        
         <a href="#" class="forgot-pass">Forgot password?</a>
-        
         <button class="btn" id="loginBtn" onclick="doLogin()">BOWL EM OUT (LOGIN) <i class="fa-solid fa-arrow-right"></i></button>
     </div>
 
-    <!-- 2. DASHBOARD VIEW -->
+    <!-- DASHBOARD -->
     <div id="dashboard-view" class="glass-panel">
         <div class="dashboard-header">
             <h2>Welcome to YDV Sports Dashboard</h2>
@@ -125,92 +144,117 @@
         </div>
         <div class="kpi-grid">
             <div class="kpi-card" onclick="openSaleEntry()">
-                <div class="kpi-title"><i class="fa-solid fa-cart-shopping"></i> SALE ENTRY</div><div class="kpi-desc">Record new match sales</div>
+                <div class="kpi-title"><i class="fa-solid fa-cart-shopping"></i> SALE ENTRY</div>
+                <div class="kpi-desc">Record new match sales</div>
             </div>
             <div class="kpi-card" onclick="openTotalSales()">
-                <div class="kpi-title"><i class="fa-solid fa-chart-line"></i> TOTAL SALE</div><div class="kpi-desc">View invoices & sales</div>
+                <div class="kpi-title"><i class="fa-solid fa-chart-line"></i> TOTAL SALE</div>
+                <div class="kpi-desc">View invoices & sales</div>
             </div>
             <div class="kpi-card" onclick="openPartyMaster()">
-                <div class="kpi-title"><i class="fa-solid fa-users"></i> PARTY MASTER</div><div class="kpi-desc">Manage clients & vendors</div>
+                <div class="kpi-title"><i class="fa-solid fa-users"></i> PARTY MASTER</div>
+                <div class="kpi-desc">Manage clients & vendors</div>
             </div>
             <div class="kpi-card" onclick="openItemMaster()">
-                <div class="kpi-title"><i class="fa-solid fa-box-open"></i> ITEM MASTER</div><div class="kpi-desc">Manage sports inventory</div>
+                <div class="kpi-title"><i class="fa-solid fa-box-open"></i> ITEM MASTER</div>
+                <div class="kpi-desc">Manage sports inventory</div>
             </div>
             <div class="kpi-card" onclick="openAdvanceReceived()">
-                <div class="kpi-title"><i class="fa-solid fa-money-bill-wave"></i> ADVANCE RECEIVED</div><div class="kpi-desc">Track advances & orders</div>
+                <div class="kpi-title"><i class="fa-solid fa-money-bill-wave"></i> ADVANCE RECEIVED</div>
+                <div class="kpi-desc">Track advances & orders</div>
             </div>
         </div>
     </div>
 
-    <!-- 3. PARTY MASTER VIEW -->
+    <!-- PARTY MASTER -->
     <div id="party-view" class="glass-panel">
         <div class="page-header">
             <button class="btn-back" onclick="backToDashboard()"><i class="fa-solid fa-arrow-left"></i> Back</button>
             <h2>PARTY MASTER</h2>
-            <button class="btn" style="width: auto; padding: 10px 20px;" onclick="openPartyModal('add')"><i class="fa-solid fa-plus"></i> Add New Party</button>
+            <div class="page-actions">
+                <button class="btn-export" onclick="exportPartyExcel()"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
+                <button class="btn" style="width:auto;padding:10px 20px;" onclick="openPartyModal('add')"><i class="fa-solid fa-plus"></i> Add New Party</button>
+            </div>
         </div>
         <div id="party-loader" class="loader"><i class="fa-solid fa-spinner fa-spin"></i> Loading parties...</div>
         <div class="table-container" id="party-table-container">
             <table>
-                <thead><tr><th>Party Name</th><th>Mob. No</th><th>State</th><th>Full Address</th><th>Pin Code</th><th>Action</th></tr></thead>
+                <thead>
+                    <tr>
+                        <th>Party Name</th><th>Mob. No</th><th>State</th><th>Full Address</th><th>Pin Code</th><th>Action</th>
+                    </tr>
+                </thead>
                 <tbody id="party-list"></tbody>
             </table>
         </div>
     </div>
 
-    <!-- 4. ITEM MASTER VIEW -->
+    <!-- ITEM MASTER -->
     <div id="item-view" class="glass-panel">
         <div class="page-header">
             <button class="btn-back" onclick="backToDashboard()"><i class="fa-solid fa-arrow-left"></i> Back</button>
             <h2>ITEM MASTER</h2>
-            <button class="btn" style="width: auto; padding: 10px 20px;" onclick="openItemModal('add')"><i class="fa-solid fa-plus"></i> Add New Item</button>
+            <div class="page-actions">
+                <button class="btn-export" onclick="exportItemExcel()"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
+                <button class="btn" style="width:auto;padding:10px 20px;" onclick="openItemModal('add')"><i class="fa-solid fa-plus"></i> Add New Item</button>
+            </div>
         </div>
         <div id="item-loader" class="loader"><i class="fa-solid fa-spinner fa-spin"></i> Loading items...</div>
         <div class="table-container" id="item-table-container">
             <table>
-                <thead><tr><th>Item Name</th><th>MRP</th><th>Action</th></tr></thead>
+                <thead>
+                    <tr><th>Item Name</th><th>MRP</th><th>Action</th></tr>
+                </thead>
                 <tbody id="item-list"></tbody>
             </table>
         </div>
     </div>
 
-    <!-- 5. ADVANCE RECEIVED VIEW -->
+    <!-- ADVANCE RECEIVED -->
     <div id="advance-view" class="glass-panel">
         <div class="page-header">
             <button class="btn-back" onclick="backToDashboard()"><i class="fa-solid fa-arrow-left"></i> Back</button>
             <h2>ADVANCE RECEIVED</h2>
-            <button class="btn" style="width: auto; padding: 10px 20px; background: #3b82f6;" onclick="openAdvanceModal()"><i class="fa-solid fa-plus"></i> Add Advance</button>
+            <button class="btn" style="width:auto;padding:10px 20px;background:#3b82f6;" onclick="openAdvanceModal()"><i class="fa-solid fa-plus"></i> Add Advance</button>
         </div>
         <div id="advance-loader" class="loader"><i class="fa-solid fa-spinner fa-spin"></i> Loading advances...</div>
         <div class="table-container" id="advance-table-container">
             <table>
-                <thead><tr><th>Party Name</th><th>Advance Amount</th><th>Action</th></tr></thead>
+                <thead>
+                    <tr><th>Party Name</th><th>Advance Amount</th><th>Action</th></tr>
+                </thead>
                 <tbody id="advance-list"></tbody>
             </table>
         </div>
     </div>
 
-    <!-- 6. TOTAL SALE VIEW -->
+    <!-- TOTAL SALES -->
     <div id="totalsale-view" class="glass-panel">
         <div class="page-header">
             <button class="btn-back" onclick="backToDashboard()"><i class="fa-solid fa-arrow-left"></i> Back</button>
             <h2>TOTAL SALES & INVOICES</h2>
+            <button class="btn-export" onclick="exportSalesExcel()"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
         </div>
         <div id="sales-loader" class="loader"><i class="fa-solid fa-spinner fa-spin"></i> Loading sales...</div>
         <div class="table-container" id="sales-table-container">
             <table>
-                <thead><tr><th>Invoice No</th><th>Date</th><th>Party Name</th><th>Items</th><th>Grand Total</th><th>Action</th></tr></thead>
+                <thead>
+                    <tr><th>Invoice No</th><th>Date</th><th>Party Name</th><th>Items</th><th>Grand Total</th><th>Action</th></tr>
+                </thead>
                 <tbody id="sales-list"></tbody>
             </table>
         </div>
     </div>
 
-    <!-- MODALS -->
-    <!-- Party Modal -->
+    <!-- PARTY MODAL -->
     <div id="party-modal" class="modal">
         <div class="modal-content">
-            <div class="modal-header"><h2 id="party-modal-title">Add New Party</h2><button class="close-btn" onclick="closeModal('party-modal')"><i class="fa-solid fa-times"></i></button></div>
-            <input type="hidden" id="p-original-name"><input type="hidden" id="p-action-type">
+            <div class="modal-header">
+                <h2 id="party-modal-title">Add New Party</h2>
+                <button class="close-btn" onclick="closeModal('party-modal')"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <input type="hidden" id="p-original-name">
+            <input type="hidden" id="p-action-type">
             <div class="input-group"><label>Party Name</label><input type="text" id="p-name"></div>
             <div class="input-group"><label>Mob. No</label><input type="text" id="p-mobile"></div>
             <div class="input-group"><label>State</label><input type="text" id="p-state"></div>
@@ -220,147 +264,154 @@
         </div>
     </div>
 
-    <!-- Item Modal -->
+    <!-- ITEM MODAL -->
     <div id="item-modal" class="modal">
         <div class="modal-content">
-            <div class="modal-header"><h2 id="item-modal-title">Add New Item</h2><button class="close-btn" onclick="closeModal('item-modal')"><i class="fa-solid fa-times"></i></button></div>
-            <input type="hidden" id="i-original-name"><input type="hidden" id="i-action-type">
+            <div class="modal-header">
+                <h2 id="item-modal-title">Add New Item</h2>
+                <button class="close-btn" onclick="closeModal('item-modal')"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <input type="hidden" id="i-original-name">
+            <input type="hidden" id="i-action-type">
             <div class="input-group"><label>Item Name</label><input type="text" id="i-name"></div>
             <div class="input-group"><label>MRP (₹)</label><input type="number" id="i-mrp"></div>
             <button class="btn" id="itemSubmitBtn" onclick="submitItem()"><i class="fa-solid fa-save"></i> Save Item</button>
         </div>
     </div>
 
-    <!-- Add Advance Modal -->
+    <!-- ADD ADVANCE MODAL -->
     <div id="add-advance-modal" class="modal">
         <div class="modal-content">
-            <div class="modal-header"><h2>Add Advance Entry</h2><button class="close-btn" onclick="closeModal('add-advance-modal')"><i class="fa-solid fa-times"></i></button></div>
+            <div class="modal-header">
+                <h2>Add Advance Entry</h2>
+                <button class="close-btn" onclick="closeModal('add-advance-modal')"><i class="fa-solid fa-times"></i></button>
+            </div>
             <div class="input-group">
                 <label>Select Party</label>
                 <select id="adv-party-select"><option value="">-- Select Party --</option></select>
             </div>
-            <div class="input-group"><label>Advance Amount (₹)</label><input type="number" id="adv-amt-input" placeholder="Enter Amount"></div>
+            <div class="input-group">
+                <label>Advance Amount (₹)</label>
+                <input type="number" id="adv-amt-input" placeholder="Enter Amount">
+            </div>
             <button class="btn" id="advSubmitBtn" onclick="submitAdvance('addAdvance')"><i class="fa-solid fa-check"></i> Save Advance</button>
         </div>
     </div>
 
-    <!-- Settle Amount Modal -->
+    <!-- SETTLE AMOUNT MODAL -->
     <div id="settle-amount-modal" class="modal">
         <div class="modal-content">
-            <div class="modal-header"><h2>Settle Amount</h2><button class="close-btn" onclick="closeModal('settle-amount-modal')"><i class="fa-solid fa-times"></i></button></div>
-            <div class="input-group"><label>Party Name</label><input type="text" id="settle-party" readonly style="background: rgba(0,0,0,0.5); color:#888;"></div>
-            <div class="input-group"><label>Amount to Settle / Add (₹)</label><input type="number" id="settle-amt-input" placeholder="Enter Amount Paid"></div>
+            <div class="modal-header">
+                <h2>Settle Amount</h2>
+                <button class="close-btn" onclick="closeModal('settle-amount-modal')"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="input-group">
+                <label>Party Name</label>
+                <input type="text" id="settle-party" readonly style="background:rgba(0,0,0,0.5);color:#888;">
+            </div>
+            <div class="input-group">
+                <label>Amount to Settle / Add (₹)</label>
+                <input type="number" id="settle-amt-input" placeholder="Enter Amount Paid">
+            </div>
             <button class="btn" id="settleSubmitBtn" onclick="submitSettle()"><i class="fa-solid fa-check"></i> Settle Amount</button>
         </div>
     </div>
 
-    <!-- SALE ENTRY MODAL (DIRECT SALE - NO ADVANCE DEDUCTION) -->
+    <!-- SALE ENTRY MODAL -->
     <div id="sale-entry-modal" class="modal">
-        <div class="modal-content" style="max-width: 700px;">
+        <div class="modal-content" style="max-width:700px;">
             <div class="modal-header">
                 <h2>Sale Entry</h2>
-                <button class="close-btn" onclick="closeModal('sale-entry-modal')"><i class="fa-solid fa-times"></i></button>
+                <button class="close-btn" onclick="closeSaleEntryModal()"><i class="fa-solid fa-times"></i></button>
             </div>
-
             <div class="input-group">
                 <label>Party Name</label>
-                <select id="sale-party">
-                    <option value="">-- Select Party --</option>
-                </select>
+                <select id="sale-party"><option value="">-- Select Party --</option></select>
             </div>
-
             <div class="flex-row">
-                <div class="input-group" style="flex: 2;">
+                <div class="input-group" style="flex:2;">
                     <label>Select Product</label>
-                    <select id="sale-item">
-                        <option value="">-- Select Product --</option>
-                    </select>
+                    <select id="sale-item"><option value="">-- Select Product --</option></select>
                 </div>
-                <div class="input-group" style="flex: 1;">
+                <div class="input-group" style="flex:1;">
                     <label>Qty</label>
                     <input type="number" id="sale-qty" value="1" min="1" step="1">
                 </div>
-                <button class="btn-action" style="padding: 12px; height: 46px; margin-bottom: 2px;" onclick="addItemToSale()">
-                    <i class="fa-solid fa-plus"></i> Add
-                </button>
+                <button class="btn-action" style="padding:12px;height:46px;margin-bottom:2px;" onclick="addItemToSale()"><i class="fa-solid fa-plus"></i> Add</button>
             </div>
-
             <div class="order-cart">
-                <h3 style="font-size: 14px; margin-bottom: 10px; color: #ccc;">Sale Items:</h3>
+                <h3 style="font-size:14px;margin-bottom:10px;color:#ccc;">Sale Items:</h3>
                 <table>
-                    <thead>
-                        <tr><th>Product Name</th><th>MRP</th><th>Qty</th><th>Total</th><th></th></tr>
-                    </thead>
+                    <thead><tr><th>Product Name</th><th>MRP</th><th>Qty</th><th>Total</th><th></th></tr></thead>
                     <tbody id="sale-cart-list"></tbody>
                 </table>
-                <div style="text-align:right; margin-top:15px; font-size:18px; font-weight:bold;">
-                    Grand Total: ₹ <span id="sale-grand-total">0</span>
-                </div>
+                <div style="text-align:right;margin-top:15px;font-size:18px;font-weight:bold;">Grand Total: ₹ <span id="sale-grand-total">0</span></div>
             </div>
-
-            <button class="btn" id="saleSubmitBtn" onclick="submitSale()" style="margin-top:15px;">
-                <i class="fa-solid fa-check"></i> Save Sale
-            </button>
+            <button class="btn" id="saleSubmitBtn" onclick="submitSale()" style="margin-top:15px;"><i class="fa-solid fa-check"></i> Save Sale</button>
         </div>
     </div>
 
-    <!-- Place Order Modal (Multiple Items) -->
+    <!-- PLACE ORDER MODAL -->
     <div id="order-modal" class="modal">
-        <div class="modal-content" style="max-width: 600px;">
-            <div class="modal-header"><h2>Place Order</h2><button class="close-btn" onclick="closeModal('order-modal')"><i class="fa-solid fa-times"></i></button></div>
-            
-            <div class="input-group"><label>Party Name</label><input type="text" id="o-party" readonly style="background: rgba(0,0,0,0.5); color:#888;"></div>
-            
+        <div class="modal-content" style="max-width:600px;">
+            <div class="modal-header">
+                <h2>Place Order</h2>
+                <button class="close-btn" onclick="closeModal('order-modal')"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="input-group">
+                <label>Party Name</label>
+                <input type="text" id="o-party" readonly style="background:rgba(0,0,0,0.5);color:#888;">
+            </div>
             <div class="flex-row">
-                <div class="input-group" style="flex: 2;">
+                <div class="input-group" style="flex:2;">
                     <label>Select Item</label>
                     <select id="o-item"><option value="">-- Select Item --</option></select>
                 </div>
-                <div class="input-group" style="flex: 1;">
+                <div class="input-group" style="flex:1;">
                     <label>Qty</label>
                     <input type="number" id="o-qty" value="1" min="1">
                 </div>
-                <button class="btn-action" style="padding: 12px; height: 46px; margin-bottom: 2px;" onclick="addItemToOrder()"><i class="fa-solid fa-plus"></i> Add</button>
+                <button class="btn-action" style="padding:12px;height:46px;margin-bottom:2px;" onclick="addItemToOrder()"><i class="fa-solid fa-plus"></i> Add</button>
             </div>
-
             <div class="order-cart">
-                <h3 style="font-size: 14px; margin-bottom: 10px; color: #ccc;">Cart Items:</h3>
+                <h3 style="font-size:14px;margin-bottom:10px;color:#ccc;">Cart Items:</h3>
                 <table>
                     <thead><tr><th>Item Name</th><th>MRP</th><th>Qty</th><th>Total</th><th></th></tr></thead>
                     <tbody id="cart-list"></tbody>
                 </table>
-                <div style="text-align: right; margin-top: 15px; font-size: 16px; font-weight: bold; color: #10B981;">
-                    Grand Total: ₹ <span id="cart-grand-total">0</span>
-                </div>
+                <div style="text-align:right;margin-top:15px;font-size:16px;font-weight:bold;color:#10B981;">Grand Total: ₹ <span id="cart-grand-total">0</span></div>
             </div>
-
             <button class="btn" id="orderSubmitBtn" onclick="submitOrder()"><i class="fa-solid fa-check"></i> Confirm Order & Deduct Advance</button>
         </div>
     </div>
 
     <script>
-        // =================================================================
-        // PASTE YOUR NEW GOOGLE APPS SCRIPT WEB APP URL BELOW
-        // =================================================================
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyF2rGx3dD-heEFRpdDObLI_rnFz0tjWy_WoAnSimP8GzQ2TfBrGGET0an0xJmZfc8/exec'; 
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz3MtJ1WjFNasEPUXX_rgAN3q9j1lit-KLUPoHxtmIm9ltrvwpE7gAo5d0rkr-_0ysh/exec';
 
         let itemsGlobalList = [];
         let partiesGlobalList = [];
-        let salesGlobalList = []; 
-        let currentCart = []; 
-        let logoBase64 = null; 
-        
+        let salesGlobalList = [];
+        let currentCart = [];
+        let saleCart = [];
+        let logoBase64 = null;
+
         const callIconBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAACUklEQVR4nO2Yv0sCQRTHv89y/KGMm7yTjIIggtCgMmgv7F/QoK29oSEoiJampra2hqqhoSEQrCFoahFE+AcEbYqgq+68M79I0tDk8t5yB4/4gQd37833md979+4NKIqiKIqi/htB2A6YTCa7aZpbiUSC1ut1QilFOzs73V6v91oIEfV1+L/B7OzsECHEW57nj/L5/FAikaBBEISpYrG41Wg0nojoL+M/A2ez2TnHcU6LxeKE1WqlhmGwoig6WZZPMpmMB+A75fRj9Pv9Z7VabWh2dpaORqMcRVEUx3HOq6urY5ZljwHk+jZ2I/A8fwgAlmWZvV4v131pmnbTNN3d2tr6FkKIfd28W4FAIFByHOfENM1pjuNoPp+nw+Ewx3GcMxiGlVqtlqMoajmTyaw1Gg2P1u5uBZzL5Y7r9XrVarVSsixTJpOhoVCIMwyDAXDQNC0dDofPEonE6traWhfAj1Y5W4HW4+PjsVQqnY6OjlKe52m1WqXdbpfm83najD31er04nU5nOp3O6VfX1gL01+XlJTsxMWH6fD7Gtm3G6/UyhmEwtVqN1nXdmEwmZUEQ3Fgs9tTr9d5U9X/c0w9YlSjLV+l0+tput08dx6Hn5+ePpaUlrFaru2xvb7+qqurYtj0SCAQ+KSo2g7Ozsy8kSUokElQURYpSisvlMi8IAisIQkxV1Q6ANyHEh6IeMwgh3mZZfiWE6P3y7I2imDIIIS8Mw8T7F/FjQxTFm263+24YxnR/Y4eCEHLtOM5tf2N9QVEURVEU9de8AQ4k15aB/92FAAAAAElFTkSuQmCC";
         const waIconBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAADw0lEQVR4nO2YS2gTQRjHfzO72U1qjVaf+EDx4EFE0SJqUSwKxYPiTfRSpOhBPIkHPXgTBEFQDx4UPBQVQcGLoAcPPVTR1lZrrU1rmjQvs/F/yGZr0iYv28T0B/9LsvPN/P/fNzP7zQillFJKKaWUUiqWFBG+TyaTwxzHmSGEGA0GgzX1en00Ho/nAXyIl98/sVjsSCgUOkUIMbUsqVQq2xVFyT0/P2dCCG+A479iMpl8nkgkjlOpVBIAJElSFEXJRVF8jcfj2QB3fP6RRCJxhOO4w6qqugFwHAeSJEFVVURRlGRZFmOxWBJAXR2v3wXdbvd6LBab3t7eXjM/m81mUVNT4zWJ47iooihJnud5AG/qet4m3G739lgstrC+vr7J/A0Gg+jo6MDKysqyZ51OJ5LJpBiPx5/qunZfl7fT5XA4FpLJ5MHe3l6X9bu1tRU+nw+7u7tLno3H4wgGgw1TU1NP0+l0p65fS4FCoXAvnU7vMxgMn/2emJhALBYDSZKyZwcHBxEKhXaXl5cP6TqlFEilUnedTufWn5mZmRm0tbWhtra2bJnH40E0Gm24fPnyh/39fVnXLykgiuLtQqFwx2Qy1QOA3+9HXV0dWltbIUnSkncejwfRaDR++fLlvb29PV3+xQIIITcMw/htNps1ADc8Hg+6urqwuLgIjuOWtTMyMoJwOHx9enr6na4F2t3dfSuK4lNRFO1lM34tHo8HAwMDuHnzJq5du7ZimWvXriEYDN5OpVJ3dC0AABAE4bHb7X5nMpkqADc8Hg8GBgYQDAZhMpmWLTcwMICenp57Npvtrq4FAEAQhHtut3stk8mwAODxeDA8PIyFhQU0NDRUaOdw4MABhEIhr6Io93S9l5L19fUuRVHu6rp2f3Nzs1H2XU2SJAwNDcHv9+PIkSPo6upa1ra9vR0DAwNIpVL3dC0AADRNe5RIJO7s7+/36X7Ubrejq6sLQ0NDOHXqVGXLpNNpzM/Pr4ii+EDXAgCwurr6vlwu345Go9/M21gQBOzevRsHDx7E1NQUVlZWKltGkqTF7e3tt6IoPun8/9wGNE17w/P8j8XFxa5MJsOM2X/q7Nmz8Pv9aGhowOjoKHK5XMUiqqoWHMeZyGQytwzD+GLVpyUAALt37549cODA4dOnTx9yOp0YHx8HISS/2MdxHHw+H/bs2YOrV69idXW14mO32y0mEompQqFwUFXVp1b9WgYajcZfW1tbKysrK4jH49Vb8z+rKMq74eFhY39/v6X+o+L/2JRSyheGYTyuVqvrpmkLpZRSSin1H/UHRf4864uUym0AAAAASUVORK5CYII=";
 
         window.addEventListener('load', function() {
-            let img = new Image();
+            const img = new Image();
             img.crossOrigin = 'Anonymous';
             img.onload = function() {
-                let canvas = document.createElement('canvas');
-                canvas.width = img.width; canvas.height = img.height;
-                canvas.getContext('2d').drawImage(img, 0, 0);
-                logoBase64 = canvas.toDataURL('image/png');
+                try {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+                    logoBase64 = canvas.toDataURL('image/png');
+                } catch (e) {
+                    console.warn('Failed to add logo:', e);
+                }
             };
             img.src = 'https://i.postimg.cc/PNxvDXKY/image.png';
         });
@@ -380,136 +431,345 @@
         }
 
         function escapeHtml(value) {
-            return String(value ?? '')
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#039;');
+            return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
         }
 
-        // Nav
+        function fetchAPI(formData, timeoutMs = 20000) {
+            const controller = new AbortController();
+            const timer = setTimeout(() => controller.abort(), timeoutMs);
+            return fetch(SCRIPT_URL, {
+                method: 'POST', body: formData, redirect: 'follow', signal: controller.signal
+            })
+            .then(res => {
+                if (!res.ok) throw new Error(`Server Error: ${res.status}`);
+                return res.json();
+            })
+            .catch(err => {
+                if (err.name === 'AbortError') throw new Error('Server response is taking too long. Please try again.');
+                throw err;
+            })
+            .finally(() => clearTimeout(timer));
+        }
+
         function hideAllViews() {
-            document.getElementById('login-view').style.display = 'none';
-            document.getElementById('dashboard-view').style.display = 'none';
-            document.getElementById('party-view').style.display = 'none';
-            document.getElementById('item-view').style.display = 'none';
-            document.getElementById('advance-view').style.display = 'none';
-            document.getElementById('totalsale-view').style.display = 'none';
+            ['login-view', 'dashboard-view', 'party-view', 'item-view', 'advance-view', 'totalsale-view'].forEach(id => {
+                document.getElementById(id).style.display = 'none';
+            });
         }
-        function backToDashboard() { hideAllViews(); document.getElementById('dashboard-view').style.display = 'block'; }
-        function closeModal(id) { document.getElementById(id).style.display = 'none'; }
-        function logout() { hideAllViews(); document.getElementById('login-view').style.display = 'block'; }
 
-        function fetchAPI(formData) { return fetch(SCRIPT_URL, { method: 'POST', body: formData, redirect: 'follow' }).then(res => res.json()); }
+        function backToDashboard() {
+            hideAllViews();
+            document.getElementById('dashboard-view').style.display = 'block';
+        }
 
-        // --- LOGIN ---
+        function closeModal(id) {
+            const modal = document.getElementById(id);
+            if (modal) modal.style.display = 'none';
+        }
+
+        function closeSaleEntryModal() {
+            closeModal('sale-entry-modal');
+            saleCart = [];
+            document.getElementById('sale-party').value = '';
+            document.getElementById('sale-item').value = '';
+            document.getElementById('sale-qty').value = 1;
+            renderSaleCart();
+        }
+
+        function logout() {
+            closeAllModals();
+            hideAllViews();
+            document.getElementById('login-view').style.display = 'block';
+            document.getElementById('username').value = '';
+            document.getElementById('password').value = '';
+            document.getElementById('login-error').style.display = 'none';
+        }
+
+        function closeAllModals() {
+            document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
+        }
+
         function doLogin() {
-            const u = document.getElementById('username').value, p = document.getElementById('password').value;
-            if(!u || !p) return;
-            document.getElementById('loginBtn').innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...';
-            
-            let fd = new URLSearchParams(); fd.append('action', 'login'); fd.append('username', u); fd.append('password', p);
-            
-            fetchAPI(fd).then(d => {
-                document.getElementById('loginBtn').innerHTML = 'BOWL EM OUT (LOGIN) <i class="fa-solid fa-arrow-right"></i>';
-                if(d.success) { 
-                    partiesGlobalList = d.parties || []; itemsGlobalList = d.items || [];
-                    hideAllViews(); document.getElementById('dashboard-view').style.display = 'block'; 
-                } else { 
-                    document.getElementById('login-error').innerText = "Invalid details!"; document.getElementById('login-error').style.display = 'block'; 
-                }
-            }).catch(err => {
-                document.getElementById('loginBtn').innerHTML = 'BOWL EM OUT (LOGIN) <i class="fa-solid fa-arrow-right"></i>';
-                document.getElementById('login-error').innerText = "Network Error! Check Script Settings."; document.getElementById('login-error').style.display = 'block';
-            });
+            const u = document.getElementById('username').value.trim();
+            const p = document.getElementById('password').value.trim();
+            const errorBox = document.getElementById('login-error');
+
+            if (!u || !p) {
+                errorBox.innerText = 'Please enter User ID and Password.';
+                errorBox.style.display = 'block';
+                return;
+            }
+
+            errorBox.style.display = 'none';
+            const btn = document.getElementById('loginBtn');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...';
+            btn.disabled = true;
+
+            const fd = new URLSearchParams();
+            fd.append('action', 'login');
+            fd.append('username', u);
+            fd.append('password', p);
+
+            fetchAPI(fd)
+                .then(d => {
+                    btn.innerHTML = 'BOWL EM OUT (LOGIN) <i class="fa-solid fa-arrow-right"></i>';
+                    btn.disabled = false;
+                    if (d.success) {
+                        partiesGlobalList = d.parties || [];
+                        itemsGlobalList = d.items || [];
+                        hideAllViews();
+                        document.getElementById('dashboard-view').style.display = 'block';
+                    } else {
+                        errorBox.innerText = d.error || 'Invalid details!';
+                        errorBox.style.display = 'block';
+                    }
+                })
+                .catch(err => {
+                    btn.innerHTML = 'BOWL EM OUT (LOGIN) <i class="fa-solid fa-arrow-right"></i>';
+                    btn.disabled = false;
+                    errorBox.innerText = err.message || 'Network Error! Check Script Settings.';
+                    errorBox.style.display = 'block';
+                });
         }
 
-        // --- PARTY MASTER ---
-        function openPartyMaster() { hideAllViews(); document.getElementById('party-view').style.display = 'block'; loadParties(); }
-        function loadParties() {
-            document.getElementById('party-table-container').style.display = 'none'; document.getElementById('party-loader').style.display = 'block';
-            let fd = new URLSearchParams(); fd.append('action', 'getParties');
-            fetchAPI(fd).then(d => {
-                partiesGlobalList = d.parties || []; 
-                document.getElementById('party-loader').style.display = 'none';
-                let tb = document.getElementById('party-list'); tb.innerHTML = '';
-                d.parties.forEach(p => {
-                    tb.innerHTML += `<tr><td>${p.name}</td><td>${p.mobile}</td><td>${p.state}</td><td>${p.address}</td><td>${p.pincode}</td>
-                    <td><button class="btn-edit" onclick="openPartyModal('edit','${p.name}','${p.mobile}','${p.state}','${p.address}','${p.pincode}')"><i class="fa-solid fa-pen"></i> Edit</button></td></tr>`;
-                });
-                document.getElementById('party-table-container').style.display = 'block';
-            });
+        function openPartyMaster() {
+            hideAllViews();
+            document.getElementById('party-view').style.display = 'block';
+            loadParties();
         }
-        function openPartyModal(m, n='', mob='', s='', a='', pin='') {
-            document.getElementById('p-action-type').value = m==='add' ? 'addParty' : 'editParty';
-            document.getElementById('party-modal-title').innerText = m==='add' ? "Add Party" : "Edit Party";
-            document.getElementById('p-original-name').value = n; document.getElementById('p-name').value = n;
-            document.getElementById('p-mobile').value = mob; document.getElementById('p-state').value = s;
-            document.getElementById('p-address').value = a; document.getElementById('p-pincode').value = pin;
+
+        function loadParties() {
+            const container = document.getElementById('party-table-container');
+            const loader = document.getElementById('party-loader');
+            container.style.display = 'none';
+            loader.style.display = 'block';
+
+            const fd = new URLSearchParams();
+            fd.append('action', 'getParties');
+
+            fetchAPI(fd)
+                .then(d => {
+                    if (!d.success) throw new Error(d.error || 'Party data load failed.');
+                    partiesGlobalList = d.parties || [];
+                    const tb = document.getElementById('party-list');
+                    if (!partiesGlobalList.length) {
+                        tb.innerHTML = '<tr><td colspan="6" style="text-align:center;">No party found</td></tr>';
+                    } else {
+                        tb.innerHTML = partiesGlobalList.map(p => `
+                            <tr>
+                                <td>${escapeHtml(p.name)}</td>
+                                <td>${escapeHtml(p.mobile)}</td>
+                                <td>${escapeHtml(p.state)}</td>
+                                <td>${escapeHtml(p.address)}</td>
+                                <td>${escapeHtml(p.pincode)}</td>
+                                <td>
+                                    <button class="btn-edit" onclick="openPartyModal('edit', '${escapeHtml(p.name)}', '${escapeHtml(p.mobile)}', '${escapeHtml(p.state)}', '${escapeHtml(p.address)}', '${escapeHtml(p.pincode)}')">
+                                        <i class="fa-solid fa-pen"></i> Edit
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('');
+                    }
+                    loader.style.display = 'none';
+                    container.style.display = 'block';
+                })
+                .catch(err => {
+                    loader.style.display = 'none';
+                    container.style.display = 'block';
+                    document.getElementById('party-list').innerHTML = `<tr><td colspan="6" style="text-align:center;color:#ff6b6b;">${escapeHtml(err.message)}</td></tr>`;
+                });
+        }
+
+        function openPartyModal(mode, n = '', mob = '', s = '', a = '', pin = '') {
+            document.getElementById('p-action-type').value = mode === 'add' ? 'addParty' : 'editParty';
+            document.getElementById('party-modal-title').innerText = mode === 'add' ? 'Add Party' : 'Edit Party';
+            document.getElementById('p-original-name').value = n;
+            document.getElementById('p-name').value = n;
+            document.getElementById('p-mobile').value = mob;
+            document.getElementById('p-state').value = s;
+            document.getElementById('p-address').value = a;
+            document.getElementById('p-pincode').value = pin;
             document.getElementById('party-modal').style.display = 'flex';
         }
+
         function submitParty() {
-            let fd = new URLSearchParams();
-            fd.append('action', document.getElementById('p-action-type').value); fd.append('originalName', document.getElementById('p-original-name').value);
-            fd.append('partyName', document.getElementById('p-name').value); fd.append('mobile', document.getElementById('p-mobile').value);
-            fd.append('state', document.getElementById('p-state').value); fd.append('address', document.getElementById('p-address').value);
+            const btn = document.getElementById('partySubmitBtn');
+            const partyName = document.getElementById('p-name').value.trim();
+
+            if (!partyName) return alert('Please enter Party Name.');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+            btn.disabled = true;
+
+            const fd = new URLSearchParams();
+            fd.append('action', document.getElementById('p-action-type').value);
+            fd.append('originalName', document.getElementById('p-original-name').value);
+            fd.append('partyName', partyName);
+            fd.append('mobile', document.getElementById('p-mobile').value);
+            fd.append('state', document.getElementById('p-state').value);
+            fd.append('address', document.getElementById('p-address').value);
             fd.append('pincode', document.getElementById('p-pincode').value);
-            fetchAPI(fd).then(() => { closeModal('party-modal'); loadParties(); });
+
+            fetchAPI(fd)
+                .then(d => {
+                    if (!d.success) throw new Error(d.error || 'Party save failed.');
+                    btn.innerHTML = '<i class="fa-solid fa-save"></i> Save Party';
+                    btn.disabled = false;
+                    closeModal('party-modal');
+                    loadParties();
+                })
+                .catch(err => {
+                    btn.innerHTML = '<i class="fa-solid fa-save"></i> Save Party';
+                    btn.disabled = false;
+                    alert('Party could not be saved.\n\n' + err.message);
+                });
         }
 
-        // --- ITEM MASTER ---
-        function openItemMaster() { hideAllViews(); document.getElementById('item-view').style.display = 'block'; loadItems(); }
-        function loadItems() {
-            document.getElementById('item-table-container').style.display = 'none'; document.getElementById('item-loader').style.display = 'block';
-            let fd = new URLSearchParams(); fd.append('action', 'getItems');
-            fetchAPI(fd).then(d => {
-                itemsGlobalList = d.items || []; 
-                let tb = document.getElementById('item-list'); tb.innerHTML = '';
-                d.items.forEach(i => {
-                    tb.innerHTML += `<tr><td>${i.name}</td><td>₹ ${i.mrp}</td>
-                    <td><button class="btn-edit" onclick="openItemModal('edit','${i.name}','${i.mrp}')"><i class="fa-solid fa-pen"></i> Edit</button></td></tr>`;
-                });
-                document.getElementById('item-loader').style.display = 'none';
-                document.getElementById('item-table-container').style.display = 'block';
-            });
+        function openItemMaster() {
+            hideAllViews();
+            document.getElementById('item-view').style.display = 'block';
+            loadItems();
         }
-        function openItemModal(m, n='', mrp='') {
-            document.getElementById('i-action-type').value = m==='add' ? 'addItem' : 'editItem';
-            document.getElementById('item-modal-title').innerText = m==='add' ? "Add Item" : "Edit Item";
-            document.getElementById('i-original-name').value = n; document.getElementById('i-name').value = n; document.getElementById('i-mrp').value = mrp;
+
+        function loadItems() {
+            const container = document.getElementById('item-table-container');
+            const loader = document.getElementById('item-loader');
+            container.style.display = 'none';
+            loader.style.display = 'block';
+
+            const fd = new URLSearchParams();
+            fd.append('action', 'getItems');
+
+            fetchAPI(fd)
+                .then(d => {
+                    if (!d.success) throw new Error(d.error || 'Item data load failed.');
+                    itemsGlobalList = d.items || [];
+                    const tb = document.getElementById('item-list');
+                    if (!itemsGlobalList.length) {
+                        tb.innerHTML = '<tr><td colspan="3" style="text-align:center;">No item found</td></tr>';
+                    } else {
+                        tb.innerHTML = itemsGlobalList.map(i => `
+                            <tr>
+                                <td>${escapeHtml(i.name)}</td>
+                                <td>₹ ${escapeHtml(i.mrp)}</td>
+                                <td>
+                                    <button class="btn-edit" onclick="openItemModal('edit', '${escapeHtml(i.name)}', '${escapeHtml(i.mrp)}')">
+                                        <i class="fa-solid fa-pen"></i> Edit
+                                    </button>
+                                </td>
+                            </tr>
+                        `).join('');
+                    }
+                    loader.style.display = 'none';
+                    container.style.display = 'block';
+                })
+                .catch(err => {
+                    loader.style.display = 'none';
+                    container.style.display = 'block';
+                    document.getElementById('item-list').innerHTML = `<tr><td colspan="3" style="text-align:center;color:#ff6b6b;">${escapeHtml(err.message)}</td></tr>`;
+                });
+        }
+
+        function openItemModal(mode, n = '', mrp = '') {
+            document.getElementById('i-action-type').value = mode === 'add' ? 'addItem' : 'editItem';
+            document.getElementById('item-modal-title').innerText = mode === 'add' ? 'Add Item' : 'Edit Item';
+            document.getElementById('i-original-name').value = n;
+            document.getElementById('i-name').value = n;
+            document.getElementById('i-mrp').value = mrp;
             document.getElementById('item-modal').style.display = 'flex';
         }
+
         function submitItem() {
-            let fd = new URLSearchParams(); fd.append('action', document.getElementById('i-action-type').value);
-            fd.append('originalName', document.getElementById('i-original-name').value); fd.append('itemName', document.getElementById('i-name').value);
-            fd.append('mrp', document.getElementById('i-mrp').value);
-            fetchAPI(fd).then(() => { closeModal('item-modal'); loadItems(); });
+            const btn = document.getElementById('itemSubmitBtn');
+            const itemName = document.getElementById('i-name').value.trim();
+            const mrp = document.getElementById('i-mrp').value;
+
+            if (!itemName) return alert('Please enter Item Name.');
+            if (!mrp || Number(mrp) < 0) return alert('Please enter valid MRP.');
+
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+            btn.disabled = true;
+
+            const fd = new URLSearchParams();
+            fd.append('action', document.getElementById('i-action-type').value);
+            fd.append('originalName', document.getElementById('i-original-name').value);
+            fd.append('itemName', itemName);
+            fd.append('mrp', mrp);
+
+            fetchAPI(fd)
+                .then(d => {
+                    if (!d.success) throw new Error(d.error || 'Item save failed.');
+                    btn.innerHTML = '<i class="fa-solid fa-save"></i> Save Item';
+                    btn.disabled = false;
+                    closeModal('item-modal');
+                    loadItems();
+                })
+                .catch(err => {
+                    btn.innerHTML = '<i class="fa-solid fa-save"></i> Save Item';
+                    btn.disabled = false;
+                    alert('Item could not be saved.\n\n' + err.message);
+                });
         }
 
-        // --- ADVANCE RECEIVED ---
-        function openAdvanceReceived() { hideAllViews(); document.getElementById('advance-view').style.display = 'block'; loadAdvances(); }
+        function openAdvanceReceived() {
+            hideAllViews();
+            document.getElementById('advance-view').style.display = 'block';
+            loadAdvances();
+        }
+
         function loadAdvances() {
-            document.getElementById('advance-table-container').style.display = 'none'; document.getElementById('advance-loader').style.display = 'block';
-            let fd = new URLSearchParams(); fd.append('action', 'getAdvances');
-            fetchAPI(fd).then(d => {
-                document.getElementById('advance-loader').style.display = 'none';
-                let tb = document.getElementById('advance-list'); tb.innerHTML = '';
-                (d.advances || []).forEach(a => {
-                    let amtColor = a.amount < 0 ? '#ef4444' : '#10B981'; 
-                    let settleBtnHTML = a.amount < 0 ? `<button class="btn-edit" onclick="openSettleModal('${a.party}')"><i class="fa-solid fa-hand-holding-dollar"></i> Settle</button>` : '';
-                    
-                    tb.innerHTML += `<tr><td>${a.party}</td><td style="color:${amtColor}; font-weight:bold;">₹ ${a.amount}</td>
-                    <td>${settleBtnHTML} <button class="btn-action" onclick="openOrderModal('${a.party}')"><i class="fa-solid fa-cart-arrow-down"></i> Place Order</button></td></tr>`;
+            const container = document.getElementById('advance-table-container');
+            const loader = document.getElementById('advance-loader');
+            container.style.display = 'none';
+            loader.style.display = 'block';
+
+            const fd = new URLSearchParams();
+            fd.append('action', 'getAdvances');
+
+            fetchAPI(fd)
+                .then(d => {
+                    if (!d.success) throw new Error(d.error || 'Advance data load failed.');
+                    const advances = d.advances || [];
+                    const tb = document.getElementById('advance-list');
+                    if (!advances.length) {
+                        tb.innerHTML = '<tr><td colspan="3" style="text-align:center;">No advance entry found</td></tr>';
+                    } else {
+                        tb.innerHTML = advances.map(a => {
+                            const amount = Number(a.amount) || 0;
+                            const amtColor = amount < 0 ? '#ef4444' : '#10B981';
+                            const settleBtnHTML = amount < 0 ? `<button class="btn-edit" onclick="openSettleModal('${escapeHtml(a.party)}')"><i class="fa-solid fa-hand-holding-dollar"></i> Settle</button>` : '';
+                            return `
+                                <tr>
+                                    <td>${escapeHtml(a.party)}</td>
+                                    <td style="color:${amtColor};font-weight:bold;">₹ ${amount.toFixed(2)}</td>
+                                    <td>
+                                        ${settleBtnHTML}
+                                        <button class="btn-action" onclick="openOrderModal('${escapeHtml(a.party)}')">
+                                            <i class="fa-solid fa-cart-arrow-down"></i> Place Order
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+                        }).join('');
+                    }
+                    loader.style.display = 'none';
+                    container.style.display = 'block';
+                })
+                .catch(err => {
+                    loader.style.display = 'none';
+                    container.style.display = 'block';
+                    document.getElementById('advance-list').innerHTML = `<tr><td colspan="3" style="text-align:center;color:#ff6b6b;">${escapeHtml(err.message)}</td></tr>`;
                 });
-                document.getElementById('advance-table-container').style.display = 'block';
-            });
         }
 
         function openAdvanceModal() {
-            let sel = document.getElementById('adv-party-select');
+            const sel = document.getElementById('adv-party-select');
             sel.innerHTML = '<option value="">-- Select Party --</option>';
-            partiesGlobalList.forEach(p => { sel.innerHTML += `<option value="${p.name}">${p.name}</option>`; });
+            partiesGlobalList.forEach(p => {
+                const opt = document.createElement('option');
+                opt.value = p.name;
+                opt.textContent = p.name;
+                sel.appendChild(opt);
+            });
             document.getElementById('adv-amt-input').value = '';
             document.getElementById('add-advance-modal').style.display = 'flex';
         }
@@ -521,36 +781,71 @@
         }
 
         function submitAdvance() {
-            let p = document.getElementById('adv-party-select').value, a = document.getElementById('adv-amt-input').value;
-            if(!p || !a) return alert("Select party and enter amount");
-            let btn = document.getElementById('advSubmitBtn'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; btn.disabled = true;
+            const p = document.getElementById('adv-party-select').value;
+            const a = document.getElementById('adv-amt-input').value;
+
+            if (!p || !a || Number(a) <= 0) return alert('Select party and enter valid amount.');
             
-            let fd = new URLSearchParams(); fd.append('action', 'addAdvance'); fd.append('partyName', p); fd.append('amount', a);
-            fetchAPI(fd).then(d => {
-                btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Advance'; btn.disabled = false;
-                closeModal('add-advance-modal'); loadAdvances();
-            });
+            const btn = document.getElementById('advSubmitBtn');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
+            btn.disabled = true;
+
+            const fd = new URLSearchParams();
+            fd.append('action', 'addAdvance');
+            fd.append('partyName', p);
+            fd.append('amount', a);
+
+            fetchAPI(fd)
+                .then(d => {
+                    if (!d.success) throw new Error(d.error || 'Advance save failed.');
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Advance';
+                    btn.disabled = false;
+                    closeModal('add-advance-modal');
+                    loadAdvances();
+                })
+                .catch(err => {
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Advance';
+                    btn.disabled = false;
+                    alert('Advance could not be saved.\n\n' + err.message);
+                });
         }
 
         function submitSettle() {
-            let p = document.getElementById('settle-party').value, a = document.getElementById('settle-amt-input').value;
-            if(!p || !a) return alert("Enter amount to settle");
-            let btn = document.getElementById('settleSubmitBtn'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...'; btn.disabled = true;
-            
-            let fd = new URLSearchParams(); fd.append('action', 'settleAmount'); fd.append('partyName', p); fd.append('amount', a);
-            fetchAPI(fd).then(d => {
-                btn.innerHTML = '<i class="fa-solid fa-check"></i> Settle Amount'; btn.disabled = false;
-                closeModal('settle-amount-modal'); loadAdvances();
-            });
+            const p = document.getElementById('settle-party').value;
+            const a = document.getElementById('settle-amt-input').value;
+
+            if (!p || !a || Number(a) <= 0) return alert('Enter valid amount to settle.');
+
+            const btn = document.getElementById('settleSubmitBtn');
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+            btn.disabled = true;
+
+            const fd = new URLSearchParams();
+            fd.append('action', 'settleAmount');
+            fd.append('partyName', p);
+            fd.append('amount', a);
+
+            fetchAPI(fd)
+                .then(d => {
+                    if (!d.success) throw new Error(d.error || 'Settlement failed.');
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Settle Amount';
+                    btn.disabled = false;
+                    closeModal('settle-amount-modal');
+                    loadAdvances();
+                })
+                .catch(err => {
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Settle Amount';
+                    btn.disabled = false;
+                    alert('Settlement could not be completed.\n\n' + err.message);
+                });
         }
 
-        // --- SALE ENTRY (DIRECT SALE - DOES NOT DEDUCT ADVANCE) ---
-        let saleCart = [];
-
         function openSaleEntry() {
-            hideAllViews();
             saleCart = [];
             populateSaleEntryMasters();
+            document.getElementById('sale-party').value = '';
+            document.getElementById('sale-item').value = '';
+            document.getElementById('sale-qty').value = 1;
             renderSaleCart();
             document.getElementById('sale-entry-modal').style.display = 'flex';
         }
@@ -558,24 +853,20 @@
         function populateSaleEntryMasters() {
             const partySelect = document.getElementById('sale-party');
             const itemSelect = document.getElementById('sale-item');
-
             partySelect.innerHTML = '<option value="">-- Select Party --</option>';
-            (partiesGlobalList || []).forEach(p => {
+            partiesGlobalList.forEach(p => {
                 const opt = document.createElement('option');
                 opt.value = p.name;
                 opt.textContent = p.name;
                 partySelect.appendChild(opt);
             });
-
             itemSelect.innerHTML = '<option value="">-- Select Product --</option>';
-            (itemsGlobalList || []).forEach(i => {
+            itemsGlobalList.forEach(i => {
                 const opt = document.createElement('option');
                 opt.value = i.name;
-                opt.textContent = `${i.name} (₹${parseFloat(i.mrp) || 0})`;
+                opt.textContent = `${i.name} (₹${Number(i.mrp) || 0})`;
                 itemSelect.appendChild(opt);
             });
-
-            document.getElementById('sale-qty').value = 1;
         }
 
         function addItemToSale() {
@@ -585,8 +876,8 @@
             if (!itemName) return alert('Please select a product.');
             if (!qty || qty < 1) return alert('Please enter a valid quantity.');
 
-            const itemObj = (itemsGlobalList || []).find(i => i.name === itemName);
-            if (!itemObj) return alert('Selected product master mein nahi mila.');
+            const itemObj = itemsGlobalList.find(i => i.name === itemName);
+            if (!itemObj) return alert('Selected product not found in master.');
 
             const mrp = parseFloat(itemObj.mrp) || 0;
             const existing = saleCart.find(x => x.name === itemObj.name);
@@ -595,14 +886,8 @@
                 existing.qty += qty;
                 existing.total = existing.qty * existing.mrp;
             } else {
-                saleCart.push({
-                    name: itemObj.name,
-                    mrp: mrp,
-                    qty: qty,
-                    total: mrp * qty
-                });
+                saleCart.push({ name: itemObj.name, mrp: mrp, qty: qty, total: mrp * qty });
             }
-
             renderSaleCart();
             document.getElementById('sale-item').value = '';
             document.getElementById('sale-qty').value = 1;
@@ -615,34 +900,35 @@
 
         function renderSaleCart() {
             const tb = document.getElementById('sale-cart-list');
-            tb.innerHTML = '';
             let grandTotal = 0;
 
-            if (saleCart.length === 0) {
+            if (!saleCart.length) {
                 tb.innerHTML = '<tr><td colspan="5" style="text-align:center;">No product added</td></tr>';
             } else {
-                saleCart.forEach((item, index) => {
+                tb.innerHTML = saleCart.map((item, index) => {
                     grandTotal += Number(item.total) || 0;
-                    tb.innerHTML += `<tr>
-                        <td>${escapeHtml(item.name)}</td>
-                        <td>₹${item.mrp}</td>
-                        <td>${item.qty}</td>
-                        <td>₹${item.total}</td>
-                        <td><button class="remove-item" onclick="removeSaleItem(${index})"><i class="fa-solid fa-trash"></i></button></td>
-                    </tr>`;
-                });
+                    return `
+                        <tr>
+                            <td>${escapeHtml(item.name)}</td>
+                            <td>₹${Number(item.mrp).toFixed(2)}</td>
+                            <td>${Number(item.qty)}</td>
+                            <td>₹${Number(item.total).toFixed(2)}</td>
+                            <td><button class="remove-item" onclick="removeSaleItem(${index})" title="Remove"><i class="fa-solid fa-trash"></i></button></td>
+                        </tr>
+                    `;
+                }).join('');
             }
-
             document.getElementById('sale-grand-total').innerText = grandTotal.toFixed(2);
         }
 
         function submitSale() {
             const partyName = document.getElementById('sale-party').value;
-
             if (!partyName) return alert('Please select a party.');
-            if (saleCart.length === 0) return alert('Please add at least one product.');
+            if (!saleCart.length) return alert('Please add at least one product.');
 
             const grandTotal = saleCart.reduce((sum, item) => sum + (Number(item.total) || 0), 0);
+            if (grandTotal <= 0) return alert('Invalid sale amount.');
+
             const btn = document.getElementById('saleSubmitBtn');
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving Sale...';
             btn.disabled = true;
@@ -653,415 +939,467 @@
             fd.append('items', JSON.stringify(saleCart));
             fd.append('grandTotal', grandTotal.toFixed(2));
 
-            fetchAPI(fd).then(d => {
-                if (!d.success) {
-                    throw new Error(d.error || d.message || 'Sale could not be saved.');
-                }
-
-                btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Sale';
-                btn.disabled = false;
-
-                const invoiceNo = d.invoiceNo || '';
-                alert(`Sale Saved Successfully!\nInvoice No: ${invoiceNo}\nAmount: ₹${grandTotal.toFixed(2)}`);
-
-                closeModal('sale-entry-modal');
-                saleCart = [];
-
-                // Immediately open Total Sales so the new invoice can be viewed/downloaded.
-                openTotalSales();
-            }).catch(err => {
-                console.error('Sale Entry Error:', err);
-                btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Sale';
-                btn.disabled = false;
-                alert('Sale save nahi hui.\n\nError: ' + err.message);
-            });
+            fetchAPI(fd)
+                .then(d => {
+                    if (!d.success) throw new Error(d.error || d.message || 'Sale could not be saved.');
+                    alert(`Sale Saved Successfully!\n\nInvoice No: ${d.invoiceNo || ''}\nAmount: ₹${grandTotal.toFixed(2)}`);
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Sale';
+                    btn.disabled = false;
+                    closeSaleEntryModal();
+                })
+                .catch(err => {
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Sale';
+                    btn.disabled = false;
+                    alert('Sale could not be saved.\n\nError: ' + err.message);
+                });
         }
 
-        // --- PLACE ORDER (MULTI-ITEM CART) ---
         function openOrderModal(party) {
             document.getElementById('o-party').value = party;
-            currentCart = []; renderCart();
-            
-            let sel = document.getElementById('o-item');
+            currentCart = [];
+            renderCart();
+            const sel = document.getElementById('o-item');
             sel.innerHTML = '<option value="">-- Select Item --</option>';
-            itemsGlobalList.forEach(i => { sel.innerHTML += `<option value="${i.name}">${i.name} (₹${i.mrp})</option>`; });
+            itemsGlobalList.forEach(i => {
+                const opt = document.createElement('option');
+                opt.value = i.name;
+                opt.textContent = `${i.name} (₹${Number(i.mrp) || 0})`;
+                sel.appendChild(opt);
+            });
+            document.getElementById('o-qty').value = 1;
             document.getElementById('order-modal').style.display = 'flex';
         }
 
         function addItemToOrder() {
-            let selVal = document.getElementById('o-item').value;
-            let qty = parseInt(document.getElementById('o-qty').value) || 1;
-            if(!selVal) return alert("Please select an item");
-            
-            let itemObj = itemsGlobalList.find(i => i.name === selVal);
-            let total = parseFloat(itemObj.mrp) * qty;
-            
-            let existing = currentCart.find(c => c.name === selVal);
-            if(existing) {
+            const selVal = document.getElementById('o-item').value;
+            const qty = parseInt(document.getElementById('o-qty').value, 10) || 1;
+
+            if (!selVal) return alert('Please select an item.');
+            if (qty < 1) return alert('Please enter valid quantity.');
+
+            const itemObj = itemsGlobalList.find(i => i.name === selVal);
+            if (!itemObj) return alert('Item not found.');
+
+            const mrp = parseFloat(itemObj.mrp) || 0;
+            const existing = currentCart.find(c => c.name === selVal);
+
+            if (existing) {
                 existing.qty += qty;
                 existing.total = existing.qty * existing.mrp;
             } else {
-                currentCart.push({ name: itemObj.name, mrp: parseFloat(itemObj.mrp), qty: qty, total: total });
+                currentCart.push({ name: itemObj.name, mrp: mrp, qty: qty, total: mrp * qty });
             }
             renderCart();
-            document.getElementById('o-item').value = ""; document.getElementById('o-qty').value = 1;
+            document.getElementById('o-item').value = '';
+            document.getElementById('o-qty').value = 1;
         }
 
-        function removeCartItem(index) { currentCart.splice(index, 1); renderCart(); }
+        function removeCartItem(index) {
+            currentCart.splice(index, 1);
+            renderCart();
+        }
 
         function renderCart() {
-            let tb = document.getElementById('cart-list'); tb.innerHTML = '';
+            const tb = document.getElementById('cart-list');
             let grandTotal = 0;
-            if(currentCart.length === 0) { tb.innerHTML = '<tr><td colspan="5" style="text-align:center;">Cart is empty</td></tr>'; } 
-            else {
-                currentCart.forEach((c, idx) => {
-                    grandTotal += c.total;
-                    tb.innerHTML += `<tr><td>${c.name}</td><td>₹${c.mrp}</td><td>${c.qty}</td><td>₹${c.total}</td>
-                    <td><button class="remove-item" onclick="removeCartItem(${idx})"><i class="fa-solid fa-trash"></i></button></td></tr>`;
-                });
+
+            if (!currentCart.length) {
+                tb.innerHTML = '<tr><td colspan="5" style="text-align:center;">Cart is empty</td></tr>';
+            } else {
+                tb.innerHTML = currentCart.map((c, idx) => {
+                    grandTotal += Number(c.total) || 0;
+                    return `
+                        <tr>
+                            <td>${escapeHtml(c.name)}</td>
+                            <td>₹${Number(c.mrp).toFixed(2)}</td>
+                            <td>${Number(c.qty)}</td>
+                            <td>₹${Number(c.total).toFixed(2)}</td>
+                            <td><button class="remove-item" onclick="removeCartItem(${idx})"><i class="fa-solid fa-trash"></i></button></td>
+                        </tr>
+                    `;
+                }).join('');
             }
-            document.getElementById('cart-grand-total').innerText = grandTotal;
+            document.getElementById('cart-grand-total').innerText = grandTotal.toFixed(2);
         }
 
         function submitOrder() {
-            if(currentCart.length === 0) return alert("Please add at least one item to the order.");
-            let p = document.getElementById('o-party').value;
-            let grandTotal = document.getElementById('cart-grand-total').innerText;
+            if (!currentCart.length) return alert('Please add at least one item to the order.');
+            const p = document.getElementById('o-party').value;
+            if (!p) return alert('Party not selected.');
+
+            const grandTotal = currentCart.reduce((sum, item) => sum + (Number(item.total) || 0), 0);
+            const btn = document.getElementById('orderSubmitBtn');
             
-            let btn = document.getElementById('orderSubmitBtn'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...'; btn.disabled = true;
-            
-            let fd = new URLSearchParams(); fd.append('action', 'placeOrder');
-            fd.append('partyName', p); fd.append('items', JSON.stringify(currentCart)); fd.append('grandTotal', grandTotal);
-            
-            fetchAPI(fd).then(d => {
-                btn.innerHTML = '<i class="fa-solid fa-check"></i> Confirm Order & Deduct Advance'; btn.disabled = false;
-                alert(`Order Saved! Invoice No: ${d.invoiceNo}\nAmount ₹${grandTotal} deducted from Advance.`);
-                closeModal('order-modal');
-                loadAdvances(); 
-            });
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+            btn.disabled = true;
+
+            const fd = new URLSearchParams();
+            fd.append('action', 'placeOrder');
+            fd.append('partyName', p);
+            fd.append('items', JSON.stringify(currentCart));
+            fd.append('grandTotal', grandTotal.toFixed(2));
+
+            fetchAPI(fd)
+                .then(d => {
+                    if (!d.success) throw new Error(d.error || d.message || 'Order could not be saved.');
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Confirm Order & Deduct Advance';
+                    btn.disabled = false;
+                    alert(`Order Saved!\n\nInvoice No: ${d.invoiceNo || ''}\nAmount ₹${grandTotal.toFixed(2)} deducted from Advance.`);
+                    closeModal('order-modal');
+                    currentCart = [];
+                    loadAdvances();
+                })
+                .catch(err => {
+                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Confirm Order & Deduct Advance';
+                    btn.disabled = false;
+                    alert('Order could not be saved.\n\n' + err.message);
+                });
         }
 
-        // --- TOTAL SALES & INVOICE GENERATION ---
-        function openTotalSales() { hideAllViews(); document.getElementById('totalsale-view').style.display = 'block'; loadSales(); }
-        
-        function loadSales() {
-            document.getElementById('sales-table-container').style.display = 'none';
-            document.getElementById('sales-loader').style.display = 'block';
+        function openTotalSales() {
+            hideAllViews();
+            document.getElementById('totalsale-view').style.display = 'block';
+            loadSales();
+        }
 
-            let fd = new URLSearchParams();
+        function loadSales() {
+            const container = document.getElementById('sales-table-container');
+            const loader = document.getElementById('sales-loader');
+            container.style.display = 'none';
+            loader.style.display = 'block';
+
+            const fd = new URLSearchParams();
             fd.append('action', 'getTotalSales');
 
-            fetchAPI(fd).then(d => {
-                salesGlobalList = d.sales || []; 
-                document.getElementById('sales-loader').style.display = 'none';
-                let tb = document.getElementById('sales-list');
-                tb.innerHTML = '';
-                
-                salesGlobalList.forEach((s, index) => {
-                    let itemsArr = [];
-                    try { 
-                        // Safe parsing of itemsJson whether it is stored as string or array
-                        itemsArr = typeof s.itemsJson === 'string' ? JSON.parse(s.itemsJson) : s.itemsJson; 
-                    } catch(e) { 
-                        console.error('Items JSON parse error:', e);
-                        itemsArr = [];
+            fetchAPI(fd)
+                .then(d => {
+                    if (!d.success) throw new Error(d.error || 'Sales data load failed.');
+                    salesGlobalList = d.sales || [];
+                    const tb = document.getElementById('sales-list');
+
+                    if (!salesGlobalList.length) {
+                        tb.innerHTML = '<tr><td colspan="6" style="text-align:center;">No sales found</td></tr>';
+                    } else {
+                        tb.innerHTML = salesGlobalList.map((s, index) => {
+                            let itemsArr = [];
+                            try {
+                                itemsArr = typeof s.itemsJson === 'string' ? JSON.parse(s.itemsJson) : s.itemsJson;
+                            } catch (e) {
+                                itemsArr = [];
+                            }
+                            const itemSummary = Array.isArray(itemsArr) && itemsArr.length
+                                ? itemsArr.map(i => `${escapeHtml(i.name || 'Item')} (x${Number(i.qty) || 1})`).join(', ')
+                                : 'Items info unavailable';
+
+                            return `
+                                <tr>
+                                    <td>${escapeHtml(s.invoiceNo)}</td>
+                                    <td>${escapeHtml(s.date)}</td>
+                                    <td>${escapeHtml(s.party)}</td>
+                                    <td>${itemSummary}</td>
+                                    <td style="color:#10B981;font-weight:bold;">₹ ${Number(s.total || 0).toFixed(2)}</td>
+                                    <td>
+                                        <button class="btn-invoice" onclick="generateInvoicePDF(${index})">
+                                            <i class="fa-solid fa-file-pdf"></i> Invoice
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+                        }).join('');
                     }
-                    
-                    let itemSummary = Array.isArray(itemsArr)
-                        ? itemsArr.map(i => `${i.name || 'Item'} (x${i.qty || 1})`).join(', ')
-                        : 'Items info unavailable';
-
-                    tb.innerHTML += `<tr>
-                        <td>${s.invoiceNo || ''}</td>
-                        <td>${s.date || ''}</td>
-                        <td>${s.party || ''}</td>
-                        <td>${itemSummary}</td>
-                        <td style="color:#10B981; font-weight:bold;">₹ ${s.total || 0}</td>
-                        <td>
-                            <button class="btn-invoice" onclick="generateInvoicePDF(${index})">
-                                <i class="fa-solid fa-file-pdf"></i> Invoice
-                            </button>
-                        </td>
-                    </tr>`;
+                    loader.style.display = 'none';
+                    container.style.display = 'block';
+                })
+                .catch(err => {
+                    loader.style.display = 'none';
+                    container.style.display = 'block';
+                    document.getElementById('sales-list').innerHTML = `<tr><td colspan="6" style="text-align:center;color:#ff6b6b;">${escapeHtml(err.message)}</td></tr>`;
                 });
-
-                document.getElementById('sales-table-container').style.display = 'block';
-            }).catch(err => {
-                document.getElementById('sales-loader').style.display = 'none';
-                document.getElementById('sales-table-container').style.display = 'block';
-                console.error('Sales load error:', err);
-                alert('Sales data load nahi ho saka. Please page refresh karke dobara try karein.');
-            });
         }
 
-        // ---------------------------------------------------------------
-        // PDF LIBRARY CHECK / LOADER
-        // ---------------------------------------------------------------
+        function createExcelFile(data, sheetName, fileName) {
+            if (!window.XLSX) return alert('Excel library failed to load.\n\nPlease refresh the page and try again.');
+            if (!Array.isArray(data) || data.length === 0) return alert('No data available to export.');
+
+            try {
+                const worksheet = XLSX.utils.json_to_sheet(data);
+                const keys = Object.keys(data[0]);
+                worksheet['!cols'] = keys.map(key => {
+                    let maxLength = key.length;
+                    for (const row of data) {
+                        maxLength = Math.max(maxLength, String(row[key] ?? '').length);
+                    }
+                    return { wch: Math.min(Math.max(maxLength + 2, 10), 60) };
+                });
+                const workbook = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(workbook, worksheet, sheetName.substring(0, 31));
+                XLSX.writeFile(workbook, fileName);
+            } catch (error) {
+                alert('Excel file could not be generated.\n\nError: ' + (error.message || error));
+            }
+        }
+
+        function exportPartyExcel() {
+            if (!partiesGlobalList || partiesGlobalList.length === 0) return alert('No data available to export.');
+            const exportData = partiesGlobalList.map((p, index) => ({
+                'S.No': index + 1,
+                'Party Name': p.name || '',
+                'Mobile No': p.mobile || '',
+                'State': p.state || '',
+                'Full Address': p.address || '',
+                'Pin Code': p.pincode || ''
+            }));
+            createExcelFile(exportData, 'Party Master', `Party_Master_${new Date().toISOString().slice(0, 10)}.xlsx`);
+        }
+
+        function exportItemExcel() {
+            if (!itemsGlobalList || itemsGlobalList.length === 0) return alert('No data available to export.');
+            const exportData = itemsGlobalList.map((item, index) => ({
+                'S.No': index + 1,
+                'Item Name': item.name || '',
+                'MRP': Number(item.mrp) || 0
+            }));
+            createExcelFile(exportData, 'Item Master', `Item_Master_${new Date().toISOString().slice(0, 10)}.xlsx`);
+        }
+
+        function exportSalesExcel() {
+            if (!salesGlobalList || salesGlobalList.length === 0) return alert('No data available to export.');
+            const exportData = salesGlobalList.map((sale, index) => {
+                let itemsArr = [];
+                try {
+                    itemsArr = typeof sale.itemsJson === 'string' ? JSON.parse(sale.itemsJson) : sale.itemsJson;
+                } catch (error) {}
+                const itemSummary = Array.isArray(itemsArr) ? itemsArr.map(item => `${item.name || 'Item'} (Qty: ${item.qty || 1})`).join(', ') : '';
+                return {
+                    'S.No': index + 1,
+                    'Invoice No': sale.invoiceNo || '',
+                    'Date': sale.date || '',
+                    'Party Name': sale.party || '',
+                    'Items': itemSummary,
+                    'Grand Total': Number(sale.total) || 0
+                };
+            });
+            createExcelFile(exportData, 'Total Sales', `Total_Sales_${new Date().toISOString().slice(0, 10)}.xlsx`);
+        }
+
         function loadScriptOnce(src, id) {
             return new Promise((resolve, reject) => {
-                if (id && document.getElementById(id)) {
-                    resolve();
-                    return;
-                }
-
+                if (id && document.getElementById(id)) return resolve();
                 const script = document.createElement('script');
                 if (id) script.id = id;
                 script.src = src;
                 script.async = true;
                 script.onload = () => resolve();
-                script.onerror = () => reject(new Error('PDF library load nahi ho saki: ' + src));
+                script.onerror = () => reject(new Error('Failed to load PDF library.'));
                 document.head.appendChild(script);
             });
         }
 
         async function ensurePDFLibraries() {
-            // First check the libraries already included in <head>.
             if (!window.jspdf || !window.jspdf.jsPDF) {
-                await loadScriptOnce(
-                    'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js',
-                    'jspdf-fallback-loader'
-                );
+                await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', 'jspdf-fallback-loader');
             }
-
-            // AutoTable is optional because the PDF function below has a manual-table fallback.
-            // Still load it when available for better formatting.
             const jsPDF = window.jspdf && window.jspdf.jsPDF;
-            if (!jsPDF) {
-                throw new Error('jsPDF library available nahi hai.');
-            }
-
+            if (!jsPDF) throw new Error('jsPDF library is not available.');
             return jsPDF;
         }
 
-        // ---------------------------------------------------------------
-        // TOTAL SALES -> INVOICE PDF
-        // ---------------------------------------------------------------
         async function generateInvoicePDF(index) {
             try {
                 const saleRecord = salesGlobalList[index];
-
-                if (!saleRecord) {
-                    alert('Invoice record nahi mila! Kripya Total Sales page ko dobara open karein.');
-                    return;
-                }
+                if (!saleRecord) return alert('Invoice record not found!');
 
                 const jsPDF = await ensurePDFLibraries();
                 const doc = new jsPDF();
-
                 const invNo = String(saleRecord.invoiceNo || '');
                 const date = String(saleRecord.date || '');
                 const partyName = String(saleRecord.party || '');
                 const grandTotal = parseFloat(saleRecord.total) || 0;
 
-                // Party information
                 let pInfo = partiesGlobalList.find(p => String(p.name).trim() === partyName.trim());
-                if (!pInfo) {
-                    pInfo = {
-                        address: 'Surajkund Road, Meerut',
-                        mobile: 'N/A',
-                        pincode: '250004'
-                    };
-                }
+                if (!pInfo) pInfo = { address: 'Surajkund Road, Meerut', mobile: 'N/A', pincode: '250004' };
 
                 let partyAddress = pInfo.address || 'Surajkund Road, Meerut';
                 const partyMobile = pInfo.mobile || 'N/A';
                 if (pInfo.pincode) partyAddress += `, Pin: ${pInfo.pincode}`;
 
-                // Parse stored item JSON safely
                 let itemsArr = [];
                 try {
-                    itemsArr = typeof saleRecord.itemsJson === 'string'
-                        ? JSON.parse(saleRecord.itemsJson)
-                        : saleRecord.itemsJson;
+                    itemsArr = typeof saleRecord.itemsJson === 'string' ? JSON.parse(saleRecord.itemsJson) : saleRecord.itemsJson;
                 } catch (e) {
-                    console.error('Invoice item JSON parse error:', e);
                     itemsArr = [];
                 }
-
                 if (!Array.isArray(itemsArr) || itemsArr.length === 0) {
-                    itemsArr = [{
-                        name: 'Sports Item',
-                        mrp: grandTotal,
-                        qty: 1,
-                        total: grandTotal
-                    }];
+                    itemsArr = [{ name: 'Sports Item', mrp: grandTotal, qty: 1, total: grandTotal }];
                 }
 
-                // -----------------------------------------------------------
-                // HEADER / LOGO
-                // -----------------------------------------------------------
                 if (logoBase64) {
                     try {
-                        doc.addImage(logoBase64, 'PNG', 15, 15, 25, 25);
-                    } catch (logoError) {
-                        console.warn('Logo add nahi ho saka:', logoError);
-                    }
+                        doc.addImage(logoBase64, 'PNG', 15, 13, 25, 25);
+                    } catch (logoError) {}
                 }
 
-                doc.setFontSize(24);
-                doc.setTextColor(26, 178, 129);
+                doc.setFont('times', 'bolditalic');
+                doc.setFontSize(25);
+                doc.setTextColor(20, 150, 110);
                 doc.text('YDV SPORTS MRT', 105, 20, null, null, 'center');
-
-                doc.setFontSize(10);
+                
+                doc.setDrawColor(20, 150, 110);
+                doc.setLineWidth(1.2);
+                doc.line(65, 24, 145, 24);
+                
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(8);
+                doc.setTextColor(90, 90, 90);
+                doc.text('SPORTS • EQUIPMENT • MART', 105, 29, null, null, 'center');
+                
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(9);
                 doc.setTextColor(80, 80, 80);
-                doc.text('Surajkund Road Meerut, Uttar Pradesh - 250004, India', 105, 28, null, null, 'center');
+                doc.text('Surajkund Road, Meerut, Uttar Pradesh - 250004, India', 105, 35, null, null, 'center');
 
                 try {
-                    doc.addImage(callIconBase64, 'PNG', 70, 31, 4, 4);
-                    doc.text('+91 76184 35453', 75, 34);
-                    doc.addImage(waIconBase64, 'PNG', 105, 31, 4, 4);
-                    doc.text('+91 7599 920 630', 110, 34);
+                    doc.addImage(callIconBase64, 'PNG', 66, 38, 4.5, 4.5);
+                    doc.setFont('helvetica', 'normal');
+                    doc.setFontSize(9);
+                    doc.setTextColor(70, 70, 70);
+                    doc.text('+91 76184 35453', 73, 42);
+                    
+                    doc.addImage(waIconBase64, 'PNG', 111, 38, 4.5, 4.5);
+                    doc.text('+91 7599 920 630', 118, 42);
                 } catch (iconError) {
-                    console.warn('Contact icon add nahi ho saka:', iconError);
-                    doc.text('Call: +91 76184 35453    WhatsApp: +91 7599 920 630', 105, 34, null, null, 'center');
+                    doc.text('Call: +91 76184 35453', 65, 42);
+                    doc.text('WhatsApp: +91 7599 920 630', 112, 42);
                 }
 
+                doc.setFont('times', 'bolditalic');
                 doc.setFontSize(16);
                 doc.setTextColor(0, 0, 0);
-                doc.setFont('times', 'italic');
-                doc.text('Sale Invoice', 105, 45, null, null, 'center');
+                doc.text('SALE INVOICE', 105, 52, null, null, 'center');
+                
+                doc.setDrawColor(180, 180, 180);
+                doc.setLineWidth(0.5);
+                doc.line(15, 57, 195, 57);
+                
                 doc.setFont('helvetica', 'normal');
-
-                doc.setDrawColor(200, 200, 200);
-                doc.line(15, 50, 195, 50);
-
-                // -----------------------------------------------------------
-                // INVOICE / PARTY DETAILS
-                // -----------------------------------------------------------
-                doc.setFontSize(11);
+                doc.setFontSize(10);
                 doc.setTextColor(0, 0, 0);
-
-                doc.setFont(undefined, 'bold');
-                doc.text('Invoice No:', 15, 60);
-                doc.setFont(undefined, 'normal');
-                doc.text(invNo, 38, 60);
-
-                doc.setFont(undefined, 'bold');
-                doc.text('Date:', 15, 66);
-                doc.setFont(undefined, 'normal');
-                doc.text(date, 27, 66);
-
-                doc.setFont(undefined, 'bold');
-                doc.text('Billed To:', 135, 60);
-                doc.setFont(undefined, 'normal');
-                doc.text(partyName, 135, 66);
-                doc.text(`Mobile: ${partyMobile}`, 135, 72);
-
+                
+                doc.setFont('helvetica', 'bold');
+                doc.text('Invoice No:', 15, 67);
+                doc.setFont('helvetica', 'normal');
+                doc.text(invNo, 39, 67);
+                
+                doc.setFont('helvetica', 'bold');
+                doc.text('Date:', 15, 73);
+                doc.setFont('helvetica', 'normal');
+                doc.text(date, 29, 73);
+                
+                doc.setFont('helvetica', 'bold');
+                doc.text('Billed To:', 130, 67);
+                doc.setFont('helvetica', 'normal');
+                doc.text(partyName, 130, 73);
+                doc.text(`Mobile: ${partyMobile}`, 130, 79);
+                
                 const splitAddress = doc.splitTextToSize(`Address: ${partyAddress}`, 60);
-                doc.text(splitAddress, 135, 78);
+                doc.text(splitAddress, 130, 85);
 
-                // -----------------------------------------------------------
-                // TABLE DATA
-                // -----------------------------------------------------------
-                const tableBody = itemsArr.map(i => [
-                    String(i.name || 'Item'),
-                    `Rs. ${parseFloat(i.mrp) || 0}`,
-                    parseInt(i.qty) || 1,
-                    `Rs. ${parseFloat(i.total) || 0}`
-                ]);
+                const tableBody = itemsArr.map(i => [String(i.name || 'Item'), `Rs. ${parseFloat(i.mrp) || 0}`, parseInt(i.qty) || 1, `Rs. ${parseFloat(i.total) || 0}`]);
+                const tableStartY = 85 + (splitAddress.length * 5) + 7;
 
-                const tableStartY = 78 + (splitAddress.length * 5) + 5;
-
-                // Use AutoTable if it is available.
-                // Otherwise draw a simple table manually so the Invoice button still works.
                 if (typeof doc.autoTable === 'function') {
                     doc.autoTable({
                         startY: tableStartY,
                         head: [['Item Name', 'MRP', 'Qty', 'Total Amount']],
                         body: tableBody,
                         theme: 'striped',
-                        headStyles: { fillColor: [26, 178, 129] },
-                        styles: { fontSize: 9 },
+                        headStyles: { fillColor: [20, 150, 110], textColor: [255, 255, 255], fontStyle: 'bold' },
+                        styles: { fontSize: 9, cellPadding: 3 },
                         margin: { left: 15, right: 15 }
                     });
                 } else {
                     drawInvoiceTableFallback(doc, tableBody, tableStartY);
                 }
 
-                // -----------------------------------------------------------
-                // TOTAL / SIGNATURE
-                // -----------------------------------------------------------
-                const finalY = doc.lastAutoTable && doc.lastAutoTable.finalY
-                    ? doc.lastAutoTable.finalY
-                    : calculateFallbackTableEndY(tableBody, tableStartY);
-
+                const finalY = doc.lastAutoTable && doc.lastAutoTable.finalY ? doc.lastAutoTable.finalY : calculateFallbackTableEndY(tableBody, tableStartY);
+                doc.setFont('helvetica', 'bold');
                 doc.setFontSize(12);
-                doc.setFont(undefined, 'bold');
+                doc.setTextColor(0, 0, 0);
                 doc.text(`Grand Total: Rs. ${grandTotal.toFixed(2)}`, 140, finalY + 15);
-
+                
                 doc.setFontSize(10);
-                doc.setFont(undefined, 'normal');
+                doc.setFont('helvetica', 'normal');
                 doc.text('For YDV SPORTS MRT', 140, finalY + 40);
                 doc.line(140, finalY + 55, 185, finalY + 55);
                 doc.text('Authorized Signatory', 142, finalY + 60);
-
-                doc.setFontSize(10);
+                
+                doc.setFontSize(9);
                 doc.setTextColor(100, 100, 100);
                 doc.text('Thank you for your business!', 105, 280, null, null, 'center');
-
+                
                 const cleanInvNo = invNo.replace(/[^a-zA-Z0-9-]/g, '_') || 'Invoice';
                 doc.save(`Invoice_${cleanInvNo}.pdf`);
 
             } catch (error) {
-                console.error('Invoice PDF Error:', error);
-                alert('Invoice PDF generate nahi ho saka.\n\nError: ' + (error.message || error));
+                alert('Invoice PDF could not be generated.\n\nError: ' + (error.message || error));
             }
         }
 
-        // Manual table fallback. This is used only if AutoTable is unavailable.
         function drawInvoiceTableFallback(doc, rows, startY) {
-            const left = 15;
-            const right = 195;
-            const colX = [left, 105, 140, 160, right];
-            const headerH = 9;
-            const rowH = 8;
+            const left = 15, right = 195, colX = [left, 105, 140, 160, right], headerH = 9, rowH = 8;
             let y = startY;
-
+            
             doc.setFontSize(9);
-            doc.setFont(undefined, 'bold');
-            doc.setFillColor(26, 178, 129);
+            doc.setFont('helvetica', 'bold');
+            doc.setFillColor(20, 150, 110);
             doc.setTextColor(255, 255, 255);
             doc.rect(left, y, right - left, headerH, 'F');
-
             doc.text('Item Name', colX[0] + 2, y + 6);
             doc.text('MRP', colX[1] + 2, y + 6);
             doc.text('Qty', colX[2] + 2, y + 6);
             doc.text('Total Amount', colX[3] + 2, y + 6);
-
             y += headerH;
-            doc.setFont(undefined, 'normal');
+            
+            doc.setFont('helvetica', 'normal');
             doc.setTextColor(0, 0, 0);
-
+            
             rows.forEach((row, idx) => {
-                const bg = idx % 2 === 0;
-                if (bg) {
+                if (idx % 2 === 0) {
                     doc.setFillColor(245, 245, 245);
                     doc.rect(left, y, right - left, rowH, 'F');
                 }
-
                 doc.rect(left, y, right - left, rowH);
                 doc.line(colX[1], y, colX[1], y + rowH);
                 doc.line(colX[2], y, colX[2], y + rowH);
                 doc.line(colX[3], y, colX[3], y + rowH);
-
+                
                 const itemName = doc.splitTextToSize(String(row[0]), 85)[0];
                 doc.text(itemName, colX[0] + 2, y + 5.5);
                 doc.text(String(row[1]), colX[1] + 2, y + 5.5);
                 doc.text(String(row[2]), colX[2] + 2, y + 5.5);
                 doc.text(String(row[3]), colX[3] + 2, y + 5.5);
-
                 y += rowH;
             });
-
             doc.setDrawColor(150, 150, 150);
             doc.rect(left, startY, right - left, y - startY);
         }
 
         function calculateFallbackTableEndY(rows, startY) {
-            const headerH = 9;
-            const rowH = 8;
-            return startY + headerH + (rows.length * rowH);
+            return startY + 9 + rows.length * 8;
         }
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeAllModals();
+        });
+
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    if (modal.id === 'sale-entry-modal') closeSaleEntryModal();
+                    else modal.style.display = 'none';
+                }
+            });
+        });
     </script>
 </body>
 </html>

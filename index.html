@@ -5,46 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>YDV Sports Mrt</title>
     <link rel="icon" href="https://i.postimg.cc/PNxvDXKY/image.png">
-    
-    <!-- jsPDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
-    
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- SheetJS Excel Export -->
     <script src="https://cdn.sheetjs.com/xlsx-0.20.3/package/dist/xlsx.full.min.js"></script>
     
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
-        body {
-            background: linear-gradient(rgba(10, 20, 35, 0.8), rgba(10, 20, 35, 0.8)), url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=1950&auto=format&fit=crop') no-repeat center center fixed;
-            background-size: cover;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: white;
-        }
-        .glass-panel {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(15px);
-            -webkit-backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            padding: 40px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37);
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        body { background: linear-gradient(rgba(10, 20, 35, 0.8), rgba(10, 20, 35, 0.8)), url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=1950&auto=format&fit=crop') no-repeat center center fixed; background-size: cover; min-height: 100vh; display: flex; justify-content: center; align-items: center; color: white; }
+        .glass-panel { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 40px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37); }
         #login-view { width: 100%; max-width: 450px; }
-        #dashboard-view, #party-view, #item-view, #advance-view, #totalsale-view { display: none; width: 100%; max-width: 1000px; }
+        #dashboard-view, #party-view, #item-view, #advance-view, #totalsale-view, #ledger-view { display: none; width: 100%; max-width: 1100px; }
         .logo-container { text-align: center; margin-bottom: 30px; }
         .logo-container img { width: 90px; height: 90px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); object-fit: cover; background: white; }
         .logo-container h1 { font-size: 28px; font-weight: 700; margin-top: 15px; }
@@ -60,10 +32,10 @@
         .btn:hover { background: #059669; }
         .btn:disabled { opacity: 0.65; cursor: not-allowed; }
         .dashboard-header, .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; }
-        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; }
         .kpi-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 25px; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; }
         .kpi-card:hover { background: rgba(255, 255, 255, 0.08); transform: translateY(-5px); border-color: rgba(255, 255, 255, 0.2); }
-        .kpi-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .kpi-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
         .kpi-title i { color: #10B981; font-size: 20px; }
         .kpi-desc { font-size: 13px; color: #aaa; }
         .table-container { width: 100%; max-height: 500px; overflow-y: auto; background: rgba(0, 0, 0, 0.2); border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); }
@@ -73,7 +45,8 @@
         td { color: #eee; }
         tr:hover td { background: rgba(255,255,255,0.02); }
         .btn-edit { background: #f59e0b; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; margin-right: 5px; }
-        .btn-action { background: #3b82f6; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; }
+        .btn-delete { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; margin-right: 5px; }
+        .btn-action { background: #3b82f6; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; }
         .btn-invoice { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
         .btn-export { background: #217346; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 7px; transition: 0.3s; }
         .btn-export:hover { background: #185c37; }
@@ -132,7 +105,6 @@
             <input type="password" id="password" class="input-with-icon" placeholder="Enter Password">
             <span class="eye-icon" onclick="togglePassword()"><i class="fa-solid fa-eye" id="eye-icon"></i></span>
         </div>
-        <a href="#" class="forgot-pass">Forgot password?</a>
         <button class="btn" id="loginBtn" onclick="doLogin()">BOWL EM OUT (LOGIN) <i class="fa-solid fa-arrow-right"></i></button>
     </div>
 
@@ -147,9 +119,14 @@
                 <div class="kpi-title"><i class="fa-solid fa-cart-shopping"></i> SALE ENTRY</div>
                 <div class="kpi-desc">Record new match sales</div>
             </div>
+            <!-- LEDGER DASHBOARD -->
+            <div class="kpi-card" style="border-color: #f59e0b;" onclick="openLedgerDashboard()">
+                <div class="kpi-title" style="color:#f59e0b;"><i class="fa-solid fa-chart-pie"></i> TOTAL SALE & OUTSTANDING</div>
+                <div class="kpi-desc">View total sales, collection & outstanding</div>
+            </div>
             <div class="kpi-card" onclick="openTotalSales()">
-                <div class="kpi-title"><i class="fa-solid fa-chart-line"></i> TOTAL SALE</div>
-                <div class="kpi-desc">View invoices & sales</div>
+                <div class="kpi-title"><i class="fa-solid fa-file-invoice"></i> GET INVOICES</div>
+                <div class="kpi-desc">View all generated invoices</div>
             </div>
             <div class="kpi-card" onclick="openPartyMaster()">
                 <div class="kpi-title"><i class="fa-solid fa-users"></i> PARTY MASTER</div>
@@ -161,7 +138,7 @@
             </div>
             <div class="kpi-card" onclick="openAdvanceReceived()">
                 <div class="kpi-title"><i class="fa-solid fa-money-bill-wave"></i> ADVANCE RECEIVED</div>
-                <div class="kpi-desc">Track advances & orders</div>
+                <div class="kpi-desc">Track pre-sale advances</div>
             </div>
         </div>
     </div>
@@ -179,11 +156,7 @@
         <div id="party-loader" class="loader"><i class="fa-solid fa-spinner fa-spin"></i> Loading parties...</div>
         <div class="table-container" id="party-table-container">
             <table>
-                <thead>
-                    <tr>
-                        <th>Party Name</th><th>Mob. No</th><th>State</th><th>Full Address</th><th>Pin Code</th><th>Action</th>
-                    </tr>
-                </thead>
+                <thead><tr><th>Party Name</th><th>Mob. No</th><th>State</th><th>Full Address</th><th>Pin Code</th><th>Action</th></tr></thead>
                 <tbody id="party-list"></tbody>
             </table>
         </div>
@@ -202,9 +175,7 @@
         <div id="item-loader" class="loader"><i class="fa-solid fa-spinner fa-spin"></i> Loading items...</div>
         <div class="table-container" id="item-table-container">
             <table>
-                <thead>
-                    <tr><th>Item Name</th><th>MRP</th><th>Action</th></tr>
-                </thead>
+                <thead><tr><th>Item Name</th><th>MRP</th><th>Action</th></tr></thead>
                 <tbody id="item-list"></tbody>
             </table>
         </div>
@@ -220,1186 +191,338 @@
         <div id="advance-loader" class="loader"><i class="fa-solid fa-spinner fa-spin"></i> Loading advances...</div>
         <div class="table-container" id="advance-table-container">
             <table>
-                <thead>
-                    <tr><th>Party Name</th><th>Advance Amount</th><th>Action</th></tr>
-                </thead>
+                <thead><tr><th>Party Name</th><th>Advance Amount</th><th>Action</th></tr></thead>
                 <tbody id="advance-list"></tbody>
             </table>
         </div>
     </div>
 
-    <!-- TOTAL SALES -->
+    <!-- GET INVOICES -->
     <div id="totalsale-view" class="glass-panel">
         <div class="page-header">
             <button class="btn-back" onclick="backToDashboard()"><i class="fa-solid fa-arrow-left"></i> Back</button>
-            <h2>TOTAL SALES & INVOICES</h2>
+            <h2>GET INVOICES</h2>
             <button class="btn-export" onclick="exportSalesExcel()"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
         </div>
-        <div id="sales-loader" class="loader"><i class="fa-solid fa-spinner fa-spin"></i> Loading sales...</div>
+        <div id="sales-loader" class="loader"><i class="fa-solid fa-spinner fa-spin"></i> Loading invoices...</div>
         <div class="table-container" id="sales-table-container">
             <table>
-                <thead>
-                    <tr><th>Invoice No</th><th>Date</th><th>Party Name</th><th>Items</th><th>Grand Total</th><th>Action</th></tr>
-                </thead>
+                <thead><tr><th>Invoice No</th><th>Date</th><th>Party Name</th><th>Items</th><th>Grand Total</th><th>Action</th></tr></thead>
                 <tbody id="sales-list"></tbody>
             </table>
         </div>
     </div>
 
-    <!-- PARTY MODAL -->
-    <div id="party-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2 id="party-modal-title">Add New Party</h2>
-                <button class="close-btn" onclick="closeModal('party-modal')"><i class="fa-solid fa-times"></i></button>
+    <!-- LEDGER / TOTAL SALE DASHBOARD -->
+    <div id="ledger-view" class="glass-panel">
+        <div class="page-header">
+            <button class="btn-back" onclick="backToDashboard()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            <h2>TOTAL SALE & OUTSTANDING</h2>
+        </div>
+        
+        <!-- 4 Top Summary Cards -->
+        <div class="kpi-grid" style="margin-bottom:20px;">
+            <div class="kpi-card" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">
+                <div class="kpi-title" style="color:#10B981;"><i class="fa-solid fa-indian-rupee-sign"></i> TOTAL SALE</div>
+                <h3 id="top-total-sale" style="font-size: 24px; margin-top: 10px;">₹ 0.00</h3>
             </div>
-            <input type="hidden" id="p-original-name">
-            <input type="hidden" id="p-action-type">
-            <div class="input-group"><label>Party Name</label><input type="text" id="p-name"></div>
-            <div class="input-group"><label>Mob. No</label><input type="text" id="p-mobile"></div>
-            <div class="input-group"><label>State</label><input type="text" id="p-state"></div>
-            <div class="input-group"><label>Full Address</label><input type="text" id="p-address"></div>
-            <div class="input-group"><label>Pin Code</label><input type="text" id="p-pincode"></div>
-            <button class="btn" id="partySubmitBtn" onclick="submitParty()"><i class="fa-solid fa-save"></i> Save Party</button>
+            <div class="kpi-card" style="background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3);">
+                <div class="kpi-title" style="color:#3b82f6;"><i class="fa-solid fa-hand-holding-dollar"></i> TOTAL ADVANCE</div>
+                <h3 id="top-total-advance" style="font-size: 24px; margin-top: 10px;">₹ 0.00</h3>
+            </div>
+            <div class="kpi-card" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">
+                <div class="kpi-title" style="color:#f59e0b;"><i class="fa-solid fa-wallet"></i> TOTAL COLLECTION</div>
+                <h3 id="top-total-collection" style="font-size: 24px; margin-top: 10px;">₹ 0.00</h3>
+            </div>
+            <div class="kpi-card" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3);">
+                <div class="kpi-title" style="color:#ef4444;"><i class="fa-solid fa-triangle-exclamation"></i> OUTSTANDING</div>
+                <h3 id="top-total-out" style="font-size: 24px; margin-top: 10px;">₹ 0.00</h3>
+            </div>
+        </div>
+
+        <div id="ledger-loader" class="loader"><i class="fa-solid fa-spinner fa-spin"></i> Loading data...</div>
+        <div class="table-container" id="ledger-table-container">
+            <table>
+                <thead>
+                    <tr><th>Party Name</th><th>Total Qty</th><th>Total Sale</th><th>Total Advance</th><th>Total Collection</th><th>Outstanding</th><th>Action</th></tr>
+                </thead>
+                <tbody id="ledger-list"></tbody>
+            </table>
         </div>
     </div>
 
-    <!-- ITEM MODAL -->
-    <div id="item-modal" class="modal">
+    <!-- RECEIVE AMOUNT MODAL -->
+    <div id="receive-payment-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2 id="item-modal-title">Add New Item</h2>
-                <button class="close-btn" onclick="closeModal('item-modal')"><i class="fa-solid fa-times"></i></button>
-            </div>
-            <input type="hidden" id="i-original-name">
-            <input type="hidden" id="i-action-type">
-            <div class="input-group"><label>Item Name</label><input type="text" id="i-name"></div>
-            <div class="input-group"><label>MRP (₹)</label><input type="number" id="i-mrp"></div>
-            <button class="btn" id="itemSubmitBtn" onclick="submitItem()"><i class="fa-solid fa-save"></i> Save Item</button>
-        </div>
-    </div>
-
-    <!-- ADD ADVANCE MODAL -->
-    <div id="add-advance-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Add Advance Entry</h2>
-                <button class="close-btn" onclick="closeModal('add-advance-modal')"><i class="fa-solid fa-times"></i></button>
-            </div>
-            <div class="input-group">
-                <label>Select Party</label>
-                <select id="adv-party-select"><option value="">-- Select Party --</option></select>
-            </div>
-            <div class="input-group">
-                <label>Advance Amount (₹)</label>
-                <input type="number" id="adv-amt-input" placeholder="Enter Amount">
-            </div>
-            <button class="btn" id="advSubmitBtn" onclick="submitAdvance('addAdvance')"><i class="fa-solid fa-check"></i> Save Advance</button>
-        </div>
-    </div>
-
-    <!-- SETTLE AMOUNT MODAL -->
-    <div id="settle-amount-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Settle Amount</h2>
-                <button class="close-btn" onclick="closeModal('settle-amount-modal')"><i class="fa-solid fa-times"></i></button>
+                <h2>Receive Payment</h2>
+                <button class="close-btn" onclick="closeModal('receive-payment-modal')"><i class="fa-solid fa-times"></i></button>
             </div>
             <div class="input-group">
                 <label>Party Name</label>
-                <input type="text" id="settle-party" readonly style="background:rgba(0,0,0,0.5);color:#888;">
+                <input type="text" id="recv-party" readonly style="background:rgba(0,0,0,0.5);color:#888;">
             </div>
             <div class="input-group">
-                <label>Amount to Settle / Add (₹)</label>
-                <input type="number" id="settle-amt-input" placeholder="Enter Amount Paid">
+                <label>Amount Received (₹)</label>
+                <input type="number" id="recv-amt-input" placeholder="Enter Post-Sale Payment">
             </div>
-            <button class="btn" id="settleSubmitBtn" onclick="submitSettle()"><i class="fa-solid fa-check"></i> Settle Amount</button>
+            <button class="btn" id="recvSubmitBtn" onclick="submitReceivePayment()"><i class="fa-solid fa-check"></i> Save Payment</button>
         </div>
     </div>
 
-    <!-- SALE ENTRY MODAL -->
-    <div id="sale-entry-modal" class="modal">
-        <div class="modal-content" style="max-width:700px;">
-            <div class="modal-header">
-                <h2>Sale Entry</h2>
-                <button class="close-btn" onclick="closeSaleEntryModal()"><i class="fa-solid fa-times"></i></button>
-            </div>
-            <div class="input-group">
-                <label>Party Name</label>
-                <select id="sale-party"><option value="">-- Select Party --</option></select>
-            </div>
-            <div class="flex-row">
-                <div class="input-group" style="flex:2;">
-                    <label>Select Product</label>
-                    <select id="sale-item"><option value="">-- Select Product --</option></select>
-                </div>
-                <div class="input-group" style="flex:1;">
-                    <label>Qty</label>
-                    <input type="number" id="sale-qty" value="1" min="1" step="1">
-                </div>
-                <button class="btn-action" style="padding:12px;height:46px;margin-bottom:2px;" onclick="addItemToSale()"><i class="fa-solid fa-plus"></i> Add</button>
-            </div>
-            <div class="order-cart">
-                <h3 style="font-size:14px;margin-bottom:10px;color:#ccc;">Sale Items:</h3>
-                <table>
-                    <thead><tr><th>Product Name</th><th>MRP</th><th>Qty</th><th>Total</th><th></th></tr></thead>
-                    <tbody id="sale-cart-list"></tbody>
-                </table>
-                <div style="text-align:right;margin-top:15px;font-size:18px;font-weight:bold;">Grand Total: ₹ <span id="sale-grand-total">0</span></div>
-            </div>
-            <button class="btn" id="saleSubmitBtn" onclick="submitSale()" style="margin-top:15px;"><i class="fa-solid fa-check"></i> Save Sale</button>
-        </div>
-    </div>
-
-    <!-- PLACE ORDER MODAL -->
-    <div id="order-modal" class="modal">
-        <div class="modal-content" style="max-width:600px;">
-            <div class="modal-header">
-                <h2>Place Order</h2>
-                <button class="close-btn" onclick="closeModal('order-modal')"><i class="fa-solid fa-times"></i></button>
-            </div>
-            <div class="input-group">
-                <label>Party Name</label>
-                <input type="text" id="o-party" readonly style="background:rgba(0,0,0,0.5);color:#888;">
-            </div>
-            <div class="flex-row">
-                <div class="input-group" style="flex:2;">
-                    <label>Select Item</label>
-                    <select id="o-item"><option value="">-- Select Item --</option></select>
-                </div>
-                <div class="input-group" style="flex:1;">
-                    <label>Qty</label>
-                    <input type="number" id="o-qty" value="1" min="1">
-                </div>
-                <button class="btn-action" style="padding:12px;height:46px;margin-bottom:2px;" onclick="addItemToOrder()"><i class="fa-solid fa-plus"></i> Add</button>
-            </div>
-            <div class="order-cart">
-                <h3 style="font-size:14px;margin-bottom:10px;color:#ccc;">Cart Items:</h3>
-                <table>
-                    <thead><tr><th>Item Name</th><th>MRP</th><th>Qty</th><th>Total</th><th></th></tr></thead>
-                    <tbody id="cart-list"></tbody>
-                </table>
-                <div style="text-align:right;margin-top:15px;font-size:16px;font-weight:bold;color:#10B981;">Grand Total: ₹ <span id="cart-grand-total">0</span></div>
-            </div>
-            <button class="btn" id="orderSubmitBtn" onclick="submitOrder()"><i class="fa-solid fa-check"></i> Confirm Order & Deduct Advance</button>
-        </div>
-    </div>
+    <!-- MODALS (Party, Item, Advance, Settle, Sale, Order) -->
+    <!-- (Included for completion) -->
+    <div id="party-modal" class="modal"><div class="modal-content"><div class="modal-header"><h2 id="party-modal-title">Add New Party</h2><button class="close-btn" onclick="closeModal('party-modal')"><i class="fa-solid fa-times"></i></button></div><input type="hidden" id="p-original-name"><input type="hidden" id="p-action-type"><div class="input-group"><label>Party Name</label><input type="text" id="p-name"></div><div class="input-group"><label>Mob. No</label><input type="text" id="p-mobile"></div><div class="input-group"><label>State</label><input type="text" id="p-state"></div><div class="input-group"><label>Full Address</label><input type="text" id="p-address"></div><div class="input-group"><label>Pin Code</label><input type="text" id="p-pincode"></div><button class="btn" id="partySubmitBtn" onclick="submitParty()"><i class="fa-solid fa-save"></i> Save Party</button></div></div>
+    <div id="item-modal" class="modal"><div class="modal-content"><div class="modal-header"><h2 id="item-modal-title">Add New Item</h2><button class="close-btn" onclick="closeModal('item-modal')"><i class="fa-solid fa-times"></i></button></div><input type="hidden" id="i-original-name"><input type="hidden" id="i-action-type"><div class="input-group"><label>Item Name</label><input type="text" id="i-name"></div><div class="input-group"><label>MRP (₹)</label><input type="number" id="i-mrp"></div><button class="btn" id="itemSubmitBtn" onclick="submitItem()"><i class="fa-solid fa-save"></i> Save Item</button></div></div>
+    <div id="add-advance-modal" class="modal"><div class="modal-content"><div class="modal-header"><h2>Add Advance Entry</h2><button class="close-btn" onclick="closeModal('add-advance-modal')"><i class="fa-solid fa-times"></i></button></div><div class="input-group"><label>Select Party</label><select id="adv-party-select"><option value="">-- Select Party --</option></select></div><div class="input-group"><label>Advance Amount (₹)</label><input type="number" id="adv-amt-input" placeholder="Enter Amount"></div><button class="btn" id="advSubmitBtn" onclick="submitAdvance('addAdvance')"><i class="fa-solid fa-check"></i> Save Advance</button></div></div>
+    <div id="settle-amount-modal" class="modal"><div class="modal-content"><div class="modal-header"><h2>Settle Amount</h2><button class="close-btn" onclick="closeModal('settle-amount-modal')"><i class="fa-solid fa-times"></i></button></div><div class="input-group"><label>Party Name</label><input type="text" id="settle-party" readonly style="background:rgba(0,0,0,0.5);color:#888;"></div><div class="input-group"><label>Amount to Settle / Add (₹)</label><input type="number" id="settle-amt-input" placeholder="Enter Amount Paid"></div><button class="btn" id="settleSubmitBtn" onclick="submitSettle()"><i class="fa-solid fa-check"></i> Settle Amount</button></div></div>
+    <div id="sale-entry-modal" class="modal"><div class="modal-content" style="max-width:700px;"><div class="modal-header"><h2>Sale Entry</h2><button class="close-btn" onclick="closeSaleEntryModal()"><i class="fa-solid fa-times"></i></button></div><div class="input-group"><label>Party Name</label><select id="sale-party"><option value="">-- Select Party --</option></select></div><div class="flex-row"><div class="input-group" style="flex:2;"><label>Select Product</label><select id="sale-item"><option value="">-- Select Product --</option></select></div><div class="input-group" style="flex:1;"><label>Qty</label><input type="number" id="sale-qty" value="1" min="1" step="1"></div><button class="btn-action" style="padding:12px;height:46px;margin-bottom:2px;" onclick="addItemToSale()"><i class="fa-solid fa-plus"></i> Add</button></div><div class="order-cart"><h3 style="font-size:14px;margin-bottom:10px;color:#ccc;">Sale Items:</h3><table><thead><tr><th>Product Name</th><th>MRP</th><th>Qty</th><th>Total</th><th></th></tr></thead><tbody id="sale-cart-list"></tbody></table><div style="text-align:right;margin-top:15px;font-size:18px;font-weight:bold;">Grand Total: ₹ <span id="sale-grand-total">0</span></div></div><button class="btn" id="saleSubmitBtn" onclick="submitSale()" style="margin-top:15px;"><i class="fa-solid fa-check"></i> Save Sale</button></div></div>
+    <div id="order-modal" class="modal"><div class="modal-content" style="max-width:600px;"><div class="modal-header"><h2>Place Order</h2><button class="close-btn" onclick="closeModal('order-modal')"><i class="fa-solid fa-times"></i></button></div><div class="input-group"><label>Party Name</label><input type="text" id="o-party" readonly style="background:rgba(0,0,0,0.5);color:#888;"></div><div class="flex-row"><div class="input-group" style="flex:2;"><label>Select Item</label><select id="o-item"><option value="">-- Select Item --</option></select></div><div class="input-group" style="flex:1;"><label>Qty</label><input type="number" id="o-qty" value="1" min="1"></div><button class="btn-action" style="padding:12px;height:46px;margin-bottom:2px;" onclick="addItemToOrder()"><i class="fa-solid fa-plus"></i> Add</button></div><div class="order-cart"><h3 style="font-size:14px;margin-bottom:10px;color:#ccc;">Cart Items:</h3><table><thead><tr><th>Item Name</th><th>MRP</th><th>Qty</th><th>Total</th><th></th></tr></thead><tbody id="cart-list"></tbody></table><div style="text-align:right;margin-top:15px;font-size:16px;font-weight:bold;color:#10B981;">Grand Total: ₹ <span id="cart-grand-total">0</span></div></div><button class="btn" id="orderSubmitBtn" onclick="submitOrder()"><i class="fa-solid fa-check"></i> Confirm Order & Deduct Advance</button></div></div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz3MtJ1WjFNasEPUXX_rgAN3q9j1lit-KLUPoHxtmIm9ltrvwpE7gAo5d0rkr-_0ysh/exec';
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyXqB-wPDI05qER7Y54f7zKrHm4av5pHkAARMR81XqGgW8MLpj_UafyF6AS5wqoWdo2/exec';
 
-        let itemsGlobalList = [];
-        let partiesGlobalList = [];
-        let salesGlobalList = [];
-        let currentCart = [];
-        let saleCart = [];
-        let logoBase64 = null;
+        let itemsGlobalList = []; let partiesGlobalList = []; let salesGlobalList = [];
+        let currentCart = []; let saleCart = []; let logoBase64 = null;
 
         const callIconBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAACUklEQVR4nO2Yv0sCQRTHv89y/KGMm7yTjIIggtCgMmgv7F/QoK29oSEoiJampra2hqqhoSEQrCFoahFE+AcEbYqgq+68M79I0tDk8t5yB4/4gQd37833md979+4NKIqiKIqi/htB2A6YTCa7aZpbiUSC1ut1QilFOzs73V6v91oIEfV1+L/B7OzsECHEW57nj/L5/FAikaBBEISpYrG41Wg0nojoL+M/A2ez2TnHcU6LxeKE1WqlhmGwoig6WZZPMpmMB+A75fRj9Pv9Z7VabWh2dpaORqMcRVEUx3HOq6urY5ZljwHk+jZ2I/A8fwgAlmWZvV4v131pmnbTNN3d2tr6FkKIfd28W4FAIFByHOfENM1pjuNoPp+nw+Ewx3GcMxiGlVqtlqMoajmTyaw1Gg2P1u5uBZzL5Y7r9XrVarVSsixTJpOhoVCIMwyDAXDQNC0dDofPEonE6traWhfAj1Y5W4HW4+PjsVQqnY6OjlKe52m1WqXdbpfm83najD31er04nU5nOp3O6VfX1gL01+XlJTsxMWH6fD7Gtm3G6/UyhmEwtVqN1nXdmEwmZUEQ3Fgs9tTr9d5U9X/c0w9YlSjLV+l0+tput08dx6Hn5+ePpaUlrFaru2xvb7+qqurYtj0SCAQ+KSo2g7Ozsy8kSUokElQURYpSisvlMi8IAisIQkxV1Q6ANyHEh6IeMwgh3mZZfiWE6P3y7I2imDIIIS8Mw8T7F/FjQxTFm263+24YxnR/Y4eCEHLtOM5tf2N9QVEURVEU9de8AQ4k15aB/92FAAAAAElFTkSuQmCC";
         const waIconBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAADw0lEQVR4nO2YS2gTQRjHfzO72U1qjVaf+EDx4EFE0SJqUSwKxYPiTfRSpOhBPIkHPXgTBEFQDx4UPBQVQcGLoAcPPVTR1lZrrU1rmjQvs/F/yGZr0iYv28T0B/9LsvPN/P/fNzP7zQillFJKKaWUUiqWFBG+TyaTwxzHmSGEGA0GgzX1en00Ho/nAXyIl98/sVjsSCgUOkUIMbUsqVQq2xVFyT0/P2dCCG+A479iMpl8nkgkjlOpVBIAJElSFEXJRVF8jcfj2QB3fP6RRCJxhOO4w6qqugFwHAeSJEFVVURRlGRZFmOxWBJAXR2v3wXdbvd6LBab3t7eXjM/m81mUVNT4zWJ47iooihJnud5AG/qet4m3G739lgstrC+vr7J/A0Gg+jo6MDKysqyZ51OJ5LJpBiPx5/qunZfl7fT5XA4FpLJ5MHe3l6X9bu1tRU+nw+7u7tLno3H4wgGgw1TU1NP0+l0p65fS4FCoXAvnU7vMxgMn/2emJhALBYDSZKyZwcHBxEKhXaXl5cP6TqlFEilUnedTufWn5mZmRm0tbWhtra2bJnH40E0Gm24fPnyh/39fVnXLykgiuLtQqFwx2Qy1QOA3+9HXV0dWltbIUnSkncejwfRaDR++fLlvb29PV3+xQIIITcMw/htNps1ADc8Hg+6urqwuLgIjuOWtTMyMoJwOHx9enr6na4F2t3dfSuK4lNRFO1lM34tHo8HAwMDuHnzJq5du7ZimWvXriEYDN5OpVJ3dC0AABAE4bHb7X5nMpkqADc8Hg8GBgYQDAZhMpmWLTcwMICenp57Npvtrq4FAEAQhHtut3stk8mwAODxeDA8PIyFhQU0NDRUaOdw4MABhEIhr6Io93S9l5L19fUuRVHu6rp2f3Nzs1H2XU2SJAwNDcHv9+PIkSPo6upa1ra9vR0DAwNIpVL3dC0AADRNe5RIJO7s7+/36X7Ubrejq6sLQ0NDOHXqVGXLpNNpzM/Pr4ii+EDXAgCwurr6vlwu345Go9/M21gQBOzevRsHDx7E1NQUVlZWKltGkqTF7e3tt6IoPun8/9wGNE17w/P8j8XFxa5MJsOM2X/q7Nmz8Pv9aGhowOjoKHK5XMUiqqoWHMeZyGQytwzD+GLVpyUAALt37549cODA4dOnTx9yOp0YHx8HISS/2MdxHHw+H/bs2YOrV69idXW14mO32y0mEompQqFwUFXVp1b9WgYajcZfW1tbKysrK4jH49Vb8z+rKMq74eFhY39/v6X+o+L/2JRSyheGYTyuVqvrpmkLpZRSSin1H/UHRf4864uUym0AAAAASUVORK5CYII=";
 
         window.addEventListener('load', function() {
-            const img = new Image();
-            img.crossOrigin = 'Anonymous';
+            const img = new Image(); img.crossOrigin = 'Anonymous';
             img.onload = function() {
-                try {
-                    const canvas = document.createElement('canvas');
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0);
-                    logoBase64 = canvas.toDataURL('image/png');
-                } catch (e) {
-                    console.warn('Failed to add logo:', e);
-                }
-            };
-            img.src = 'https://i.postimg.cc/PNxvDXKY/image.png';
+                try { const c = document.createElement('canvas'); c.width = img.width; c.height = img.height; c.getContext('2d').drawImage(img, 0, 0); logoBase64 = c.toDataURL('image/png'); } catch (e) {}
+            }; img.src = 'https://i.postimg.cc/PNxvDXKY/image.png';
         });
 
-        function togglePassword() {
-            const passInput = document.getElementById('password');
-            const eyeIcon = document.getElementById('eye-icon');
-            if (passInput.type === 'password') {
-                passInput.type = 'text';
-                eyeIcon.classList.remove('fa-eye');
-                eyeIcon.classList.add('fa-eye-slash');
-            } else {
-                passInput.type = 'password';
-                eyeIcon.classList.remove('fa-eye-slash');
-                eyeIcon.classList.add('fa-eye');
-            }
-        }
-
-        function escapeHtml(value) {
-            return String(value ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
-        }
-
+        function togglePassword() { const p = document.getElementById('password'); const e = document.getElementById('eye-icon'); if (p.type === 'password') { p.type = 'text'; e.className = 'fa-solid fa-eye-slash'; } else { p.type = 'password'; e.className = 'fa-solid fa-eye'; } }
+        function escapeHtml(v) { return String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;'); }
+        function formatCurrency(amt) { return Number(amt || 0).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+        
         function fetchAPI(formData, timeoutMs = 20000) {
-            const controller = new AbortController();
-            const timer = setTimeout(() => controller.abort(), timeoutMs);
-            return fetch(SCRIPT_URL, {
-                method: 'POST', body: formData, redirect: 'follow', signal: controller.signal
-            })
-            .then(res => {
-                if (!res.ok) throw new Error(`Server Error: ${res.status}`);
-                return res.json();
-            })
-            .catch(err => {
-                if (err.name === 'AbortError') throw new Error('Server response is taking too long. Please try again.');
-                throw err;
-            })
+            const controller = new AbortController(); const timer = setTimeout(() => controller.abort(), timeoutMs);
+            return fetch(SCRIPT_URL, { method: 'POST', body: formData, redirect: 'follow', signal: controller.signal })
+            .then(res => { if (!res.ok) throw new Error(`Server Error: ${res.status}`); return res.json(); })
+            .catch(err => { if (err.name === 'AbortError') throw new Error('Server response taking too long. Please try again.'); throw err; })
             .finally(() => clearTimeout(timer));
         }
 
-        function hideAllViews() {
-            ['login-view', 'dashboard-view', 'party-view', 'item-view', 'advance-view', 'totalsale-view'].forEach(id => {
-                document.getElementById(id).style.display = 'none';
-            });
-        }
-
-        function backToDashboard() {
-            hideAllViews();
-            document.getElementById('dashboard-view').style.display = 'block';
-        }
-
-        function closeModal(id) {
-            const modal = document.getElementById(id);
-            if (modal) modal.style.display = 'none';
-        }
-
-        function closeSaleEntryModal() {
-            closeModal('sale-entry-modal');
-            saleCart = [];
-            document.getElementById('sale-party').value = '';
-            document.getElementById('sale-item').value = '';
-            document.getElementById('sale-qty').value = 1;
-            renderSaleCart();
-        }
-
-        function logout() {
-            closeAllModals();
-            hideAllViews();
-            document.getElementById('login-view').style.display = 'block';
-            document.getElementById('username').value = '';
-            document.getElementById('password').value = '';
-            document.getElementById('login-error').style.display = 'none';
-        }
-
-        function closeAllModals() {
-            document.querySelectorAll('.modal').forEach(modal => modal.style.display = 'none');
-        }
+        function hideAllViews() { ['login-view', 'dashboard-view', 'party-view', 'item-view', 'advance-view', 'totalsale-view', 'ledger-view'].forEach(id => document.getElementById(id).style.display = 'none'); }
+        function backToDashboard() { hideAllViews(); document.getElementById('dashboard-view').style.display = 'block'; }
+        function closeModal(id) { const m = document.getElementById(id); if (m) m.style.display = 'none'; }
+        function closeSaleEntryModal() { closeModal('sale-entry-modal'); saleCart = []; document.getElementById('sale-party').value = ''; document.getElementById('sale-item').value = ''; document.getElementById('sale-qty').value = 1; renderSaleCart(); }
+        function logout() { closeAllModals(); hideAllViews(); document.getElementById('login-view').style.display = 'block'; document.getElementById('username').value = ''; document.getElementById('password').value = ''; document.getElementById('login-error').style.display = 'none'; }
+        function closeAllModals() { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); }
 
         function doLogin() {
-            const u = document.getElementById('username').value.trim();
-            const p = document.getElementById('password').value.trim();
-            const errorBox = document.getElementById('login-error');
-
-            if (!u || !p) {
-                errorBox.innerText = 'Please enter User ID and Password.';
-                errorBox.style.display = 'block';
-                return;
-            }
-
-            errorBox.style.display = 'none';
-            const btn = document.getElementById('loginBtn');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...';
-            btn.disabled = true;
-
-            const fd = new URLSearchParams();
-            fd.append('action', 'login');
-            fd.append('username', u);
-            fd.append('password', p);
-
-            fetchAPI(fd)
-                .then(d => {
-                    btn.innerHTML = 'BOWL EM OUT (LOGIN) <i class="fa-solid fa-arrow-right"></i>';
-                    btn.disabled = false;
-                    if (d.success) {
-                        partiesGlobalList = d.parties || [];
-                        itemsGlobalList = d.items || [];
-                        hideAllViews();
-                        document.getElementById('dashboard-view').style.display = 'block';
-                    } else {
-                        errorBox.innerText = d.error || 'Invalid details!';
-                        errorBox.style.display = 'block';
-                    }
-                })
-                .catch(err => {
-                    btn.innerHTML = 'BOWL EM OUT (LOGIN) <i class="fa-solid fa-arrow-right"></i>';
-                    btn.disabled = false;
-                    errorBox.innerText = err.message || 'Network Error! Check Script Settings.';
-                    errorBox.style.display = 'block';
-                });
+            const u = document.getElementById('username').value.trim(); const p = document.getElementById('password').value.trim(); const e = document.getElementById('login-error');
+            if (!u || !p) { e.innerText = 'Please enter User ID and Password.'; e.style.display = 'block'; return; }
+            e.style.display = 'none'; const btn = document.getElementById('loginBtn'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...'; btn.disabled = true;
+            const fd = new URLSearchParams(); fd.append('action', 'login'); fd.append('username', u); fd.append('password', p);
+            fetchAPI(fd).then(d => { btn.innerHTML = 'BOWL EM OUT (LOGIN) <i class="fa-solid fa-arrow-right"></i>'; btn.disabled = false;
+                if (d.success) { partiesGlobalList = d.parties || []; itemsGlobalList = d.items || []; hideAllViews(); document.getElementById('dashboard-view').style.display = 'block'; } 
+                else { e.innerText = d.message || 'Invalid details!'; e.style.display = 'block'; }
+            }).catch(err => { btn.innerHTML = 'BOWL EM OUT (LOGIN) <i class="fa-solid fa-arrow-right"></i>'; btn.disabled = false; e.innerText = err.message || 'Network Error!'; e.style.display = 'block'; });
         }
 
-        function openPartyMaster() {
-            hideAllViews();
-            document.getElementById('party-view').style.display = 'block';
-            loadParties();
-        }
-
+        /* --- PARTY MASTER --- */
+        function openPartyMaster() { hideAllViews(); document.getElementById('party-view').style.display = 'block'; loadParties(); }
         function loadParties() {
-            const container = document.getElementById('party-table-container');
-            const loader = document.getElementById('party-loader');
-            container.style.display = 'none';
-            loader.style.display = 'block';
-
-            const fd = new URLSearchParams();
-            fd.append('action', 'getParties');
-
-            fetchAPI(fd)
-                .then(d => {
-                    if (!d.success) throw new Error(d.error || 'Party data load failed.');
-                    partiesGlobalList = d.parties || [];
-                    const tb = document.getElementById('party-list');
-                    if (!partiesGlobalList.length) {
-                        tb.innerHTML = '<tr><td colspan="6" style="text-align:center;">No party found</td></tr>';
-                    } else {
-                        tb.innerHTML = partiesGlobalList.map(p => `
-                            <tr>
-                                <td>${escapeHtml(p.name)}</td>
-                                <td>${escapeHtml(p.mobile)}</td>
-                                <td>${escapeHtml(p.state)}</td>
-                                <td>${escapeHtml(p.address)}</td>
-                                <td>${escapeHtml(p.pincode)}</td>
-                                <td>
-                                    <button class="btn-edit" onclick="openPartyModal('edit', '${escapeHtml(p.name)}', '${escapeHtml(p.mobile)}', '${escapeHtml(p.state)}', '${escapeHtml(p.address)}', '${escapeHtml(p.pincode)}')">
-                                        <i class="fa-solid fa-pen"></i> Edit
-                                    </button>
-                                </td>
-                            </tr>
-                        `).join('');
-                    }
-                    loader.style.display = 'none';
-                    container.style.display = 'block';
-                })
-                .catch(err => {
-                    loader.style.display = 'none';
-                    container.style.display = 'block';
-                    document.getElementById('party-list').innerHTML = `<tr><td colspan="6" style="text-align:center;color:#ff6b6b;">${escapeHtml(err.message)}</td></tr>`;
-                });
+            document.getElementById('party-table-container').style.display = 'none'; document.getElementById('party-loader').style.display = 'block';
+            const fd = new URLSearchParams(); fd.append('action', 'getParties');
+            fetchAPI(fd).then(d => {
+                if (!d.success) throw new Error(d.message || 'Party load failed.'); partiesGlobalList = d.parties || []; const tb = document.getElementById('party-list');
+                if (!partiesGlobalList.length) tb.innerHTML = '<tr><td colspan="6" style="text-align:center;">No party found</td></tr>';
+                else tb.innerHTML = partiesGlobalList.map(p => `<tr><td>${escapeHtml(p.name)}</td><td>${escapeHtml(p.mobile)}</td><td>${escapeHtml(p.state)}</td><td>${escapeHtml(p.address)}</td><td>${escapeHtml(p.pin)}</td>
+                    <td><button class="btn-edit" onclick="openPartyModal('edit', '${escapeHtml(p.name)}', '${escapeHtml(p.mobile)}', '${escapeHtml(p.state)}', '${escapeHtml(p.address)}', '${escapeHtml(p.pin)}')"><i class="fa-solid fa-pen"></i> Edit</button>
+                    <button class="btn-delete" onclick="deleteParty('${escapeHtml(p.name)}')"><i class="fa-solid fa-trash"></i> Delete</button></td></tr>`).join('');
+                document.getElementById('party-loader').style.display = 'none'; document.getElementById('party-table-container').style.display = 'block';
+            }).catch(err => { document.getElementById('party-loader').style.display = 'none'; document.getElementById('party-table-container').style.display = 'block'; document.getElementById('party-list').innerHTML = `<tr><td colspan="6" style="text-align:center;color:#ff6b6b;">${escapeHtml(err.message)}</td></tr>`; });
         }
-
-        function openPartyModal(mode, n = '', mob = '', s = '', a = '', pin = '') {
-            document.getElementById('p-action-type').value = mode === 'add' ? 'addParty' : 'editParty';
-            document.getElementById('party-modal-title').innerText = mode === 'add' ? 'Add Party' : 'Edit Party';
-            document.getElementById('p-original-name').value = n;
-            document.getElementById('p-name').value = n;
-            document.getElementById('p-mobile').value = mob;
-            document.getElementById('p-state').value = s;
-            document.getElementById('p-address').value = a;
-            document.getElementById('p-pincode').value = pin;
-            document.getElementById('party-modal').style.display = 'flex';
-        }
-
+        function openPartyModal(mode, n = '', mob = '', s = '', a = '', pin = '') { document.getElementById('p-action-type').value = mode === 'add' ? 'addParty' : 'editParty'; document.getElementById('party-modal-title').innerText = mode === 'add' ? 'Add Party' : 'Edit Party'; document.getElementById('p-original-name').value = n; document.getElementById('p-name').value = n; document.getElementById('p-mobile').value = mob; document.getElementById('p-state').value = s; document.getElementById('p-address').value = a; document.getElementById('p-pincode').value = pin; document.getElementById('party-modal').style.display = 'flex'; }
         function submitParty() {
-            const btn = document.getElementById('partySubmitBtn');
-            const partyName = document.getElementById('p-name').value.trim();
-
-            if (!partyName) return alert('Please enter Party Name.');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
-            btn.disabled = true;
-
-            const fd = new URLSearchParams();
-            fd.append('action', document.getElementById('p-action-type').value);
-            fd.append('originalName', document.getElementById('p-original-name').value);
-            fd.append('partyName', partyName);
-            fd.append('mobile', document.getElementById('p-mobile').value);
-            fd.append('state', document.getElementById('p-state').value);
-            fd.append('address', document.getElementById('p-address').value);
-            fd.append('pincode', document.getElementById('p-pincode').value);
-
-            fetchAPI(fd)
-                .then(d => {
-                    if (!d.success) throw new Error(d.error || 'Party save failed.');
-                    btn.innerHTML = '<i class="fa-solid fa-save"></i> Save Party';
-                    btn.disabled = false;
-                    closeModal('party-modal');
-                    loadParties();
-                })
-                .catch(err => {
-                    btn.innerHTML = '<i class="fa-solid fa-save"></i> Save Party';
-                    btn.disabled = false;
-                    alert('Party could not be saved.\n\n' + err.message);
-                });
+            const btn = document.getElementById('partySubmitBtn'); const name = document.getElementById('p-name').value.trim();
+            if (!name) return alert('Please enter Party Name.'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; btn.disabled = true;
+            const fd = new URLSearchParams(); fd.append('action', document.getElementById('p-action-type').value); fd.append('oldName', document.getElementById('p-original-name').value); fd.append('name', name); fd.append('mobile', document.getElementById('p-mobile').value); fd.append('state', document.getElementById('p-state').value); fd.append('address', document.getElementById('p-address').value); fd.append('pin', document.getElementById('p-pincode').value);
+            fetchAPI(fd).then(d => { if (!d.success) throw new Error(d.message || 'Party save failed.'); btn.innerHTML = '<i class="fa-solid fa-save"></i> Save Party'; btn.disabled = false; closeModal('party-modal'); loadParties(); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-save"></i> Save Party'; btn.disabled = false; alert(err.message); });
+        }
+        function deleteParty(name) {
+            if (!confirm(`Delete party: ${name}?`)) return; const fd = new URLSearchParams(); fd.append('action', 'deleteParty'); fd.append('name', name);
+            fetchAPI(fd).then(d => { if (!d.success) throw new Error(d.message || 'Delete failed.'); loadParties(); }).catch(err => alert(err.message));
         }
 
-        function openItemMaster() {
-            hideAllViews();
-            document.getElementById('item-view').style.display = 'block';
-            loadItems();
-        }
-
+        /* --- ITEM MASTER --- */
+        function openItemMaster() { hideAllViews(); document.getElementById('item-view').style.display = 'block'; loadItems(); }
         function loadItems() {
-            const container = document.getElementById('item-table-container');
-            const loader = document.getElementById('item-loader');
-            container.style.display = 'none';
-            loader.style.display = 'block';
-
-            const fd = new URLSearchParams();
-            fd.append('action', 'getItems');
-
-            fetchAPI(fd)
-                .then(d => {
-                    if (!d.success) throw new Error(d.error || 'Item data load failed.');
-                    itemsGlobalList = d.items || [];
-                    const tb = document.getElementById('item-list');
-                    if (!itemsGlobalList.length) {
-                        tb.innerHTML = '<tr><td colspan="3" style="text-align:center;">No item found</td></tr>';
-                    } else {
-                        tb.innerHTML = itemsGlobalList.map(i => `
-                            <tr>
-                                <td>${escapeHtml(i.name)}</td>
-                                <td>₹ ${escapeHtml(i.mrp)}</td>
-                                <td>
-                                    <button class="btn-edit" onclick="openItemModal('edit', '${escapeHtml(i.name)}', '${escapeHtml(i.mrp)}')">
-                                        <i class="fa-solid fa-pen"></i> Edit
-                                    </button>
-                                </td>
-                            </tr>
-                        `).join('');
-                    }
-                    loader.style.display = 'none';
-                    container.style.display = 'block';
-                })
-                .catch(err => {
-                    loader.style.display = 'none';
-                    container.style.display = 'block';
-                    document.getElementById('item-list').innerHTML = `<tr><td colspan="3" style="text-align:center;color:#ff6b6b;">${escapeHtml(err.message)}</td></tr>`;
-                });
+            document.getElementById('item-table-container').style.display = 'none'; document.getElementById('item-loader').style.display = 'block';
+            const fd = new URLSearchParams(); fd.append('action', 'getItems');
+            fetchAPI(fd).then(d => {
+                if (!d.success) throw new Error(d.message || 'Item load failed.'); itemsGlobalList = d.items || []; const tb = document.getElementById('item-list');
+                if (!itemsGlobalList.length) tb.innerHTML = '<tr><td colspan="3" style="text-align:center;">No item found</td></tr>';
+                else tb.innerHTML = itemsGlobalList.map(i => `<tr><td>${escapeHtml(i.name)}</td><td>₹ ${escapeHtml(i.mrp)}</td>
+                    <td><button class="btn-edit" onclick="openItemModal('edit', '${escapeHtml(i.name)}', '${escapeHtml(i.mrp)}')"><i class="fa-solid fa-pen"></i> Edit</button>
+                    <button class="btn-delete" onclick="deleteItem('${escapeHtml(i.name)}')"><i class="fa-solid fa-trash"></i> Delete</button></td></tr>`).join('');
+                document.getElementById('item-loader').style.display = 'none'; document.getElementById('item-table-container').style.display = 'block';
+            }).catch(err => { document.getElementById('item-loader').style.display = 'none'; document.getElementById('item-table-container').style.display = 'block'; document.getElementById('item-list').innerHTML = `<tr><td colspan="3" style="text-align:center;color:#ff6b6b;">${escapeHtml(err.message)}</td></tr>`; });
         }
-
-        function openItemModal(mode, n = '', mrp = '') {
-            document.getElementById('i-action-type').value = mode === 'add' ? 'addItem' : 'editItem';
-            document.getElementById('item-modal-title').innerText = mode === 'add' ? 'Add Item' : 'Edit Item';
-            document.getElementById('i-original-name').value = n;
-            document.getElementById('i-name').value = n;
-            document.getElementById('i-mrp').value = mrp;
-            document.getElementById('item-modal').style.display = 'flex';
-        }
-
+        function openItemModal(mode, n = '', mrp = '') { document.getElementById('i-action-type').value = mode === 'add' ? 'addItem' : 'editItem'; document.getElementById('item-modal-title').innerText = mode === 'add' ? 'Add Item' : 'Edit Item'; document.getElementById('i-original-name').value = n; document.getElementById('i-name').value = n; document.getElementById('i-mrp').value = mrp; document.getElementById('item-modal').style.display = 'flex'; }
         function submitItem() {
-            const btn = document.getElementById('itemSubmitBtn');
-            const itemName = document.getElementById('i-name').value.trim();
-            const mrp = document.getElementById('i-mrp').value;
-
-            if (!itemName) return alert('Please enter Item Name.');
-            if (!mrp || Number(mrp) < 0) return alert('Please enter valid MRP.');
-
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
-            btn.disabled = true;
-
-            const fd = new URLSearchParams();
-            fd.append('action', document.getElementById('i-action-type').value);
-            fd.append('originalName', document.getElementById('i-original-name').value);
-            fd.append('itemName', itemName);
-            fd.append('mrp', mrp);
-
-            fetchAPI(fd)
-                .then(d => {
-                    if (!d.success) throw new Error(d.error || 'Item save failed.');
-                    btn.innerHTML = '<i class="fa-solid fa-save"></i> Save Item';
-                    btn.disabled = false;
-                    closeModal('item-modal');
-                    loadItems();
-                })
-                .catch(err => {
-                    btn.innerHTML = '<i class="fa-solid fa-save"></i> Save Item';
-                    btn.disabled = false;
-                    alert('Item could not be saved.\n\n' + err.message);
-                });
+            const btn = document.getElementById('itemSubmitBtn'); const name = document.getElementById('i-name').value.trim(); const mrp = document.getElementById('i-mrp').value;
+            if (!name || !mrp || mrp < 0) return alert('Enter valid Name and MRP.'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; btn.disabled = true;
+            const fd = new URLSearchParams(); fd.append('action', document.getElementById('i-action-type').value); fd.append('oldName', document.getElementById('i-original-name').value); fd.append('name', name); fd.append('mrp', mrp);
+            fetchAPI(fd).then(d => { if (!d.success) throw new Error(d.message || 'Item save failed.'); btn.innerHTML = '<i class="fa-solid fa-save"></i> Save Item'; btn.disabled = false; closeModal('item-modal'); loadItems(); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-save"></i> Save Item'; btn.disabled = false; alert(err.message); });
+        }
+        function deleteItem(name) {
+            if (!confirm(`Delete item: ${name}?`)) return; const fd = new URLSearchParams(); fd.append('action', 'deleteItem'); fd.append('name', name);
+            fetchAPI(fd).then(d => { if (!d.success) throw new Error(d.message || 'Delete failed.'); loadItems(); }).catch(err => alert(err.message));
         }
 
-        function openAdvanceReceived() {
-            hideAllViews();
-            document.getElementById('advance-view').style.display = 'block';
-            loadAdvances();
-        }
-
+        /* --- ADVANCE RECEIVED --- */
+        function openAdvanceReceived() { hideAllViews(); document.getElementById('advance-view').style.display = 'block'; loadAdvances(); }
         function loadAdvances() {
-            const container = document.getElementById('advance-table-container');
-            const loader = document.getElementById('advance-loader');
-            container.style.display = 'none';
-            loader.style.display = 'block';
-
-            const fd = new URLSearchParams();
-            fd.append('action', 'getAdvances');
-
-            fetchAPI(fd)
-                .then(d => {
-                    if (!d.success) throw new Error(d.error || 'Advance data load failed.');
-                    const advances = d.advances || [];
-                    const tb = document.getElementById('advance-list');
-                    if (!advances.length) {
-                        tb.innerHTML = '<tr><td colspan="3" style="text-align:center;">No advance entry found</td></tr>';
-                    } else {
-                        tb.innerHTML = advances.map(a => {
-                            const amount = Number(a.amount) || 0;
-                            const amtColor = amount < 0 ? '#ef4444' : '#10B981';
-                            const settleBtnHTML = amount < 0 ? `<button class="btn-edit" onclick="openSettleModal('${escapeHtml(a.party)}')"><i class="fa-solid fa-hand-holding-dollar"></i> Settle</button>` : '';
-                            return `
-                                <tr>
-                                    <td>${escapeHtml(a.party)}</td>
-                                    <td style="color:${amtColor};font-weight:bold;">₹ ${amount.toFixed(2)}</td>
-                                    <td>
-                                        ${settleBtnHTML}
-                                        <button class="btn-action" onclick="openOrderModal('${escapeHtml(a.party)}')">
-                                            <i class="fa-solid fa-cart-arrow-down"></i> Place Order
-                                        </button>
-                                    </td>
-                                </tr>
-                            `;
-                        }).join('');
-                    }
-                    loader.style.display = 'none';
-                    container.style.display = 'block';
-                })
-                .catch(err => {
-                    loader.style.display = 'none';
-                    container.style.display = 'block';
-                    document.getElementById('advance-list').innerHTML = `<tr><td colspan="3" style="text-align:center;color:#ff6b6b;">${escapeHtml(err.message)}</td></tr>`;
-                });
+            document.getElementById('advance-table-container').style.display = 'none'; document.getElementById('advance-loader').style.display = 'block';
+            const fd = new URLSearchParams(); fd.append('action', 'getAdvances');
+            fetchAPI(fd).then(d => {
+                if (!d.success) throw new Error(d.message || 'Advance load failed.'); const tb = document.getElementById('advance-list');
+                if (!d.advances || !d.advances.length) tb.innerHTML = '<tr><td colspan="3" style="text-align:center;">No advance entry found</td></tr>';
+                else tb.innerHTML = d.advances.map(a => `<tr><td>${escapeHtml(a.partyName)}</td><td style="color:${a.amount<0?'#ef4444':'#10B981'};font-weight:bold;">₹ ${Number(a.amount).toFixed(2)}</td>
+                    <td>${a.amount<0 ? `<button class="btn-edit" onclick="openSettleModal('${escapeHtml(a.partyName)}')"><i class="fa-solid fa-hand-holding-dollar"></i> Settle</button>` : ''}
+                    <button class="btn-action" onclick="openOrderModal('${escapeHtml(a.partyName)}')"><i class="fa-solid fa-cart-arrow-down"></i> Place Order</button></td></tr>`).join('');
+                document.getElementById('advance-loader').style.display = 'none'; document.getElementById('advance-table-container').style.display = 'block';
+            }).catch(err => { document.getElementById('advance-loader').style.display = 'none'; document.getElementById('advance-table-container').style.display = 'block'; document.getElementById('advance-list').innerHTML = `<tr><td colspan="3" style="text-align:center;color:#ff6b6b;">${escapeHtml(err.message)}</td></tr>`; });
         }
-
-        function openAdvanceModal() {
-            const sel = document.getElementById('adv-party-select');
-            sel.innerHTML = '<option value="">-- Select Party --</option>';
-            partiesGlobalList.forEach(p => {
-                const opt = document.createElement('option');
-                opt.value = p.name;
-                opt.textContent = p.name;
-                sel.appendChild(opt);
-            });
-            document.getElementById('adv-amt-input').value = '';
-            document.getElementById('add-advance-modal').style.display = 'flex';
-        }
-
-        function openSettleModal(party) {
-            document.getElementById('settle-party').value = party;
-            document.getElementById('settle-amt-input').value = '';
-            document.getElementById('settle-amount-modal').style.display = 'flex';
-        }
-
+        function openAdvanceModal() { const sel = document.getElementById('adv-party-select'); sel.innerHTML = '<option value="">-- Select Party --</option>'; partiesGlobalList.forEach(p => { const opt = document.createElement('option'); opt.value = p.name; opt.textContent = p.name; sel.appendChild(opt); }); document.getElementById('adv-amt-input').value = ''; document.getElementById('add-advance-modal').style.display = 'flex'; }
+        function openSettleModal(party) { document.getElementById('settle-party').value = party; document.getElementById('settle-amt-input').value = ''; document.getElementById('settle-amount-modal').style.display = 'flex'; }
         function submitAdvance() {
-            const p = document.getElementById('adv-party-select').value;
-            const a = document.getElementById('adv-amt-input').value;
-
-            if (!p || !a || Number(a) <= 0) return alert('Select party and enter valid amount.');
-            
-            const btn = document.getElementById('advSubmitBtn');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...';
-            btn.disabled = true;
-
-            const fd = new URLSearchParams();
-            fd.append('action', 'addAdvance');
-            fd.append('partyName', p);
-            fd.append('amount', a);
-
-            fetchAPI(fd)
-                .then(d => {
-                    if (!d.success) throw new Error(d.error || 'Advance save failed.');
-                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Advance';
-                    btn.disabled = false;
-                    closeModal('add-advance-modal');
-                    loadAdvances();
-                })
-                .catch(err => {
-                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Advance';
-                    btn.disabled = false;
-                    alert('Advance could not be saved.\n\n' + err.message);
-                });
+            const p = document.getElementById('adv-party-select').value; const a = document.getElementById('adv-amt-input').value; if (!p || !a || a <= 0) return alert('Select party and enter valid amount.');
+            const btn = document.getElementById('advSubmitBtn'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; btn.disabled = true;
+            const fd = new URLSearchParams(); fd.append('action', 'addAdvance'); fd.append('partyName', p); fd.append('amount', a);
+            fetchAPI(fd).then(d => { if (!d.success) throw new Error(d.message || 'Advance save failed.'); btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Advance'; btn.disabled = false; closeModal('add-advance-modal'); loadAdvances(); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Advance'; btn.disabled = false; alert(err.message); });
         }
-
         function submitSettle() {
-            const p = document.getElementById('settle-party').value;
-            const a = document.getElementById('settle-amt-input').value;
-
-            if (!p || !a || Number(a) <= 0) return alert('Enter valid amount to settle.');
-
-            const btn = document.getElementById('settleSubmitBtn');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
-            btn.disabled = true;
-
-            const fd = new URLSearchParams();
-            fd.append('action', 'settleAmount');
-            fd.append('partyName', p);
-            fd.append('amount', a);
-
-            fetchAPI(fd)
-                .then(d => {
-                    if (!d.success) throw new Error(d.error || 'Settlement failed.');
-                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Settle Amount';
-                    btn.disabled = false;
-                    closeModal('settle-amount-modal');
-                    loadAdvances();
-                })
-                .catch(err => {
-                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Settle Amount';
-                    btn.disabled = false;
-                    alert('Settlement could not be completed.\n\n' + err.message);
-                });
+            const p = document.getElementById('settle-party').value; const a = document.getElementById('settle-amt-input').value; if (!p || !a || a <= 0) return alert('Enter valid amount.');
+            const btn = document.getElementById('settleSubmitBtn'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...'; btn.disabled = true;
+            const fd = new URLSearchParams(); fd.append('action', 'settleAmount'); fd.append('partyName', p); fd.append('amount', a);
+            fetchAPI(fd).then(d => { if (!d.success) throw new Error(d.message || 'Settlement failed.'); btn.innerHTML = '<i class="fa-solid fa-check"></i> Settle Amount'; btn.disabled = false; closeModal('settle-amount-modal'); loadAdvances(); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-check"></i> Settle Amount'; btn.disabled = false; alert(err.message); });
         }
 
-        function openSaleEntry() {
-            saleCart = [];
-            populateSaleEntryMasters();
-            document.getElementById('sale-party').value = '';
-            document.getElementById('sale-item').value = '';
-            document.getElementById('sale-qty').value = 1;
-            renderSaleCart();
-            document.getElementById('sale-entry-modal').style.display = 'flex';
-        }
-
-        function populateSaleEntryMasters() {
-            const partySelect = document.getElementById('sale-party');
-            const itemSelect = document.getElementById('sale-item');
-            partySelect.innerHTML = '<option value="">-- Select Party --</option>';
-            partiesGlobalList.forEach(p => {
-                const opt = document.createElement('option');
-                opt.value = p.name;
-                opt.textContent = p.name;
-                partySelect.appendChild(opt);
-            });
-            itemSelect.innerHTML = '<option value="">-- Select Product --</option>';
-            itemsGlobalList.forEach(i => {
-                const opt = document.createElement('option');
-                opt.value = i.name;
-                opt.textContent = `${i.name} (₹${Number(i.mrp) || 0})`;
-                itemSelect.appendChild(opt);
-            });
-        }
-
-        function addItemToSale() {
-            const itemName = document.getElementById('sale-item').value;
-            const qty = parseInt(document.getElementById('sale-qty').value, 10);
-
-            if (!itemName) return alert('Please select a product.');
-            if (!qty || qty < 1) return alert('Please enter a valid quantity.');
-
-            const itemObj = itemsGlobalList.find(i => i.name === itemName);
-            if (!itemObj) return alert('Selected product not found in master.');
-
-            const mrp = parseFloat(itemObj.mrp) || 0;
-            const existing = saleCart.find(x => x.name === itemObj.name);
-
-            if (existing) {
-                existing.qty += qty;
-                existing.total = existing.qty * existing.mrp;
-            } else {
-                saleCart.push({ name: itemObj.name, mrp: mrp, qty: qty, total: mrp * qty });
-            }
-            renderSaleCart();
-            document.getElementById('sale-item').value = '';
-            document.getElementById('sale-qty').value = 1;
-        }
-
-        function removeSaleItem(index) {
-            saleCart.splice(index, 1);
-            renderSaleCart();
-        }
-
-        function renderSaleCart() {
-            const tb = document.getElementById('sale-cart-list');
-            let grandTotal = 0;
-
-            if (!saleCart.length) {
-                tb.innerHTML = '<tr><td colspan="5" style="text-align:center;">No product added</td></tr>';
-            } else {
-                tb.innerHTML = saleCart.map((item, index) => {
-                    grandTotal += Number(item.total) || 0;
-                    return `
-                        <tr>
-                            <td>${escapeHtml(item.name)}</td>
-                            <td>₹${Number(item.mrp).toFixed(2)}</td>
-                            <td>${Number(item.qty)}</td>
-                            <td>₹${Number(item.total).toFixed(2)}</td>
-                            <td><button class="remove-item" onclick="removeSaleItem(${index})" title="Remove"><i class="fa-solid fa-trash"></i></button></td>
-                        </tr>
-                    `;
-                }).join('');
-            }
-            document.getElementById('sale-grand-total').innerText = grandTotal.toFixed(2);
-        }
-
-        function submitSale() {
-            const partyName = document.getElementById('sale-party').value;
-            if (!partyName) return alert('Please select a party.');
-            if (!saleCart.length) return alert('Please add at least one product.');
-
-            const grandTotal = saleCart.reduce((sum, item) => sum + (Number(item.total) || 0), 0);
-            if (grandTotal <= 0) return alert('Invalid sale amount.');
-
-            const btn = document.getElementById('saleSubmitBtn');
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving Sale...';
-            btn.disabled = true;
-
-            const fd = new URLSearchParams();
-            fd.append('action', 'saveSale');
-            fd.append('partyName', partyName);
-            fd.append('items', JSON.stringify(saleCart));
-            fd.append('grandTotal', grandTotal.toFixed(2));
-
-            fetchAPI(fd)
-                .then(d => {
-                    if (!d.success) throw new Error(d.error || d.message || 'Sale could not be saved.');
-                    alert(`Sale Saved Successfully!\n\nInvoice No: ${d.invoiceNo || ''}\nAmount: ₹${grandTotal.toFixed(2)}`);
-                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Sale';
-                    btn.disabled = false;
-                    closeSaleEntryModal();
-                })
-                .catch(err => {
-                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Sale';
-                    btn.disabled = false;
-                    alert('Sale could not be saved.\n\nError: ' + err.message);
-                });
-        }
-
-        function openOrderModal(party) {
-            document.getElementById('o-party').value = party;
-            currentCart = [];
-            renderCart();
-            const sel = document.getElementById('o-item');
-            sel.innerHTML = '<option value="">-- Select Item --</option>';
-            itemsGlobalList.forEach(i => {
-                const opt = document.createElement('option');
-                opt.value = i.name;
-                opt.textContent = `${i.name} (₹${Number(i.mrp) || 0})`;
-                sel.appendChild(opt);
-            });
-            document.getElementById('o-qty').value = 1;
-            document.getElementById('order-modal').style.display = 'flex';
-        }
-
-        function addItemToOrder() {
-            const selVal = document.getElementById('o-item').value;
-            const qty = parseInt(document.getElementById('o-qty').value, 10) || 1;
-
-            if (!selVal) return alert('Please select an item.');
-            if (qty < 1) return alert('Please enter valid quantity.');
-
-            const itemObj = itemsGlobalList.find(i => i.name === selVal);
-            if (!itemObj) return alert('Item not found.');
-
-            const mrp = parseFloat(itemObj.mrp) || 0;
-            const existing = currentCart.find(c => c.name === selVal);
-
-            if (existing) {
-                existing.qty += qty;
-                existing.total = existing.qty * existing.mrp;
-            } else {
-                currentCart.push({ name: itemObj.name, mrp: mrp, qty: qty, total: mrp * qty });
-            }
-            renderCart();
-            document.getElementById('o-item').value = '';
-            document.getElementById('o-qty').value = 1;
-        }
-
-        function removeCartItem(index) {
-            currentCart.splice(index, 1);
-            renderCart();
-        }
-
-        function renderCart() {
-            const tb = document.getElementById('cart-list');
-            let grandTotal = 0;
-
-            if (!currentCart.length) {
-                tb.innerHTML = '<tr><td colspan="5" style="text-align:center;">Cart is empty</td></tr>';
-            } else {
-                tb.innerHTML = currentCart.map((c, idx) => {
-                    grandTotal += Number(c.total) || 0;
-                    return `
-                        <tr>
-                            <td>${escapeHtml(c.name)}</td>
-                            <td>₹${Number(c.mrp).toFixed(2)}</td>
-                            <td>${Number(c.qty)}</td>
-                            <td>₹${Number(c.total).toFixed(2)}</td>
-                            <td><button class="remove-item" onclick="removeCartItem(${idx})"><i class="fa-solid fa-trash"></i></button></td>
-                        </tr>
-                    `;
-                }).join('');
-            }
-            document.getElementById('cart-grand-total').innerText = grandTotal.toFixed(2);
-        }
-
-        function submitOrder() {
-            if (!currentCart.length) return alert('Please add at least one item to the order.');
-            const p = document.getElementById('o-party').value;
-            if (!p) return alert('Party not selected.');
-
-            const grandTotal = currentCart.reduce((sum, item) => sum + (Number(item.total) || 0), 0);
-            const btn = document.getElementById('orderSubmitBtn');
-            
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
-            btn.disabled = true;
-
-            const fd = new URLSearchParams();
-            fd.append('action', 'placeOrder');
-            fd.append('partyName', p);
-            fd.append('items', JSON.stringify(currentCart));
-            fd.append('grandTotal', grandTotal.toFixed(2));
-
-            fetchAPI(fd)
-                .then(d => {
-                    if (!d.success) throw new Error(d.error || d.message || 'Order could not be saved.');
-                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Confirm Order & Deduct Advance';
-                    btn.disabled = false;
-                    alert(`Order Saved!\n\nInvoice No: ${d.invoiceNo || ''}\nAmount ₹${grandTotal.toFixed(2)} deducted from Advance.`);
-                    closeModal('order-modal');
-                    currentCart = [];
-                    loadAdvances();
-                })
-                .catch(err => {
-                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Confirm Order & Deduct Advance';
-                    btn.disabled = false;
-                    alert('Order could not be saved.\n\n' + err.message);
-                });
-        }
-
-        function openTotalSales() {
-            hideAllViews();
-            document.getElementById('totalsale-view').style.display = 'block';
-            loadSales();
-        }
-
+        /* --- TOTAL SALES & INVOICES --- */
+        function openTotalSales() { hideAllViews(); document.getElementById('totalsale-view').style.display = 'block'; loadSales(); }
         function loadSales() {
-            const container = document.getElementById('sales-table-container');
-            const loader = document.getElementById('sales-loader');
-            container.style.display = 'none';
-            loader.style.display = 'block';
-
-            const fd = new URLSearchParams();
-            fd.append('action', 'getTotalSales');
-
-            fetchAPI(fd)
-                .then(d => {
-                    if (!d.success) throw new Error(d.error || 'Sales data load failed.');
-                    salesGlobalList = d.sales || [];
-                    const tb = document.getElementById('sales-list');
-
-                    if (!salesGlobalList.length) {
-                        tb.innerHTML = '<tr><td colspan="6" style="text-align:center;">No sales found</td></tr>';
-                    } else {
-                        tb.innerHTML = salesGlobalList.map((s, index) => {
-                            let itemsArr = [];
-                            try {
-                                itemsArr = typeof s.items === 'string' ? JSON.parse(s.items) : s.items;
-                            } catch (e) {
-                                itemsArr = [];
-                            }
-                            const itemSummary = Array.isArray(itemsArr) && itemsArr.length
-                                ? itemsArr.map(i => `${escapeHtml(i.name || 'Item')} (x${Number(i.qty) || 1})`).join(', ')
-                                : 'Items info unavailable';
-
-                            return `
-                                <tr>
-                                    <td>${escapeHtml(s.invoiceNo)}</td>
-                                    <td>${escapeHtml(s.date)}</td>
-                                    <td>${escapeHtml(s.party)}</td>
-                                    <td>${itemSummary}</td>
-                                    <td style="color:#10B981;font-weight:bold;">₹ ${Number(s.grandTotal || 0).toFixed(2)}</td>
-                                    <td>
-                                        <button class="btn-invoice" onclick="generateInvoicePDF(${index})">
-                                            <i class="fa-solid fa-file-pdf"></i> Invoice
-                                        </button>
-                                    </td>
-                                </tr>
-                            `;
-                        }).join('');
-                    }
-                    loader.style.display = 'none';
-                    container.style.display = 'block';
-                })
-                .catch(err => {
-                    loader.style.display = 'none';
-                    container.style.display = 'block';
-                    document.getElementById('sales-list').innerHTML = `<tr><td colspan="6" style="text-align:center;color:#ff6b6b;">${escapeHtml(err.message)}</td></tr>`;
-                });
+            document.getElementById('sales-table-container').style.display = 'none'; document.getElementById('sales-loader').style.display = 'block';
+            const fd = new URLSearchParams(); fd.append('action', 'getTotalSales');
+            fetchAPI(fd).then(d => {
+                if (!d.success) throw new Error(d.message || 'Sales load failed.'); salesGlobalList = d.sales || []; const tb = document.getElementById('sales-list');
+                if (!salesGlobalList.length) tb.innerHTML = '<tr><td colspan="6" style="text-align:center;">No sales found</td></tr>';
+                else tb.innerHTML = salesGlobalList.map((s, index) => {
+                    let itemsArr = []; try { itemsArr = typeof s.items === 'string' ? JSON.parse(s.items) : s.items; } catch (e) {}
+                    const itemSummary = (Array.isArray(itemsArr) && itemsArr.length) ? itemsArr.map(i => `${escapeHtml(i.name)} (x${Number(i.qty)})`).join(', ') : 'Items info unavailable';
+                    return `<tr><td>${escapeHtml(s.invoiceNo)}</td><td>${escapeHtml(s.date)}</td><td>${escapeHtml(s.partyName)}</td><td>${itemSummary}</td><td style="color:#10B981;font-weight:bold;">₹ ${Number(s.grandTotal).toFixed(2)}</td><td><button class="btn-invoice" onclick="generateInvoicePDF(${index})"><i class="fa-solid fa-file-pdf"></i> Invoice</button></td></tr>`;
+                }).join('');
+                document.getElementById('sales-loader').style.display = 'none'; document.getElementById('sales-table-container').style.display = 'block';
+            }).catch(err => { document.getElementById('sales-loader').style.display = 'none'; document.getElementById('sales-table-container').style.display = 'block'; document.getElementById('sales-list').innerHTML = `<tr><td colspan="6" style="text-align:center;color:#ff6b6b;">${escapeHtml(err.message)}</td></tr>`; });
         }
 
+        /* --- LEDGER DASHBOARD (NEW) --- */
+        function openLedgerDashboard() { hideAllViews(); document.getElementById('ledger-view').style.display = 'block'; loadLedger(); }
+        function loadLedger() {
+            document.getElementById('ledger-table-container').style.display = 'none'; document.getElementById('ledger-loader').style.display = 'block';
+            const fd = new URLSearchParams(); fd.append('action', 'getLedger');
+            fetchAPI(fd).then(d => {
+                if (!d.success) throw new Error(d.message || 'Ledger data load failed.');
+                document.getElementById('top-total-sale').innerText = '₹ ' + formatCurrency(d.globalSale);
+                document.getElementById('top-total-advance').innerText = '₹ ' + formatCurrency(d.globalAdvance);
+                document.getElementById('top-total-collection').innerText = '₹ ' + formatCurrency(d.globalCollection);
+                document.getElementById('top-total-out').innerText = '₹ ' + formatCurrency(d.globalOutstanding);
+
+                const tb = document.getElementById('ledger-list');
+                if (!d.ledger || !d.ledger.length) tb.innerHTML = '<tr><td colspan="7" style="text-align:center;">No data found</td></tr>';
+                else tb.innerHTML = d.ledger.map(l => {
+                    let outColor = l.outstanding > 0 ? '#ef4444' : (l.outstanding < 0 ? '#10B981' : '#ccc');
+                    let outText = l.outstanding < 0 ? `+ ₹${Math.abs(l.outstanding).toFixed(2)} (Adv)` : `₹${l.outstanding.toFixed(2)}`;
+                    return `<tr><td>${escapeHtml(l.partyName)}</td><td>${l.totalQty}</td><td>₹ ${Number(l.totalSaleAmount).toFixed(2)}</td><td style="color:#3b82f6;">₹ ${Number(l.totalAdvanceAmount).toFixed(2)}</td><td style="color:#f59e0b;">₹ ${Number(l.totalCollectionAmount).toFixed(2)}</td><td style="color:${outColor};font-weight:bold;">${outText}</td>
+                        <td><button class="btn-action" onclick="openReceiveModal('${escapeHtml(l.partyName)}')"><i class="fa-solid fa-money-bill-transfer"></i> Received Amount</button></td></tr>`;
+                }).join('');
+                document.getElementById('ledger-loader').style.display = 'none'; document.getElementById('ledger-table-container').style.display = 'block';
+            }).catch(err => { document.getElementById('ledger-loader').style.display = 'none'; document.getElementById('ledger-table-container').style.display = 'block'; document.getElementById('ledger-list').innerHTML = `<tr><td colspan="7" style="text-align:center;color:#ff6b6b;">${escapeHtml(err.message)}</td></tr>`; });
+        }
+        function openReceiveModal(partyName) { document.getElementById('recv-party').value = partyName; document.getElementById('recv-amt-input').value = ''; document.getElementById('receive-payment-modal').style.display = 'flex'; }
+        function submitReceivePayment() {
+            const p = document.getElementById('recv-party').value; const a = document.getElementById('recv-amt-input').value; if (!p || !a || a <= 0) return alert('Enter valid amount.');
+            const btn = document.getElementById('recvSubmitBtn'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; btn.disabled = true;
+            const fd = new URLSearchParams(); fd.append('action', 'addPayment'); fd.append('partyName', p); fd.append('amount', a); // Updated to use addPayment
+            fetchAPI(fd).then(d => { if (!d.success) throw new Error(d.message || 'Payment save failed.'); btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Payment'; btn.disabled = false; closeModal('receive-payment-modal'); alert('Payment successfully recorded!'); loadLedger(); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Payment'; btn.disabled = false; alert(err.message); });
+        }
+
+        /* --- SALE ENTRY & PLACING ORDER --- */
+        function openSaleEntry() { saleCart = []; document.getElementById('sale-party').innerHTML = '<option value="">-- Select Party --</option>' + partiesGlobalList.map(p=>`<option value="${p.name}">${p.name}</option>`).join(''); document.getElementById('sale-item').innerHTML = '<option value="">-- Select Product --</option>' + itemsGlobalList.map(i=>`<option value="${i.name}">${i.name} (₹${i.mrp})</option>`).join(''); document.getElementById('sale-qty').value = 1; renderSaleCart(); document.getElementById('sale-entry-modal').style.display = 'flex'; }
+        function addItemToSale() { const itemName = document.getElementById('sale-item').value; const qty = parseInt(document.getElementById('sale-qty').value, 10); if (!itemName || qty < 1) return alert('Select item and valid quantity.'); const itemObj = itemsGlobalList.find(i => i.name === itemName); const mrp = parseFloat(itemObj.mrp) || 0; const existing = saleCart.find(x => x.name === itemName); if (existing) { existing.qty += qty; existing.total = existing.qty * existing.mrp; } else saleCart.push({ name: itemObj.name, mrp: mrp, qty: qty, total: mrp * qty }); renderSaleCart(); document.getElementById('sale-item').value = ''; document.getElementById('sale-qty').value = 1; }
+        function removeSaleItem(idx) { saleCart.splice(idx, 1); renderSaleCart(); }
+        function renderSaleCart() { const tb = document.getElementById('sale-cart-list'); let grandTotal = 0; if (!saleCart.length) tb.innerHTML = '<tr><td colspan="5" style="text-align:center;">No product added</td></tr>'; else tb.innerHTML = saleCart.map((i, idx) => { grandTotal += i.total; return `<tr><td>${escapeHtml(i.name)}</td><td>₹${i.mrp.toFixed(2)}</td><td>${i.qty}</td><td>₹${i.total.toFixed(2)}</td><td><button class="remove-item" onclick="removeSaleItem(${idx})"><i class="fa-solid fa-trash"></i></button></td></tr>`; }).join(''); document.getElementById('sale-grand-total').innerText = grandTotal.toFixed(2); }
+        function submitSale() {
+            const p = document.getElementById('sale-party').value; if (!p) return alert('Select party.'); if (!saleCart.length) return alert('Add at least one product.'); const gt = saleCart.reduce((s, i) => s + i.total, 0); if (gt <= 0) return alert('Invalid amount.');
+            const btn = document.getElementById('saleSubmitBtn'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; btn.disabled = true;
+            const fd = newSearchParams(); fd.append('action', 'saveSale'); fd.append('partyName', p); fd.append('items', JSON.stringify(saleCart)); fd.append('grandTotal', gt.toFixed(2));
+            fetchAPI(fd).then(d => { if (!d.success) throw new Error(d.message || 'Sale save failed.'); alert(`Sale Saved!\nInvoice: ${d.invoiceNo}\nAmount: ₹${gt.toFixed(2)}`); btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Sale'; btn.disabled = false; closeSaleEntryModal(); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Sale'; btn.disabled = false; alert(err.message); });
+        }
+
+        function openOrderModal(party) { document.getElementById('o-party').value = party; currentCart = []; renderCart(); document.getElementById('o-item').innerHTML = '<option value="">-- Select Item --</option>' + itemsGlobalList.map(i=>`<option value="${i.name}">${i.name} (₹${i.mrp})</option>`).join(''); document.getElementById('o-qty').value = 1; document.getElementById('order-modal').style.display = 'flex'; }
+        function addItemToOrder() { const v = document.getElementById('o-item').value; const q = parseInt(document.getElementById('o-qty').value, 10); if (!v || q < 1) return alert('Select item and qty.'); const iObj = itemsGlobalList.find(i => i.name === v); const mrp = parseFloat(iObj.mrp) || 0; const ex = currentCart.find(c => c.name === v); if (ex) { ex.qty += q; ex.total = ex.qty * ex.mrp; } else currentCart.push({ name: iObj.name, mrp: mrp, qty: q, total: mrp * q }); renderCart(); document.getElementById('o-item').value = ''; document.getElementById('o-qty').value = 1; }
+        function removeCartItem(idx) { currentCart.splice(idx, 1); renderCart(); }
+        function renderCart() { const tb = document.getElementById('cart-list'); let gt = 0; if (!currentCart.length) tb.innerHTML = '<tr><td colspan="5" style="text-align:center;">Cart is empty</td></tr>'; else tb.innerHTML = currentCart.map((c, idx) => { gt += c.total; return `<tr><td>${escapeHtml(c.name)}</td><td>₹${c.mrp.toFixed(2)}</td><td>${c.qty}</td><td>₹${c.total.toFixed(2)}</td><td><button class="remove-item" onclick="removeCartItem(${idx})"><i class="fa-solid fa-trash"></i></button></td></tr>`; }).join(''); document.getElementById('cart-grand-total').innerText = gt.toFixed(2); }
+        function submitOrder() {
+            if (!currentCart.length) return alert('Add item.'); const p = document.getElementById('o-party').value; const gt = currentCart.reduce((s, i) => s + i.total, 0);
+            const btn = document.getElementById('orderSubmitBtn'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...'; btn.disabled = true;
+            const fd = new URLSearchParams(); fd.append('action', 'placeOrder'); fd.append('partyName', p); fd.append('items', JSON.stringify(currentCart)); fd.append('grandTotal', gt.toFixed(2));
+            fetchAPI(fd).then(d => { if (!d.success) throw new Error(d.message || 'Order failed.'); btn.innerHTML = '<i class="fa-solid fa-check"></i> Confirm Order'; btn.disabled = false; alert(`Order Saved!\nInvoice: ${d.invoiceNo}`); closeModal('order-modal'); loadAdvances(); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-check"></i> Confirm Order'; btn.disabled = false; alert(err.message); });
+        }
+
+        /* --- EXPORT TO EXCEL --- */
         function createExcelFile(data, sheetName, fileName) {
-            if (!window.XLSX) return alert('Excel library failed to load.\n\nPlease refresh the page and try again.');
-            if (!Array.isArray(data) || data.length === 0) return alert('No data available to export.');
-
-            try {
-                const worksheet = XLSX.utils.json_to_sheet(data);
-                const keys = Object.keys(data[0]);
-                worksheet['!cols'] = keys.map(key => {
-                    let maxLength = key.length;
-                    for (const row of data) {
-                        maxLength = Math.max(maxLength, String(row[key] ?? '').length);
-                    }
-                    return { wch: Math.min(Math.max(maxLength + 2, 10), 60) };
-                });
-                const workbook = XLSX.utils.book_new();
-                XLSX.utils.book_append_sheet(workbook, worksheet, sheetName.substring(0, 31));
-                XLSX.writeFile(workbook, fileName);
-            } catch (error) {
-                alert('Excel file could not be generated.\n\nError: ' + (error.message || error));
-            }
+            if (!window.XLSX) return alert('Excel lib failed to load.'); if (!data.length) return alert('No data.');
+            try { const ws = XLSX.utils.json_to_sheet(data); const keys = Object.keys(data[0]); ws['!cols'] = keys.map(k => { let ml = k.length; for(const r of data) ml = Math.max(ml, String(r[k]??'').length); return { wch: Math.min(Math.max(ml + 2, 10), 60) }; }); const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, ws, sheetName.substring(0, 31)); XLSX.writeFile(wb, fileName); } catch (e) { alert(e.message); }
         }
+        function exportPartyExcel() { if (!partiesGlobalList.length) return alert('No data.'); createExcelFile(partiesGlobalList.map((p, i) => ({ 'S.No': i+1, 'Party': p.name, 'Mobile': p.mobile, 'State': p.state, 'Address': p.address, 'Pin': p.pin })), 'Parties', `Party_Master_${new Date().toISOString().slice(0,10)}.xlsx`); }
+        function exportItemExcel() { if (!itemsGlobalList.length) return alert('No data.'); createExcelFile(itemsGlobalList.map((it, i) => ({ 'S.No': i+1, 'Item': it.name, 'MRP': Number(it.mrp) })), 'Items', `Item_Master_${new Date().toISOString().slice(0,10)}.xlsx`); }
+        function exportSalesExcel() { if (!salesGlobalList.length) return alert('No data.'); createExcelFile(salesGlobalList.map((s, i) => { let arr = []; try { arr = typeof s.items==='string'?JSON.parse(s.items):s.items; } catch(e){} return { 'S.No': i+1, 'Invoice': s.invoiceNo, 'Date': s.date, 'Party': s.partyName, 'Items': Array.isArray(arr)?arr.map(x=>`${x.name}(x${x.qty})`).join(', '):'', 'Total': Number(s.grandTotal) }; }), 'Sales', `Total_Sales_${new Date().toISOString().slice(0,10)}.xlsx`); }
 
-        function exportPartyExcel() {
-            if (!partiesGlobalList || partiesGlobalList.length === 0) return alert('No data available to export.');
-            const exportData = partiesGlobalList.map((p, index) => ({
-                'S.No': index + 1,
-                'Party Name': p.name || '',
-                'Mobile No': p.mobile || '',
-                'State': p.state || '',
-                'Full Address': p.address || '',
-                'Pin Code': p.pincode || ''
-            }));
-            createExcelFile(exportData, 'Party Master', `Party_Master_${new Date().toISOString().slice(0, 10)}.xlsx`);
-        }
-
-        function exportItemExcel() {
-            if (!itemsGlobalList || itemsGlobalList.length === 0) return alert('No data available to export.');
-            const exportData = itemsGlobalList.map((item, index) => ({
-                'S.No': index + 1,
-                'Item Name': item.name || '',
-                'MRP': Number(item.mrp) || 0
-            }));
-            createExcelFile(exportData, 'Item Master', `Item_Master_${new Date().toISOString().slice(0, 10)}.xlsx`);
-        }
-
-        function exportSalesExcel() {
-            if (!salesGlobalList || salesGlobalList.length === 0) return alert('No data available to export.');
-            const exportData = salesGlobalList.map((sale, index) => {
-                let itemsArr = [];
-                try {
-                    itemsArr = typeof sale.items === 'string' ? JSON.parse(sale.items) : sale.items;
-                } catch (error) {}
-                const itemSummary = Array.isArray(itemsArr) ? itemsArr.map(item => `${item.name || 'Item'} (Qty: ${item.qty || 1})`).join(', ') : '';
-                return {
-                    'S.No': index + 1,
-                    'Invoice No': sale.invoiceNo || '',
-                    'Date': sale.date || '',
-                    'Party Name': sale.party || '',
-                    'Items': itemSummary,
-                    'Grand Total': Number(sale.grandTotal) || 0
-                };
-            });
-            createExcelFile(exportData, 'Total Sales', `Total_Sales_${new Date().toISOString().slice(0, 10)}.xlsx`);
-        }
-
-        function loadScriptOnce(src, id) {
-            return new Promise((resolve, reject) => {
-                if (id && document.getElementById(id)) return resolve();
-                const script = document.createElement('script');
-                if (id) script.id = id;
-                script.src = src;
-                script.async = true;
-                script.onload = () => resolve();
-                script.onerror = () => reject(new Error('Failed to load PDF library.'));
-                document.head.appendChild(script);
-            });
-        }
-
-        async function ensurePDFLibraries() {
-            if (!window.jspdf || !window.jspdf.jsPDF) {
-                await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', 'jspdf-fallback-loader');
-            }
-            const jsPDF = window.jspdf && window.jspdf.jsPDF;
-            if (!jsPDF) throw new Error('jsPDF library is not available.');
-            return jsPDF;
-        }
-
+        /* --- PDF GENERATION --- */
+        function loadScriptOnce(src, id) { return new Promise((res, rej) => { if (id && document.getElementById(id)) return res(); const s = document.createElement('script'); if (id) s.id = id; s.src = src; s.async = true; s.onload = res; s.onerror = rej; document.head.appendChild(s); }); }
+        async function ensurePDFLibraries() { if (!window.jspdf || !window.jspdf.jsPDF) await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', 'jspdf-fallback'); const jsPDF = window.jspdf && window.jspdf.jsPDF; if (!jsPDF) throw new Error('jsPDF not found.'); return jsPDF; }
         async function generateInvoicePDF(index) {
             try {
-                const saleRecord = salesGlobalList[index];
-                if (!saleRecord) return alert('Invoice record not found!');
-
-                const jsPDF = await ensurePDFLibraries();
-                const doc = new jsPDF();
-                const invNo = String(saleRecord.invoiceNo || '');
-                const date = String(saleRecord.date || '');
-                const partyName = String(saleRecord.party || '');
-                const grandTotal = parseFloat(saleRecord.grandTotal) || 0;
-
-                let pInfo = partiesGlobalList.find(p => String(p.name).trim() === partyName.trim());
-                if (!pInfo) pInfo = { address: 'Surajkund Road, Meerut', mobile: 'N/A', pincode: '250004' };
-
-                let partyAddress = pInfo.address || 'Surajkund Road, Meerut';
-                const partyMobile = pInfo.mobile || 'N/A';
-                if (pInfo.pincode) partyAddress += `, Pin: ${pInfo.pincode}`;
-
-                let itemsArr = [];
-                try {
-                    itemsArr = typeof saleRecord.items === 'string' ? JSON.parse(saleRecord.items) : saleRecord.items;
-                } catch (e) {
-                    itemsArr = [];
-                }
-                if (!Array.isArray(itemsArr) || itemsArr.length === 0) {
-                    itemsArr = [{ name: 'Sports Item', mrp: grandTotal, qty: 1, total: grandTotal }];
-                }
-
-                if (logoBase64) {
-                    try {
-                        doc.addImage(logoBase64, 'PNG', 15, 13, 25, 25);
-                    } catch (logoError) {}
-                }
-
-                doc.setFont('times', 'bolditalic');
-                doc.setFontSize(25);
-                doc.setTextColor(20, 150, 110);
-                doc.text('YDV SPORTS MRT', 105, 20, null, null, 'center');
-                
-                doc.setDrawColor(20, 150, 110);
-                doc.setLineWidth(1.2);
-                doc.line(65, 24, 145, 24);
-                
-                doc.setFont('helvetica', 'bold');
-                doc.setFontSize(8);
-                doc.setTextColor(90, 90, 90);
-                doc.text('SPORTS • EQUIPMENT • MART', 105, 29, null, null, 'center');
-                
-                doc.setFont('helvetica', 'normal');
-                doc.setFontSize(9);
-                doc.setTextColor(80, 80, 80);
-                doc.text('Surajkund Road, Meerut, Uttar Pradesh - 250004, India', 105, 35, null, null, 'center');
-
-                try {
-                    doc.addImage(callIconBase64, 'PNG', 66, 38, 4.5, 4.5);
-                    doc.setFont('helvetica', 'normal');
-                    doc.setFontSize(9);
-                    doc.setTextColor(70, 70, 70);
-                    doc.text('+91 76184 35453', 73, 42);
-                    
-                    doc.addImage(waIconBase64, 'PNG', 111, 38, 4.5, 4.5);
-                    doc.text('+91 7599 920 630', 118, 42);
-                } catch (iconError) {
-                    doc.text('Call: +91 76184 35453', 65, 42);
-                    doc.text('WhatsApp: +91 7599 920 630', 112, 42);
-                }
-
-                doc.setFont('times', 'bolditalic');
-                doc.setFontSize(16);
-                doc.setTextColor(0, 0, 0);
-                doc.text('SALE INVOICE', 105, 52, null, null, 'center');
-                
-                doc.setDrawColor(180, 180, 180);
-                doc.setLineWidth(0.5);
-                doc.line(15, 57, 195, 57);
-                
-                doc.setFont('helvetica', 'normal');
-                doc.setFontSize(10);
-                doc.setTextColor(0, 0, 0);
-                
-                doc.setFont('helvetica', 'bold');
-                doc.text('Invoice No:', 15, 67);
-                doc.setFont('helvetica', 'normal');
-                doc.text(invNo, 39, 67);
-                
-                doc.setFont('helvetica', 'bold');
-                doc.text('Date:', 15, 73);
-                doc.setFont('helvetica', 'normal');
-                doc.text(date, 29, 73);
-                
-                doc.setFont('helvetica', 'bold');
-                doc.text('Billed To:', 130, 67);
-                doc.setFont('helvetica', 'normal');
-                doc.text(partyName, 130, 73);
-                doc.text(`Mobile: ${partyMobile}`, 130, 79);
-                
-                const splitAddress = doc.splitTextToSize(`Address: ${partyAddress}`, 60);
-                doc.text(splitAddress, 130, 85);
-
-                const tableBody = itemsArr.map(i => [String(i.name || 'Item'), `Rs. ${parseFloat(i.mrp) || 0}`, parseInt(i.qty) || 1, `Rs. ${parseFloat(i.total) || 0}`]);
-                const tableStartY = 85 + (splitAddress.length * 5) + 7;
-
-                if (typeof doc.autoTable === 'function') {
-                    doc.autoTable({
-                        startY: tableStartY,
-                        head: [['Item Name', 'MRP', 'Qty', 'Total Amount']],
-                        body: tableBody,
-                        theme: 'striped',
-                        headStyles: { fillColor: [20, 150, 110], textColor: [255, 255, 255], fontStyle: 'bold' },
-                        styles: { fontSize: 9, cellPadding: 3 },
-                        margin: { left: 15, right: 15 }
-                    });
-                } else {
-                    drawInvoiceTableFallback(doc, tableBody, tableStartY);
-                }
-
-                const finalY = doc.lastAutoTable && doc.lastAutoTable.finalY ? doc.lastAutoTable.finalY : calculateFallbackTableEndY(tableBody, tableStartY);
-                doc.setFont('helvetica', 'bold');
-                doc.setFontSize(12);
-                doc.setTextColor(0, 0, 0);
-                doc.text(`Grand Total: Rs. ${grandTotal.toFixed(2)}`, 140, finalY + 15);
-                
-                doc.setFontSize(10);
-                doc.setFont('helvetica', 'normal');
-                doc.text('For YDV SPORTS MRT', 140, finalY + 40);
-                doc.line(140, finalY + 55, 185, finalY + 55);
-                doc.text('Authorized Signatory', 142, finalY + 60);
-                
-                doc.setFontSize(9);
-                doc.setTextColor(100, 100, 100);
-                doc.text('Thank you for your business!', 105, 280, null, null, 'center');
-                
-                const cleanInvNo = invNo.replace(/[^a-zA-Z0-9-]/g, '_') || 'Invoice';
-                doc.save(`Invoice_${cleanInvNo}.pdf`);
-
-            } catch (error) {
-                alert('Invoice PDF could not be generated.\n\nError: ' + (error.message || error));
-            }
+                const sRec = salesGlobalList[index]; if (!sRec) return alert('Invoice not found!');
+                const jsPDF = await ensurePDFLibraries(); const doc = new jsPDF();
+                const invNo = String(sRec.invoiceNo || ''); const date = String(sRec.date || ''); const pName = String(sRec.partyName || ''); const gt = parseFloat(sRec.grandTotal) || 0;
+                let pInfo = partiesGlobalList.find(p => String(p.name).trim() === pName.trim()) || { address: 'Surajkund Road, Meerut', mobile: 'N/A', pin: '250004' };
+                let pAddr = pInfo.address || 'Surajkund Road, Meerut'; const pMob = pInfo.mobile || 'N/A'; if (pInfo.pin) pAddr += `, Pin: ${pInfo.pin}`;
+                let iArr = []; try { iArr = typeof sRec.items === 'string' ? JSON.parse(sRec.items) : sRec.items; } catch(e){} if (!Array.isArray(iArr) || !iArr.length) iArr = [{ name: 'Sports Item', mrp: gt, qty: 1, total: gt }];
+                if (logoBase64) { try { doc.addImage(logoBase64, 'PNG', 15, 13, 25, 25); } catch(e){} }
+                doc.setFont('times', 'bolditalic'); doc.setFontSize(25); doc.setTextColor(20, 150, 110); doc.text('YDV SPORTS MRT', 105, 20, null, null, 'center');
+                doc.setDrawColor(20, 150, 110); doc.setLineWidth(1.2); doc.line(65, 24, 145, 24);
+                doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(90, 90, 90); doc.text('SPORTS • EQUIPMENT • MART', 105, 29, null, null, 'center');
+                doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(80, 80, 80); doc.text('Surajkund Road, Meerut, Uttar Pradesh - 250004, India', 105, 35, null, null, 'center');
+                try { doc.addImage(callIconBase64, 'PNG', 66, 38, 4.5, 4.5); doc.text('+91 76184 35453', 73, 42); doc.addImage(waIconBase64, 'PNG', 111, 38, 4.5, 4.5); doc.text('+91 7599 920 630', 118, 42); } catch(e) { doc.text('Call: +91 76184 35453', 65, 42); doc.text('WhatsApp: +91 7599 920 630', 112, 42); }
+                doc.setFont('times', 'bolditalic'); doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('SALE INVOICE', 105, 52, null, null, 'center');
+                doc.setDrawColor(180, 180, 180); doc.setLineWidth(0.5); doc.line(15, 57, 195, 57);
+                doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(0, 0, 0); doc.setFont('helvetica', 'bold'); doc.text('Invoice No:', 15, 67); doc.setFont('helvetica', 'normal'); doc.text(invNo, 39, 67);
+                doc.setFont('helvetica', 'bold'); doc.text('Date:', 15, 73); doc.setFont('helvetica', 'normal'); doc.text(date, 29, 73);
+                doc.setFont('helvetica', 'bold'); doc.text('Billed To:', 130, 67); doc.setFont('helvetica', 'normal'); doc.text(pName, 130, 73); doc.text(`Mobile: ${pMob}`, 130, 79);
+                const sAddr = doc.splitTextToSize(`Address: ${pAddr}`, 60); doc.text(sAddr, 130, 85);
+                const tBody = iArr.map(i => [String(i.name), `Rs. ${parseFloat(i.mrp)||0}`, parseInt(i.qty)||1, `Rs. ${parseFloat(i.total)||0}`]); const tStartY = 85 + (sAddr.length * 5) + 7;
+                if (typeof doc.autoTable === 'function') { doc.autoTable({ startY: tStartY, head: [['Item Name', 'MRP', 'Qty', 'Total Amount']], body: tBody, theme: 'striped', headStyles: { fillColor: [20, 150, 110], textColor: [255, 255, 255], fontStyle: 'bold' }, styles: { fontSize: 9, cellPadding: 3 }, margin: { left: 15, right: 15 } }); } else { drawInvoiceTableFallback(doc, tBody, tStartY); }
+                const fY = doc.lastAutoTable && doc.lastAutoTable.finalY ? doc.lastAutoTable.finalY : (tStartY + 9 + tBody.length * 8);
+                doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.text(`Grand Total: Rs. ${gt.toFixed(2)}`, 140, fY + 15);
+                doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.text('For YDV SPORTS MRT', 140, fY + 40); doc.line(140, fY + 55, 185, fY + 55); doc.text('Authorized Signatory', 142, fY + 60);
+                doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.text('Thank you for your business!', 105, 280, null, null, 'center');
+                doc.save(`Invoice_${invNo.replace(/[^a-zA-Z0-9-]/g, '_')}.pdf`);
+            } catch (e) { alert(e.message); }
         }
+        function drawInvoiceTableFallback(doc, rows, startY) { const l = 15, r = 195, cX = [l, 105, 140, 160, r], hH = 9, rH = 8; let y = startY; doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setFillColor(20, 150, 110); doc.setTextColor(255, 255, 255); doc.rect(l, y, r - l, hH, 'F'); doc.text('Item Name', cX[0] + 2, y + 6); doc.text('MRP', cX[1] + 2, y + 6); doc.text('Qty', cX[2] + 2, y + 6); doc.text('Total Amount', cX[3] + 2, y + 6); y += hH; doc.setFont('helvetica', 'normal'); doc.setTextColor(0, 0, 0); rows.forEach((row, i) => { if (i % 2 === 0) { doc.setFillColor(245, 245, 245); doc.rect(l, y, r - l, rH, 'F'); } doc.rect(l, y, r - l, rH); doc.line(cX[1], y, cX[1], y + rH); doc.line(cX[2], y, cX[2], y + rH); doc.line(cX[3], y, cX[3], y + rH); doc.text(doc.splitTextToSize(String(row[0]), 85)[0], cX[0] + 2, y + 5.5); doc.text(String(row[1]), cX[1] + 2, y + 5.5); doc.text(String(row[2]), cX[2] + 2, y + 5.5); doc.text(String(row[3]), cX[3] + 2, y + 5.5); y += rH; }); doc.setDrawColor(150, 150, 150); doc.rect(l, startY, r - l, y - startY); }
 
-        function drawInvoiceTableFallback(doc, rows, startY) {
-            const left = 15, right = 195, colX = [left, 105, 140, 160, right], headerH = 9, rowH = 8;
-            let y = startY;
-            
-            doc.setFontSize(9);
-            doc.setFont('helvetica', 'bold');
-            doc.setFillColor(20, 150, 110);
-            doc.setTextColor(255, 255, 255);
-            doc.rect(left, y, right - left, headerH, 'F');
-            doc.text('Item Name', colX[0] + 2, y + 6);
-            doc.text('MRP', colX[1] + 2, y + 6);
-            doc.text('Qty', colX[2] + 2, y + 6);
-            doc.text('Total Amount', colX[3] + 2, y + 6);
-            y += headerH;
-            
-            doc.setFont('helvetica', 'normal');
-            doc.setTextColor(0, 0, 0);
-            
-            rows.forEach((row, idx) => {
-                if (idx % 2 === 0) {
-                    doc.setFillColor(245, 245, 245);
-                    doc.rect(left, y, right - left, rowH, 'F');
-                }
-                doc.rect(left, y, right - left, rowH);
-                doc.line(colX[1], y, colX[1], y + rowH);
-                doc.line(colX[2], y, colX[2], y + rowH);
-                doc.line(colX[3], y, colX[3], y + rowH);
-                
-                const itemName = doc.splitTextToSize(String(row[0]), 85)[0];
-                doc.text(itemName, colX[0] + 2, y + 5.5);
-                doc.text(String(row[1]), colX[1] + 2, y + 5.5);
-                doc.text(String(row[2]), colX[2] + 2, y + 5.5);
-                doc.text(String(row[3]), colX[3] + 2, y + 5.5);
-                y += rowH;
-            });
-            doc.setDrawColor(150, 150, 150);
-            doc.rect(left, startY, right - left, y - startY);
-        }
-
-        function calculateFallbackTableEndY(rows, startY) {
-            return startY + 9 + rows.length * 8;
-        }
-
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') closeAllModals();
-        });
-
-        document.querySelectorAll('.modal').forEach(modal => {
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) {
-                    if (modal.id === 'sale-entry-modal') closeSaleEntryModal();
-                    else modal.style.display = 'none';
-                }
-            });
-        });
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllModals(); });
+        document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) { if (m.id === 'sale-entry-modal') closeSaleEntryModal(); else m.style.display = 'none'; } }));
+        function newSearchParams() { return new URLSearchParams(); }
     </script>
 </body>
 </html>

@@ -13,74 +13,123 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background: linear-gradient(rgba(10, 20, 35, 0.8), rgba(10, 20, 35, 0.8)), url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=1950&auto=format&fit=crop') no-repeat center center fixed; background-size: cover; min-height: 100vh; display: flex; justify-content: center; align-items: center; color: white; }
-        .glass-panel { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 40px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37); }
-        #login-view { width: 100%; max-width: 450px; }
-        #dashboard-view, #party-view, #item-view, #advance-view, #totalsale-view, #ledger-view { display: none; width: 100%; max-width: 1100px; }
-        .logo-container { text-align: center; margin-bottom: 30px; }
+        
+        /* UPDATED: Darker Background for better readability */
+        body { background: linear-gradient(rgba(10, 20, 35, 0.88), rgba(10, 20, 35, 0.88)), url('https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?q=80&w=1950&auto=format&fit=crop') no-repeat center center fixed; background-size: cover; min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white; padding-bottom: 40px; position: relative;}
+        
+        .glass-panel { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 20px; padding: 40px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.37); z-index: 2;}
+        
+        /* UPDATED: Login View is darker, solid and compact */
+        #login-view { width: 100%; max-width: 400px; padding: 35px 30px; margin-bottom: 20px; background: rgba(15, 23, 42, 0.75); border: 1px solid rgba(255, 255, 255, 0.15);}
+        #dashboard-view, #party-view, #item-view, #advance-view, #totalsale-view, #ledger-view { display: none; width: 100%; max-width: 1100px; margin-bottom: 20px;}
+        
+        /* UPDATED: Larger Logo */
+        .logo-container { text-align: center; margin-bottom: 20px; }
         .logo-container img { width: 90px; height: 90px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.2); object-fit: cover; background: white; }
-        .logo-container h1 { font-size: 28px; font-weight: 700; margin-top: 15px; }
-        .logo-container p { font-size: 14px; color: #b3b3b3; margin-top: 5px; }
-        .input-group { margin-bottom: 20px; position: relative; }
-        .input-group label { display: block; font-size: 13px; margin-bottom: 8px; color: #ccc; }
-        .input-group input, .input-group select { width: 100%; padding: 12px 15px; background: rgba(0, 0, 0, 0.2); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; font-size: 15px; outline: none; transition: 0.3s ease; }
-        .input-group input:focus, .input-group select:focus { border-color: #28a745; background: rgba(0, 0, 0, 0.4); }
+        .logo-container h1 { font-size: 24px; font-weight: 700; margin-top: 10px; }
+        .logo-container p { font-size: 13px; color: #b3b3b3; margin-top: 2px; }
+        
+        .input-group { margin-bottom: 15px; position: relative; }
+        .input-group label { display: block; font-size: 13px; margin-bottom: 6px; color: #ccc; }
+        .input-group input, .input-group select { width: 100%; padding: 10px 14px; background: rgba(0, 0, 0, 0.3); border: 1px solid rgba(255, 255, 255, 0.15); border-radius: 8px; color: white; font-size: 14px; outline: none; transition: 0.3s ease; }
+        .input-group input:focus, .input-group select:focus { border-color: #10B981; background: rgba(0, 0, 0, 0.5); }
         .input-group select option { background: #1a202c; color: white; }
-        .input-icon { position: absolute; bottom: 12px; left: 12px; color: #aaa; font-size: 16px; }
-        .input-with-icon { padding-left: 40px !important; }
-        .btn { width: 100%; padding: 14px; border: none; border-radius: 8px; background: #10B981; color: white; font-size: 16px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .input-icon { position: absolute; bottom: 10px; left: 12px; color: #aaa; font-size: 14px; }
+        .input-with-icon { padding-left: 36px !important; }
+        
+        #caps-warning { display: none; color: #f59e0b; font-size: 11px; text-align: right; margin-top: 4px; letter-spacing: 0.5px; }
+
+        .btn { width: 100%; padding: 12px; border: none; border-radius: 8px; background: #10B981; color: white; font-size: 15px; font-weight: 600; cursor: pointer; transition: 0.3s; display: flex; justify-content: center; align-items: center; gap: 8px; }
         .btn:hover { background: #059669; }
         .btn:disabled { opacity: 0.65; cursor: not-allowed; }
-        .dashboard-header, .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 20px; }
-        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 20px; }
-        .kpi-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 25px; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; }
+        
+        .dashboard-header, .page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 25px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; }
+        .dashboard-title-area h2 { font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+        .dashboard-title-area .sub-title { font-size: 15px; color: #10B981; font-weight: 600; }
+        .dashboard-title-area .welcome-text { font-size: 13px; color: #aaa; margin-top: 6px; }
+
+        /* 3 CARDS LAYOUT */
+        .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+        .kpi-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 15px; padding: 22px; cursor: pointer; transition: 0.3s; display: flex; flex-direction: column; }
         .kpi-card:hover { background: rgba(255, 255, 255, 0.08); transform: translateY(-5px); border-color: rgba(255, 255, 255, 0.2); }
-        .kpi-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
-        .kpi-title i { color: #10B981; font-size: 20px; }
-        .kpi-desc { font-size: 13px; color: #aaa; }
+        .kpi-title { font-size: 15px; font-weight: 600; margin-bottom: 8px; display: flex; align-items: center; gap: 10px; }
+        .kpi-title i { color: #10B981; font-size: 18px; }
+        .kpi-desc { font-size: 12px; color: #aaa; line-height: 1.4; }
+
+        /* TOP SUMMARY KPI CARDS */
+        .summary-kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px; }
+        .summary-card { background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 15px 20px; display: flex; flex-direction: column; justify-content: center; }
+        .summary-card h4 { font-size: 11px; color: #aaa; margin-bottom: 5px; font-weight: 600; letter-spacing: 0.5px; }
+        .summary-card h3 { font-size: 20px; font-weight: 700; margin: 0; }
+        
         .table-container { width: 100%; max-height: 500px; overflow-y: auto; background: rgba(0, 0, 0, 0.2); border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); }
         table { width: 100%; border-collapse: collapse; text-align: left; }
-        th, td { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; }
+        th, td { padding: 12px 15px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 13px; }
         th { background: rgba(255,255,255,0.05); font-weight: 600; color: #ccc; position: sticky; top: 0; z-index: 1; }
         td { color: #eee; }
         tr:hover td { background: rgba(255,255,255,0.02); }
+        
         .btn-edit { background: #f59e0b; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; margin-right: 5px; }
         .btn-delete { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; margin-right: 5px; }
         .btn-action { background: #3b82f6; color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; }
         .btn-invoice { background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
         .btn-export { background: #217346; color: white; border: none; padding: 10px 18px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 7px; transition: 0.3s; }
         .btn-export:hover { background: #185c37; }
-        .btn-back { background: transparent; color: #ccc; border: 1px solid #ccc; padding: 8px 15px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 6px; }
+        .btn-back { background: transparent; color: #ccc; border: 1px solid rgba(255,255,255,0.2); padding: 8px 15px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 13px; margin-top: 5px;}
         .btn-back:hover { background: rgba(255,255,255,0.1); color: white; }
-        .page-actions { display: flex; align-items: center; gap: 10px; }
-        .modal { display: none; position: fixed; z-index: 10; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
-        .modal-content { background: #1a202c; border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 30px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
+        .page-actions { display: flex; align-items: center; gap: 10px; margin-top: 5px;}
+        
+        .modal { display: none; position: fixed; z-index: 100; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); backdrop-filter: blur(5px); justify-content: center; align-items: center; }
+        .modal-content { background: #1a202c; border: 1px solid rgba(255,255,255,0.1); border-radius: 15px; padding: 25px; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; }
         .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .close-btn { background: transparent; border: none; color: #aaa; font-size: 24px; cursor: pointer; }
+        .close-btn { background: transparent; border: none; color: #aaa; font-size: 20px; cursor: pointer; }
         .close-btn:hover { color: white; }
+        
         .loader { display: none; text-align: center; padding: 20px; color: #10B981; }
-        #login-error { display: none; background: rgba(220, 53, 69, 0.2); color: #ff6b6b; padding: 12px; border-radius: 8px; font-size: 14px; margin-bottom: 20px; border: 1px solid rgba(220, 53, 69, 0.3); text-align: center; }
-        .forgot-pass { display: block; text-align: right; font-size: 13px; color: #ccc; text-decoration: none; margin-bottom: 20px; transition: 0.3s; }
+        #login-error { display: none; background: rgba(220, 53, 69, 0.2); color: #ff6b6b; padding: 10px; border-radius: 8px; font-size: 13px; margin-bottom: 15px; border: 1px solid rgba(220, 53, 69, 0.3); text-align: center; }
+        
+        .forgot-pass { display: block; text-align: right; font-size: 12px; color: #aaa; text-decoration: none; margin-top: 8px; margin-bottom: 18px; transition: 0.3s; cursor: pointer;}
         .forgot-pass:hover { color: white; text-decoration: underline; }
+        
         .order-cart { background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; margin-bottom: 20px; overflow-x: auto; }
         .order-cart table th, .order-cart table td { padding: 8px; font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.05); }
         .remove-item { color: #ef4444; cursor: pointer; font-weight: bold; background: none; border: none; }
         .flex-row { display: flex; gap: 10px; align-items: flex-end; margin-bottom: 20px; }
         .flex-row .input-group { margin-bottom: 0; flex: 1; }
-        .eye-icon { position: absolute; right: 15px; bottom: 12px; cursor: pointer; color: #aaa; font-size: 16px; transition: 0.3s; }
+        .eye-icon { position: absolute; right: 15px; bottom: 10px; cursor: pointer; color: #aaa; font-size: 14px; transition: 0.3s; }
         .eye-icon:hover { color: white; }
+
+        .footer-text { position: absolute; bottom: 15px; width: 100%; text-align: center; font-size: 11px; color: rgba(255, 255, 255, 0.5); z-index: 1; letter-spacing: 0.5px; }
         
-        @media (max-width: 700px) {
-            body { align-items: flex-start; padding: 15px; }
-            .glass-panel { padding: 20px; }
+        .forgot-modal-content { background-color: white; color: #1e3a8a; border-radius: 8px; padding: 0; max-width: 400px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        .forgot-modal-header { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid #e5e7eb; }
+        .forgot-modal-header h3 { margin: 0; font-size: 15px; font-weight: 600; color: #1e3a8a;}
+        .forgot-modal-close { background: none; border: none; color: #6b7280; font-size: 16px; cursor: pointer; }
+        .forgot-modal-body { padding: 25px 20px; text-align: center; color: #4b5563; font-size: 13px; line-height: 1.6; border-bottom: 1px solid #e5e7eb; }
+        .forgot-modal-footer { padding: 15px 20px; display: flex; justify-content: center; }
+        .forgot-modal-btn { background: white; border: 1px solid #e5e7eb; color: #1e3a8a; padding: 8px 16px; border-radius: 4px; font-size: 13px; cursor: pointer; width: 100%; font-weight: 500; transition: 0.2s; }
+        .forgot-modal-btn:hover { background: #f9fafb; }
+        
+        @media (max-width: 800px) {
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+            .summary-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 550px) {
+            body { align-items: flex-start; padding: 15px; padding-bottom: 50px;}
+            .glass-panel { padding: 25px; }
+            .kpi-grid { grid-template-columns: 1fr; }
+            .summary-kpi-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .page-header, .dashboard-header { flex-wrap: wrap; gap: 12px; }
-            .page-header h2 { font-size: 18px; order: 2; }
+            .dashboard-title-area h2 { font-size: 20px; }
+            .page-header h2 { font-size: 16px; order: 2; margin-top: 10px;}
             .page-actions { width: 100%; justify-content: flex-end; }
             .flex-row { flex-direction: column; align-items: stretch; }
             .flex-row .input-group { width: 100% !important; }
             .flex-row .btn-action { width: 100%; }
             .table-container { overflow-x: auto; }
             table { min-width: 700px; }
+            .footer-text { position: relative; margin-top: 20px; bottom: 0;}
         }
     </style>
 </head>
@@ -91,7 +140,7 @@
         <div class="logo-container">
             <img src="https://i.postimg.cc/PNxvDXKY/image.png" alt="YDV Sports Mrt Logo">
             <h1>YDV SPORTS MRT</h1>
-            <p>Enter your credentials to hit the pitch</p>
+            <p>Your match starts here. Sign in to continue.</p>
         </div>
         <div id="login-error"></div>
         <div class="input-group">
@@ -99,46 +148,74 @@
             <span class="input-icon"><i class="fa-solid fa-user"></i></span>
             <input type="text" id="username" class="input-with-icon" placeholder="Enter User ID">
         </div>
-        <div class="input-group">
+        <div class="input-group" style="margin-bottom: 5px;">
             <label>Password</label>
             <span class="input-icon"><i class="fa-solid fa-lock"></i></span>
             <input type="password" id="password" class="input-with-icon" placeholder="Enter Password">
             <span class="eye-icon" onclick="togglePassword()"><i class="fa-solid fa-eye" id="eye-icon"></i></span>
+            <div id="caps-warning"><i class="fa-solid fa-triangle-exclamation"></i> Caps Lock is ON</div>
         </div>
-        <button class="btn" id="loginBtn" onclick="doLogin()">BOWL EM OUT (LOGIN) <i class="fa-solid fa-arrow-right"></i></button>
+        <a class="forgot-pass" onclick="openForgotPassword()">Forgot Password?</a>
+        
+        <button class="btn" id="loginBtn" onclick="doLogin()">ENTER DASHBOARD <i class="fa-solid fa-arrow-right"></i></button>
     </div>
 
     <!-- DASHBOARD -->
     <div id="dashboard-view" class="glass-panel">
         <div class="dashboard-header">
-            <h2>Welcome to YDV Sports Dashboard</h2>
+            <div class="dashboard-title-area">
+                <h2>YDV SPORTS MRT</h2>
+                <div class="sub-title">Sales & Collection Dashboard</div>
+                <div class="welcome-text" id="welcome-msg">Welcome back, User</div>
+            </div>
             <button class="btn-back" onclick="logout()"><i class="fa-solid fa-power-off"></i> Logout</button>
         </div>
+
+        <!-- NEW TOP KPI SUMMARY ROW -->
+        <div class="summary-kpi-grid">
+            <div class="summary-card" style="background: rgba(16, 185, 129, 0.05); border-color: rgba(16, 185, 129, 0.2);">
+                <h4>TOTAL SALES</h4>
+                <h3 id="dash-total-sale" style="color:#10B981;">₹0</h3>
+            </div>
+            <div class="summary-card" style="background: rgba(245, 158, 11, 0.05); border-color: rgba(245, 158, 11, 0.2);">
+                <h4>COLLECTION RECEIVED</h4>
+                <h3 id="dash-total-collection" style="color:#f59e0b;">₹0</h3>
+            </div>
+            <div class="summary-card" style="background: rgba(239, 68, 68, 0.05); border-color: rgba(239, 68, 68, 0.2);">
+                <h4>OUTSTANDING</h4>
+                <h3 id="dash-total-out" style="color:#ef4444;">₹0</h3>
+            </div>
+            <div class="summary-card" style="background: rgba(59, 130, 246, 0.05); border-color: rgba(59, 130, 246, 0.2);">
+                <h4>ADVANCE RECEIVED</h4>
+                <h3 id="dash-total-advance" style="color:#3b82f6;">₹0</h3>
+            </div>
+        </div>
+
+        <!-- 3x3 CARDS GRID WITH NEUTRAL BACKGROUNDS & ERP-LIKE DESCRIPTIONS -->
         <div class="kpi-grid">
             <div class="kpi-card" onclick="openSaleEntry()">
                 <div class="kpi-title"><i class="fa-solid fa-cart-shopping"></i> SALE ENTRY</div>
-                <div class="kpi-desc">Record new match sales</div>
+                <div class="kpi-desc">Create and manage sales transactions</div>
             </div>
-            <!-- LEDGER DASHBOARD -->
-            <div class="kpi-card" style="border-color: #f59e0b;" onclick="openLedgerDashboard()">
-                <div class="kpi-title" style="color:#f59e0b;"><i class="fa-solid fa-chart-pie"></i> TOTAL SALE & OUTSTANDING</div>
+            <div class="kpi-card" onclick="openLedgerDashboard()">
+                <div class="kpi-title"><i class="fa-solid fa-chart-pie" style="color: #f59e0b;"></i> SALES & OUTSTANDING</div>
                 <div class="kpi-desc">View total sales, collection & outstanding</div>
             </div>
             <div class="kpi-card" onclick="openTotalSales()">
-                <div class="kpi-title"><i class="fa-solid fa-file-invoice"></i> GET INVOICES</div>
+                <div class="kpi-title"><i class="fa-solid fa-file-invoice" style="color: #3b82f6;"></i> INVOICES</div>
                 <div class="kpi-desc">View all generated invoices</div>
             </div>
             <div class="kpi-card" onclick="openPartyMaster()">
-                <div class="kpi-title"><i class="fa-solid fa-users"></i> PARTY MASTER</div>
-                <div class="kpi-desc">Manage clients & vendors</div>
+                <div class="kpi-title"><i class="fa-solid fa-users" style="color: #8b5cf6;"></i> PARTY MASTER</div>
+                <div class="kpi-desc">Manage customers, clients & vendors</div>
             </div>
             <div class="kpi-card" onclick="openItemMaster()">
-                <div class="kpi-title"><i class="fa-solid fa-box-open"></i> ITEM MASTER</div>
-                <div class="kpi-desc">Manage sports inventory</div>
+                <div class="kpi-title"><i class="fa-solid fa-box-open" style="color: #14b8a6;"></i> ITEM MASTER</div>
+                <div class="kpi-desc">Manage products & inventory</div>
             </div>
             <div class="kpi-card" onclick="openAdvanceReceived()">
-                <div class="kpi-title"><i class="fa-solid fa-money-bill-wave"></i> ADVANCE RECEIVED</div>
-                <div class="kpi-desc">Track pre-sale advances</div>
+                <div class="kpi-title"><i class="fa-solid fa-money-bill-wave" style="color: #3b82f6;"></i> ADVANCE RECEIVED</div>
+                <div class="kpi-desc">Record and track advance payments</div>
             </div>
         </div>
     </div>
@@ -146,14 +223,14 @@
     <!-- PARTY MASTER -->
     <div id="party-view" class="glass-panel">
         <div class="page-header">
-            <button class="btn-back" onclick="backToDashboard()"><i class="fa-solid fa-arrow-left"></i> Back</button>
-            <h2>PARTY MASTER</h2>
+            <div><h2 style="font-size:20px; font-weight:700;">PARTY MASTER</h2></div>
             <div class="page-actions">
-                <button class="btn-export" onclick="exportPartyExcel()"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
-                <button class="btn" style="width:auto;padding:10px 20px;" onclick="openPartyModal('add')"><i class="fa-solid fa-plus"></i> Add New Party</button>
+                <button class="btn-export" onclick="exportPartyExcel()"><i class="fa-solid fa-file-excel"></i> Export</button>
+                <button class="btn" style="width:auto;padding:10px 15px;" onclick="openPartyModal('add')"><i class="fa-solid fa-plus"></i> Add Party</button>
+                <button class="btn-back" onclick="backToDashboard()"><i class="fa-solid fa-arrow-left"></i> Back</button>
             </div>
         </div>
-        <div id="party-loader" class="loader"><i class="fa-solid fa-spinner fa-spin"></i> Loading parties...</div>
+        <div id="party-loader" class="loader"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</div>
         <div class="table-container" id="party-table-container">
             <table>
                 <thead><tr><th>Party Name</th><th>Mob. No</th><th>State</th><th>Full Address</th><th>Pin Code</th><th>Action</th></tr></thead>
@@ -165,14 +242,14 @@
     <!-- ITEM MASTER -->
     <div id="item-view" class="glass-panel">
         <div class="page-header">
-            <button class="btn-back" onclick="backToDashboard()"><i class="fa-solid fa-arrow-left"></i> Back</button>
-            <h2>ITEM MASTER</h2>
+            <div><h2 style="font-size:20px; font-weight:700;">ITEM MASTER</h2></div>
             <div class="page-actions">
-                <button class="btn-export" onclick="exportItemExcel()"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
-                <button class="btn" style="width:auto;padding:10px 20px;" onclick="openItemModal('add')"><i class="fa-solid fa-plus"></i> Add New Item</button>
+                <button class="btn-export" onclick="exportItemExcel()"><i class="fa-solid fa-file-excel"></i> Export</button>
+                <button class="btn" style="width:auto;padding:10px 15px;" onclick="openItemModal('add')"><i class="fa-solid fa-plus"></i> Add Item</button>
+                <button class="btn-back" onclick="backToDashboard()"><i class="fa-solid fa-arrow-left"></i> Back</button>
             </div>
         </div>
-        <div id="item-loader" class="loader"><i class="fa-solid fa-spinner fa-spin"></i> Loading items...</div>
+        <div id="item-loader" class="loader"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</div>
         <div class="table-container" id="item-table-container">
             <table>
                 <thead><tr><th>Item Name</th><th>MRP</th><th>Action</th></tr></thead>
@@ -184,25 +261,29 @@
     <!-- ADVANCE RECEIVED -->
     <div id="advance-view" class="glass-panel">
         <div class="page-header">
-            <button class="btn-back" onclick="backToDashboard()"><i class="fa-solid fa-arrow-left"></i> Back</button>
-            <h2>ADVANCE RECEIVED</h2>
-            <button class="btn" style="width:auto;padding:10px 20px;background:#3b82f6;" onclick="openAdvanceModal()"><i class="fa-solid fa-plus"></i> Add Advance</button>
+            <div><h2 style="font-size:20px; font-weight:700;">ADVANCE RECEIVED</h2></div>
+            <div class="page-actions">
+                <button class="btn" style="width:auto;padding:10px 20px;background:#3b82f6;" onclick="openAdvanceModal()"><i class="fa-solid fa-plus"></i> Add Advance</button>
+                <button class="btn-back" onclick="backToDashboard()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            </div>
         </div>
-        <div id="advance-loader" class="loader"><i class="fa-solid fa-spinner fa-spin"></i> Loading advances...</div>
+        <div id="advance-loader" class="loader"><i class="fa-solid fa-spinner fa-spin"></i> Loading...</div>
         <div class="table-container" id="advance-table-container">
             <table>
-                <thead><tr><th>Party Name</th><th>Advance Amount</th><th>Action</th></tr></thead>
+                <thead><tr><th>Date</th><th>Party Name</th><th>Advance Amount</th><th>Action</th></tr></thead>
                 <tbody id="advance-list"></tbody>
             </table>
         </div>
     </div>
 
-    <!-- GET INVOICES -->
+    <!-- INVOICES -->
     <div id="totalsale-view" class="glass-panel">
         <div class="page-header">
-            <button class="btn-back" onclick="backToDashboard()"><i class="fa-solid fa-arrow-left"></i> Back</button>
-            <h2>GET INVOICES</h2>
-            <button class="btn-export" onclick="exportSalesExcel()"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
+            <div><h2 style="font-size:20px; font-weight:700;">INVOICES</h2></div>
+            <div class="page-actions">
+                <button class="btn-export" onclick="exportSalesExcel()"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
+                <button class="btn-back" onclick="backToDashboard()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            </div>
         </div>
         <div id="sales-loader" class="loader"><i class="fa-solid fa-spinner fa-spin"></i> Loading invoices...</div>
         <div class="table-container" id="sales-table-container">
@@ -213,33 +294,16 @@
         </div>
     </div>
 
-    <!-- LEDGER / TOTAL SALE DASHBOARD -->
+    <!-- LEDGER / SALES & OUTSTANDING -->
     <div id="ledger-view" class="glass-panel">
         <div class="page-header">
-            <button class="btn-back" onclick="backToDashboard()"><i class="fa-solid fa-arrow-left"></i> Back</button>
-            <h2>TOTAL SALE & OUTSTANDING</h2>
+            <div><h2 style="font-size:20px; font-weight:700;">SALES & OUTSTANDING</h2></div>
+            <div class="page-actions">
+                <button class="btn-export" onclick="exportLedgerExcel()"><i class="fa-solid fa-file-excel"></i> Export Excel</button>
+                <button class="btn-back" onclick="backToDashboard()"><i class="fa-solid fa-arrow-left"></i> Back</button>
+            </div>
         </div>
         
-        <!-- 4 Top Summary Cards -->
-        <div class="kpi-grid" style="margin-bottom:20px;">
-            <div class="kpi-card" style="background: rgba(16, 185, 129, 0.1); border-color: rgba(16, 185, 129, 0.3);">
-                <div class="kpi-title" style="color:#10B981;"><i class="fa-solid fa-indian-rupee-sign"></i> TOTAL SALE</div>
-                <h3 id="top-total-sale" style="font-size: 24px; margin-top: 10px;">₹ 0.00</h3>
-            </div>
-            <div class="kpi-card" style="background: rgba(59, 130, 246, 0.1); border-color: rgba(59, 130, 246, 0.3);">
-                <div class="kpi-title" style="color:#3b82f6;"><i class="fa-solid fa-hand-holding-dollar"></i> TOTAL ADVANCE</div>
-                <h3 id="top-total-advance" style="font-size: 24px; margin-top: 10px;">₹ 0.00</h3>
-            </div>
-            <div class="kpi-card" style="background: rgba(245, 158, 11, 0.1); border-color: rgba(245, 158, 11, 0.3);">
-                <div class="kpi-title" style="color:#f59e0b;"><i class="fa-solid fa-wallet"></i> TOTAL COLLECTION</div>
-                <h3 id="top-total-collection" style="font-size: 24px; margin-top: 10px;">₹ 0.00</h3>
-            </div>
-            <div class="kpi-card" style="background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3);">
-                <div class="kpi-title" style="color:#ef4444;"><i class="fa-solid fa-triangle-exclamation"></i> OUTSTANDING</div>
-                <h3 id="top-total-out" style="font-size: 24px; margin-top: 10px;">₹ 0.00</h3>
-            </div>
-        </div>
-
         <div id="ledger-loader" class="loader"><i class="fa-solid fa-spinner fa-spin"></i> Loading data...</div>
         <div class="table-container" id="ledger-table-container">
             <table>
@@ -251,7 +315,7 @@
         </div>
     </div>
 
-    <!-- RECEIVE AMOUNT MODAL -->
+    <!-- RECEIVE PAYMENT MODAL -->
     <div id="receive-payment-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -271,18 +335,39 @@
     </div>
 
     <!-- MODALS (Party, Item, Advance, Settle, Sale, Order) -->
-    <!-- (Included for completion) -->
     <div id="party-modal" class="modal"><div class="modal-content"><div class="modal-header"><h2 id="party-modal-title">Add New Party</h2><button class="close-btn" onclick="closeModal('party-modal')"><i class="fa-solid fa-times"></i></button></div><input type="hidden" id="p-original-name"><input type="hidden" id="p-action-type"><div class="input-group"><label>Party Name</label><input type="text" id="p-name"></div><div class="input-group"><label>Mob. No</label><input type="text" id="p-mobile"></div><div class="input-group"><label>State</label><input type="text" id="p-state"></div><div class="input-group"><label>Full Address</label><input type="text" id="p-address"></div><div class="input-group"><label>Pin Code</label><input type="text" id="p-pincode"></div><button class="btn" id="partySubmitBtn" onclick="submitParty()"><i class="fa-solid fa-save"></i> Save Party</button></div></div>
     <div id="item-modal" class="modal"><div class="modal-content"><div class="modal-header"><h2 id="item-modal-title">Add New Item</h2><button class="close-btn" onclick="closeModal('item-modal')"><i class="fa-solid fa-times"></i></button></div><input type="hidden" id="i-original-name"><input type="hidden" id="i-action-type"><div class="input-group"><label>Item Name</label><input type="text" id="i-name"></div><div class="input-group"><label>MRP (₹)</label><input type="number" id="i-mrp"></div><button class="btn" id="itemSubmitBtn" onclick="submitItem()"><i class="fa-solid fa-save"></i> Save Item</button></div></div>
     <div id="add-advance-modal" class="modal"><div class="modal-content"><div class="modal-header"><h2>Add Advance Entry</h2><button class="close-btn" onclick="closeModal('add-advance-modal')"><i class="fa-solid fa-times"></i></button></div><div class="input-group"><label>Select Party</label><select id="adv-party-select"><option value="">-- Select Party --</option></select></div><div class="input-group"><label>Advance Amount (₹)</label><input type="number" id="adv-amt-input" placeholder="Enter Amount"></div><button class="btn" id="advSubmitBtn" onclick="submitAdvance('addAdvance')"><i class="fa-solid fa-check"></i> Save Advance</button></div></div>
     <div id="settle-amount-modal" class="modal"><div class="modal-content"><div class="modal-header"><h2>Settle Amount</h2><button class="close-btn" onclick="closeModal('settle-amount-modal')"><i class="fa-solid fa-times"></i></button></div><div class="input-group"><label>Party Name</label><input type="text" id="settle-party" readonly style="background:rgba(0,0,0,0.5);color:#888;"></div><div class="input-group"><label>Amount to Settle / Add (₹)</label><input type="number" id="settle-amt-input" placeholder="Enter Amount Paid"></div><button class="btn" id="settleSubmitBtn" onclick="submitSettle()"><i class="fa-solid fa-check"></i> Settle Amount</button></div></div>
-    <div id="sale-entry-modal" class="modal"><div class="modal-content" style="max-width:700px;"><div class="modal-header"><h2>Sale Entry</h2><button class="close-btn" onclick="closeSaleEntryModal()"><i class="fa-solid fa-times"></i></button></div><div class="input-group"><label>Party Name</label><select id="sale-party"><option value="">-- Select Party --</option></select></div><div class="flex-row"><div class="input-group" style="flex:2;"><label>Select Product</label><select id="sale-item"><option value="">-- Select Product --</option></select></div><div class="input-group" style="flex:1;"><label>Qty</label><input type="number" id="sale-qty" value="1" min="1" step="1"></div><button class="btn-action" style="padding:12px;height:46px;margin-bottom:2px;" onclick="addItemToSale()"><i class="fa-solid fa-plus"></i> Add</button></div><div class="order-cart"><h3 style="font-size:14px;margin-bottom:10px;color:#ccc;">Sale Items:</h3><table><thead><tr><th>Product Name</th><th>MRP</th><th>Qty</th><th>Total</th><th></th></tr></thead><tbody id="sale-cart-list"></tbody></table><div style="text-align:right;margin-top:15px;font-size:18px;font-weight:bold;">Grand Total: ₹ <span id="sale-grand-total">0</span></div></div><button class="btn" id="saleSubmitBtn" onclick="submitSale()" style="margin-top:15px;"><i class="fa-solid fa-check"></i> Save Sale</button></div></div>
-    <div id="order-modal" class="modal"><div class="modal-content" style="max-width:600px;"><div class="modal-header"><h2>Place Order</h2><button class="close-btn" onclick="closeModal('order-modal')"><i class="fa-solid fa-times"></i></button></div><div class="input-group"><label>Party Name</label><input type="text" id="o-party" readonly style="background:rgba(0,0,0,0.5);color:#888;"></div><div class="flex-row"><div class="input-group" style="flex:2;"><label>Select Item</label><select id="o-item"><option value="">-- Select Item --</option></select></div><div class="input-group" style="flex:1;"><label>Qty</label><input type="number" id="o-qty" value="1" min="1"></div><button class="btn-action" style="padding:12px;height:46px;margin-bottom:2px;" onclick="addItemToOrder()"><i class="fa-solid fa-plus"></i> Add</button></div><div class="order-cart"><h3 style="font-size:14px;margin-bottom:10px;color:#ccc;">Cart Items:</h3><table><thead><tr><th>Item Name</th><th>MRP</th><th>Qty</th><th>Total</th><th></th></tr></thead><tbody id="cart-list"></tbody></table><div style="text-align:right;margin-top:15px;font-size:16px;font-weight:bold;color:#10B981;">Grand Total: ₹ <span id="cart-grand-total">0</span></div></div><button class="btn" id="orderSubmitBtn" onclick="submitOrder()"><i class="fa-solid fa-check"></i> Confirm Order & Deduct Advance</button></div></div>
+    <div id="sale-entry-modal" class="modal"><div class="modal-content" style="max-width:700px;"><div class="modal-header"><h2>Sale Entry</h2><button class="close-btn" onclick="closeSaleEntryModal()"><i class="fa-solid fa-times"></i></button></div><div class="input-group"><label>Party Name</label><select id="sale-party"><option value="">-- Select Party --</option></select></div><div class="flex-row"><div class="input-group" style="flex:2;"><label>Select Product</label><select id="sale-item"><option value="">-- Select Product --</option></select></div><div class="input-group" style="flex:1;"><label>Qty</label><input type="number" id="sale-qty" value="1" min="1" step="1"></div><button class="btn-action" style="padding:10px;height:42px;margin-bottom:2px;" onclick="addItemToSale()"><i class="fa-solid fa-plus"></i> Add</button></div><div class="order-cart"><h3 style="font-size:13px;margin-bottom:10px;color:#ccc;">Sale Items:</h3><table><thead><tr><th>Product Name</th><th>MRP</th><th>Qty</th><th>Total</th><th></th></tr></thead><tbody id="sale-cart-list"></tbody></table><div style="text-align:right;margin-top:15px;font-size:16px;font-weight:bold;">Grand Total: ₹ <span id="sale-grand-total">0</span></div></div><button class="btn" id="saleSubmitBtn" onclick="submitSale()" style="margin-top:15px;"><i class="fa-solid fa-check"></i> Save Sale</button></div></div>
+    <div id="order-modal" class="modal"><div class="modal-content" style="max-width:600px;"><div class="modal-header"><h2>Place Order</h2><button class="close-btn" onclick="closeModal('order-modal')"><i class="fa-solid fa-times"></i></button></div><div class="input-group"><label>Party Name</label><input type="text" id="o-party" readonly style="background:rgba(0,0,0,0.5);color:#888;"></div><div class="flex-row"><div class="input-group" style="flex:2;"><label>Select Item</label><select id="o-item"><option value="">-- Select Item --</option></select></div><div class="input-group" style="flex:1;"><label>Qty</label><input type="number" id="o-qty" value="1" min="1"></div><button class="btn-action" style="padding:10px;height:42px;margin-bottom:2px;" onclick="addItemToOrder()"><i class="fa-solid fa-plus"></i> Add</button></div><div class="order-cart"><h3 style="font-size:13px;margin-bottom:10px;color:#ccc;">Cart Items:</h3><table><thead><tr><th>Item Name</th><th>MRP</th><th>Qty</th><th>Total</th><th></th></tr></thead><tbody id="cart-list"></tbody></table><div style="text-align:right;margin-top:15px;font-size:15px;font-weight:bold;color:#10B981;">Grand Total: ₹ <span id="cart-grand-total">0</span></div></div><button class="btn" id="orderSubmitBtn" onclick="submitOrder()"><i class="fa-solid fa-check"></i> Confirm Order & Deduct Advance</button></div></div>
+
+    <!-- FORGOT PASSWORD MODAL -->
+    <div id="forgot-password-modal" class="modal">
+        <div class="modal-content forgot-modal-content">
+            <div class="forgot-modal-header">
+                <h3>Password Assistance</h3>
+                <button class="forgot-modal-close" onclick="closeModal('forgot-password-modal')"><i class="fa-solid fa-times"></i></button>
+            </div>
+            <div class="forgot-modal-body">
+                If you have forgotten your password or wish to change it, please contact your Developer at pandit.rahul1998@gmail.com & 9012720180.
+            </div>
+            <div class="forgot-modal-footer">
+                <button class="forgot-modal-btn" onclick="closeModal('forgot-password-modal')">Close Window</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER TEXT -->
+    <div class="footer-text">
+        © 2026 YDV SPORTS MRT | Developed & Maintained by Sharma R.
+    </div>
 
     <script>
-        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyXqB-wPDI05qER7Y54f7zKrHm4av5pHkAARMR81XqGgW8MLpj_UafyF6AS5wqoWdo2/exec';
+        // Replace with your actual deployment URL
+        const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbw4vlSYdi-79Zzsd62Fo4r8uIVYVo6TGtTGJSqjiigoL160qqGSSaKop45vx6ftAAXT/exec';
 
-        let itemsGlobalList = []; let partiesGlobalList = []; let salesGlobalList = [];
+        let itemsGlobalList = []; let partiesGlobalList = []; let salesGlobalList = []; let ledgerGlobalList = [];
         let currentCart = []; let saleCart = []; let logoBase64 = null;
 
         const callIconBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAACUklEQVR4nO2Yv0sCQRTHv89y/KGMm7yTjIIggtCgMmgv7F/QoK29oSEoiJampra2hqqhoSEQrCFoahFE+AcEbYqgq+68M79I0tDk8t5yB4/4gQd37833md979+4NKIqiKIqi/htB2A6YTCa7aZpbiUSC1ut1QilFOzs73V6v91oIEfV1+L/B7OzsECHEW57nj/L5/FAikaBBEISpYrG41Wg0nojoL+M/A2ez2TnHcU6LxeKE1WqlhmGwoig6WZZPMpmMB+A75fRj9Pv9Z7VabWh2dpaORqMcRVEUx3HOq6urY5ZljwHk+jZ2I/A8fwgAlmWZvV4v131pmnbTNN3d2tr6FkKIfd28W4FAIFByHOfENM1pjuNoPp+nw+Ewx3GcMxiGlVqtlqMoajmTyaw1Gg2P1u5uBZzL5Y7r9XrVarVSsixTJpOhoVCIMwyDAXDQNC0dDofPEonE6traWhfAj1Y5W4HW4+PjsVQqnY6OjlKe52m1WqXdbpfm83najD31er04nU5nOp3O6VfX1gL01+XlJTsxMWH6fD7Gtm3G6/UyhmEwtVqN1nXdmEwmZUEQ3Fgs9tTr9d5U9X/c0w9YlSjLV+l0+tput08dx6Hn5+ePpaUlrFaru2xvb7+qqurYtj0SCAQ+KSo2g7Ozsy8kSUokElQURYpSisvlMi8IAisIQkxV1Q6ANyHEh6IeMwgh3mZZfiWE6P3y7I2imDIIIS8Mw8T7F/FjQxTFm263+24YxnR/Y4eCEHLtOM5tf2N9QVEURVEU9de8AQ4k15aB/92FAAAAAElFTkSuQmCC";
@@ -295,10 +380,30 @@
             }; img.src = 'https://i.postimg.cc/PNxvDXKY/image.png';
         });
 
+        // CAPS LOCK DETECTOR
+        document.getElementById('password').addEventListener('keyup', function(e) {
+            if (e.getModifierState('CapsLock')) {
+                document.getElementById('caps-warning').style.display = 'block';
+            } else {
+                document.getElementById('caps-warning').style.display = 'none';
+            }
+        });
+
+        // ENTER KEY TO LOGIN
+        document.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter' && document.getElementById('login-view').style.display !== 'none') {
+                doLogin();
+            }
+        });
+
         function togglePassword() { const p = document.getElementById('password'); const e = document.getElementById('eye-icon'); if (p.type === 'password') { p.type = 'text'; e.className = 'fa-solid fa-eye-slash'; } else { p.type = 'password'; e.className = 'fa-solid fa-eye'; } }
         function escapeHtml(v) { return String(v ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;'); }
-        function formatCurrency(amt) { return Number(amt || 0).toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
         
+        // UPDATED: NO DECIMAL FORMATTING (e.g. ₹30,690 instead of ₹30,690.00)
+        function formatCurrency(amt) { return Number(amt || 0).toLocaleString("en-IN", { maximumFractionDigits: 0 }); }
+        
+        function openForgotPassword() { document.getElementById('forgot-password-modal').style.display = 'flex'; }
+
         function fetchAPI(formData, timeoutMs = 20000) {
             const controller = new AbortController(); const timer = setTimeout(() => controller.abort(), timeoutMs);
             return fetch(SCRIPT_URL, { method: 'POST', body: formData, redirect: 'follow', signal: controller.signal })
@@ -308,21 +413,59 @@
         }
 
         function hideAllViews() { ['login-view', 'dashboard-view', 'party-view', 'item-view', 'advance-view', 'totalsale-view', 'ledger-view'].forEach(id => document.getElementById(id).style.display = 'none'); }
-        function backToDashboard() { hideAllViews(); document.getElementById('dashboard-view').style.display = 'block'; }
+        function backToDashboard() { hideAllViews(); document.getElementById('dashboard-view').style.display = 'block'; loadDashboardKPIs(); }
         function closeModal(id) { const m = document.getElementById(id); if (m) m.style.display = 'none'; }
         function closeSaleEntryModal() { closeModal('sale-entry-modal'); saleCart = []; document.getElementById('sale-party').value = ''; document.getElementById('sale-item').value = ''; document.getElementById('sale-qty').value = 1; renderSaleCart(); }
-        function logout() { closeAllModals(); hideAllViews(); document.getElementById('login-view').style.display = 'block'; document.getElementById('username').value = ''; document.getElementById('password').value = ''; document.getElementById('login-error').style.display = 'none'; }
+        function logout() { closeAllModals(); hideAllViews(); document.getElementById('login-view').style.display = 'block'; document.getElementById('username').value = ''; document.getElementById('password').value = ''; document.getElementById('login-error').style.display = 'none'; document.getElementById('caps-warning').style.display = 'none';}
         function closeAllModals() { document.querySelectorAll('.modal').forEach(m => m.style.display = 'none'); }
+
+        function loadDashboardKPIs() {
+            document.getElementById('dash-total-sale').innerText = 'Loading...';
+            document.getElementById('dash-total-advance').innerText = 'Loading...';
+            document.getElementById('dash-total-collection').innerText = 'Loading...';
+            document.getElementById('dash-total-out').innerText = 'Loading...';
+            
+            const fd = new URLSearchParams(); fd.append('action', 'getLedger');
+            fetchAPI(fd).then(d => {
+                if(d.success) {
+                    document.getElementById('dash-total-sale').innerText = '₹' + formatCurrency(d.globalSale);
+                    document.getElementById('dash-total-advance').innerText = '₹' + formatCurrency(d.globalAdvance);
+                    document.getElementById('dash-total-collection').innerText = '₹' + formatCurrency(d.globalCollection);
+                    document.getElementById('dash-total-out').innerText = '₹' + formatCurrency(d.globalOutstanding);
+                    ledgerGlobalList = d.ledger || [];
+                }
+            }).catch(e => {
+                document.getElementById('dash-total-sale').innerText = '₹0';
+                document.getElementById('dash-total-advance').innerText = '₹0';
+                document.getElementById('dash-total-collection').innerText = '₹0';
+                document.getElementById('dash-total-out').innerText = '₹0';
+            });
+        }
 
         function doLogin() {
             const u = document.getElementById('username').value.trim(); const p = document.getElementById('password').value.trim(); const e = document.getElementById('login-error');
             if (!u || !p) { e.innerText = 'Please enter User ID and Password.'; e.style.display = 'block'; return; }
-            e.style.display = 'none'; const btn = document.getElementById('loginBtn'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Authenticating...'; btn.disabled = true;
+            e.style.display = 'none'; const btn = document.getElementById('loginBtn'); 
+            
+            // UPDATED: 'Signing in...' visual feedback
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Signing in...'; 
+            btn.disabled = true;
+            
             const fd = new URLSearchParams(); fd.append('action', 'login'); fd.append('username', u); fd.append('password', p);
-            fetchAPI(fd).then(d => { btn.innerHTML = 'BOWL EM OUT (LOGIN) <i class="fa-solid fa-arrow-right"></i>'; btn.disabled = false;
-                if (d.success) { partiesGlobalList = d.parties || []; itemsGlobalList = d.items || []; hideAllViews(); document.getElementById('dashboard-view').style.display = 'block'; } 
-                else { e.innerText = d.message || 'Invalid details!'; e.style.display = 'block'; }
-            }).catch(err => { btn.innerHTML = 'BOWL EM OUT (LOGIN) <i class="fa-solid fa-arrow-right"></i>'; btn.disabled = false; e.innerText = err.message || 'Network Error!'; e.style.display = 'block'; });
+            fetchAPI(fd).then(d => { 
+                btn.innerHTML = 'ENTER DASHBOARD <i class="fa-solid fa-arrow-right"></i>'; btn.disabled = false;
+                if (d.success) { 
+                    // UPDATED: Dashboard Greeting Header
+                    let uName = d.user && d.user.name ? d.user.name : u;
+                    document.getElementById('welcome-msg').innerText = 'Welcome back, ' + uName;
+                    
+                    partiesGlobalList = d.parties || []; 
+                    itemsGlobalList = d.items || []; 
+                    hideAllViews(); 
+                    document.getElementById('dashboard-view').style.display = 'block'; 
+                    loadDashboardKPIs(); 
+                } else { e.innerText = d.message || 'Invalid details!'; e.style.display = 'block'; }
+            }).catch(err => { btn.innerHTML = 'ENTER DASHBOARD <i class="fa-solid fa-arrow-right"></i>'; btn.disabled = false; e.innerText = err.message || 'Network Error!'; e.style.display = 'block'; });
         }
 
         /* --- PARTY MASTER --- */
@@ -384,12 +527,12 @@
             const fd = new URLSearchParams(); fd.append('action', 'getAdvances');
             fetchAPI(fd).then(d => {
                 if (!d.success) throw new Error(d.message || 'Advance load failed.'); const tb = document.getElementById('advance-list');
-                if (!d.advances || !d.advances.length) tb.innerHTML = '<tr><td colspan="3" style="text-align:center;">No advance entry found</td></tr>';
-                else tb.innerHTML = d.advances.map(a => `<tr><td>${escapeHtml(a.partyName)}</td><td style="color:${a.amount<0?'#ef4444':'#10B981'};font-weight:bold;">₹ ${Number(a.amount).toFixed(2)}</td>
+                if (!d.advances || !d.advances.length) tb.innerHTML = '<tr><td colspan="4" style="text-align:center;">No advance entry found</td></tr>';
+                else tb.innerHTML = d.advances.map(a => `<tr><td>${escapeHtml(a.date)}</td><td>${escapeHtml(a.partyName)}</td><td style="color:${a.amount<0?'#ef4444':'#10B981'};font-weight:bold;">₹ ${Number(a.amount).toFixed(2)}</td>
                     <td>${a.amount<0 ? `<button class="btn-edit" onclick="openSettleModal('${escapeHtml(a.partyName)}')"><i class="fa-solid fa-hand-holding-dollar"></i> Settle</button>` : ''}
                     <button class="btn-action" onclick="openOrderModal('${escapeHtml(a.partyName)}')"><i class="fa-solid fa-cart-arrow-down"></i> Place Order</button></td></tr>`).join('');
                 document.getElementById('advance-loader').style.display = 'none'; document.getElementById('advance-table-container').style.display = 'block';
-            }).catch(err => { document.getElementById('advance-loader').style.display = 'none'; document.getElementById('advance-table-container').style.display = 'block'; document.getElementById('advance-list').innerHTML = `<tr><td colspan="3" style="text-align:center;color:#ff6b6b;">${escapeHtml(err.message)}</td></tr>`; });
+            }).catch(err => { document.getElementById('advance-loader').style.display = 'none'; document.getElementById('advance-table-container').style.display = 'block'; document.getElementById('advance-list').innerHTML = `<tr><td colspan="4" style="text-align:center;color:#ff6b6b;">${escapeHtml(err.message)}</td></tr>`; });
         }
         function openAdvanceModal() { const sel = document.getElementById('adv-party-select'); sel.innerHTML = '<option value="">-- Select Party --</option>'; partiesGlobalList.forEach(p => { const opt = document.createElement('option'); opt.value = p.name; opt.textContent = p.name; sel.appendChild(opt); }); document.getElementById('adv-amt-input').value = ''; document.getElementById('add-advance-modal').style.display = 'flex'; }
         function openSettleModal(party) { document.getElementById('settle-party').value = party; document.getElementById('settle-amt-input').value = ''; document.getElementById('settle-amount-modal').style.display = 'flex'; }
@@ -417,31 +560,34 @@
                 else tb.innerHTML = salesGlobalList.map((s, index) => {
                     let itemsArr = []; try { itemsArr = typeof s.items === 'string' ? JSON.parse(s.items) : s.items; } catch (e) {}
                     const itemSummary = (Array.isArray(itemsArr) && itemsArr.length) ? itemsArr.map(i => `${escapeHtml(i.name)} (x${Number(i.qty)})`).join(', ') : 'Items info unavailable';
-                    return `<tr><td>${escapeHtml(s.invoiceNo)}</td><td>${escapeHtml(s.date)}</td><td>${escapeHtml(s.partyName)}</td><td>${itemSummary}</td><td style="color:#10B981;font-weight:bold;">₹ ${Number(s.grandTotal).toFixed(2)}</td><td><button class="btn-invoice" onclick="generateInvoicePDF(${index})"><i class="fa-solid fa-file-pdf"></i> Invoice</button></td></tr>`;
+                    return `<tr><td>${escapeHtml(s.invoiceNo)}</td><td>${escapeHtml(s.date)}</td><td>${escapeHtml(s.partyName)}</td><td>${itemSummary}</td><td style="color:#10B981;font-weight:bold;">₹${formatCurrency(s.grandTotal)}</td><td><button class="btn-invoice" onclick="generateInvoicePDF(${index})"><i class="fa-solid fa-file-pdf"></i> Invoice</button></td></tr>`;
                 }).join('');
                 document.getElementById('sales-loader').style.display = 'none'; document.getElementById('sales-table-container').style.display = 'block';
             }).catch(err => { document.getElementById('sales-loader').style.display = 'none'; document.getElementById('sales-table-container').style.display = 'block'; document.getElementById('sales-list').innerHTML = `<tr><td colspan="6" style="text-align:center;color:#ff6b6b;">${escapeHtml(err.message)}</td></tr>`; });
         }
 
-        /* --- LEDGER DASHBOARD (NEW) --- */
+        /* --- LEDGER DASHBOARD --- */
         function openLedgerDashboard() { hideAllViews(); document.getElementById('ledger-view').style.display = 'block'; loadLedger(); }
         function loadLedger() {
             document.getElementById('ledger-table-container').style.display = 'none'; document.getElementById('ledger-loader').style.display = 'block';
             const fd = new URLSearchParams(); fd.append('action', 'getLedger');
             fetchAPI(fd).then(d => {
                 if (!d.success) throw new Error(d.message || 'Ledger data load failed.');
-                document.getElementById('top-total-sale').innerText = '₹ ' + formatCurrency(d.globalSale);
-                document.getElementById('top-total-advance').innerText = '₹ ' + formatCurrency(d.globalAdvance);
-                document.getElementById('top-total-collection').innerText = '₹ ' + formatCurrency(d.globalCollection);
-                document.getElementById('top-total-out').innerText = '₹ ' + formatCurrency(d.globalOutstanding);
+                
+                ledgerGlobalList = d.ledger || [];
 
                 const tb = document.getElementById('ledger-list');
                 if (!d.ledger || !d.ledger.length) tb.innerHTML = '<tr><td colspan="7" style="text-align:center;">No data found</td></tr>';
                 else tb.innerHTML = d.ledger.map(l => {
                     let outColor = l.outstanding > 0 ? '#ef4444' : (l.outstanding < 0 ? '#10B981' : '#ccc');
-                    let outText = l.outstanding < 0 ? `+ ₹${Math.abs(l.outstanding).toFixed(2)} (Adv)` : `₹${l.outstanding.toFixed(2)}`;
-                    return `<tr><td>${escapeHtml(l.partyName)}</td><td>${l.totalQty}</td><td>₹ ${Number(l.totalSaleAmount).toFixed(2)}</td><td style="color:#3b82f6;">₹ ${Number(l.totalAdvanceAmount).toFixed(2)}</td><td style="color:#f59e0b;">₹ ${Number(l.totalCollectionAmount).toFixed(2)}</td><td style="color:${outColor};font-weight:bold;">${outText}</td>
-                        <td><button class="btn-action" onclick="openReceiveModal('${escapeHtml(l.partyName)}')"><i class="fa-solid fa-money-bill-transfer"></i> Received Amount</button></td></tr>`;
+                    let outText = l.outstanding < 0 ? `+ ₹${formatCurrency(Math.abs(l.outstanding))} (Adv)` : `₹${formatCurrency(l.outstanding)}`;
+                    
+                    let actionBtn = l.outstanding > 0 
+                        ? `<button class="btn-action" onclick="openReceiveModal('${escapeHtml(l.partyName)}')"><i class="fa-solid fa-money-bill-transfer"></i> Received Amount</button>` 
+                        : `<span style="color:#10B981;font-weight:bold;"><i class="fa-solid fa-check-circle"></i> Cleared</span>`;
+
+                    return `<tr><td>${escapeHtml(l.partyName)}</td><td>${l.totalQty}</td><td>₹${formatCurrency(l.totalSaleAmount)}</td><td style="color:#3b82f6;">₹${formatCurrency(l.totalAdvanceAmount)}</td><td style="color:#f59e0b;">₹${formatCurrency(l.totalCollectionAmount)}</td><td style="color:${outColor};font-weight:bold;">${outText}</td>
+                        <td>${actionBtn}</td></tr>`;
                 }).join('');
                 document.getElementById('ledger-loader').style.display = 'none'; document.getElementById('ledger-table-container').style.display = 'block';
             }).catch(err => { document.getElementById('ledger-loader').style.display = 'none'; document.getElementById('ledger-table-container').style.display = 'block'; document.getElementById('ledger-list').innerHTML = `<tr><td colspan="7" style="text-align:center;color:#ff6b6b;">${escapeHtml(err.message)}</td></tr>`; });
@@ -450,31 +596,31 @@
         function submitReceivePayment() {
             const p = document.getElementById('recv-party').value; const a = document.getElementById('recv-amt-input').value; if (!p || !a || a <= 0) return alert('Enter valid amount.');
             const btn = document.getElementById('recvSubmitBtn'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; btn.disabled = true;
-            const fd = new URLSearchParams(); fd.append('action', 'addPayment'); fd.append('partyName', p); fd.append('amount', a); // Updated to use addPayment
-            fetchAPI(fd).then(d => { if (!d.success) throw new Error(d.message || 'Payment save failed.'); btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Payment'; btn.disabled = false; closeModal('receive-payment-modal'); alert('Payment successfully recorded!'); loadLedger(); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Payment'; btn.disabled = false; alert(err.message); });
+            const fd = new URLSearchParams(); fd.append('action', 'addPayment'); fd.append('partyName', p); fd.append('amount', a);
+            fetchAPI(fd).then(d => { if (!d.success) throw new Error(d.message || 'Payment save failed.'); btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Payment'; btn.disabled = false; closeModal('receive-payment-modal'); alert('Payment successfully recorded!'); loadLedger(); loadDashboardKPIs();}).catch(err => { btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Payment'; btn.disabled = false; alert(err.message); });
         }
 
         /* --- SALE ENTRY & PLACING ORDER --- */
         function openSaleEntry() { saleCart = []; document.getElementById('sale-party').innerHTML = '<option value="">-- Select Party --</option>' + partiesGlobalList.map(p=>`<option value="${p.name}">${p.name}</option>`).join(''); document.getElementById('sale-item').innerHTML = '<option value="">-- Select Product --</option>' + itemsGlobalList.map(i=>`<option value="${i.name}">${i.name} (₹${i.mrp})</option>`).join(''); document.getElementById('sale-qty').value = 1; renderSaleCart(); document.getElementById('sale-entry-modal').style.display = 'flex'; }
         function addItemToSale() { const itemName = document.getElementById('sale-item').value; const qty = parseInt(document.getElementById('sale-qty').value, 10); if (!itemName || qty < 1) return alert('Select item and valid quantity.'); const itemObj = itemsGlobalList.find(i => i.name === itemName); const mrp = parseFloat(itemObj.mrp) || 0; const existing = saleCart.find(x => x.name === itemName); if (existing) { existing.qty += qty; existing.total = existing.qty * existing.mrp; } else saleCart.push({ name: itemObj.name, mrp: mrp, qty: qty, total: mrp * qty }); renderSaleCart(); document.getElementById('sale-item').value = ''; document.getElementById('sale-qty').value = 1; }
         function removeSaleItem(idx) { saleCart.splice(idx, 1); renderSaleCart(); }
-        function renderSaleCart() { const tb = document.getElementById('sale-cart-list'); let grandTotal = 0; if (!saleCart.length) tb.innerHTML = '<tr><td colspan="5" style="text-align:center;">No product added</td></tr>'; else tb.innerHTML = saleCart.map((i, idx) => { grandTotal += i.total; return `<tr><td>${escapeHtml(i.name)}</td><td>₹${i.mrp.toFixed(2)}</td><td>${i.qty}</td><td>₹${i.total.toFixed(2)}</td><td><button class="remove-item" onclick="removeSaleItem(${idx})"><i class="fa-solid fa-trash"></i></button></td></tr>`; }).join(''); document.getElementById('sale-grand-total').innerText = grandTotal.toFixed(2); }
+        function renderSaleCart() { const tb = document.getElementById('sale-cart-list'); let grandTotal = 0; if (!saleCart.length) tb.innerHTML = '<tr><td colspan="5" style="text-align:center;">No product added</td></tr>'; else tb.innerHTML = saleCart.map((i, idx) => { grandTotal += i.total; return `<tr><td>${escapeHtml(i.name)}</td><td>₹${i.mrp.toFixed(2)}</td><td>${i.qty}</td><td>₹${i.total.toFixed(2)}</td><td><button class="remove-item" onclick="removeSaleItem(${idx})"><i class="fa-solid fa-trash"></i></button></td></tr>`; }).join(''); document.getElementById('sale-grand-total').innerText = formatCurrency(grandTotal); }
         function submitSale() {
             const p = document.getElementById('sale-party').value; if (!p) return alert('Select party.'); if (!saleCart.length) return alert('Add at least one product.'); const gt = saleCart.reduce((s, i) => s + i.total, 0); if (gt <= 0) return alert('Invalid amount.');
             const btn = document.getElementById('saleSubmitBtn'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Saving...'; btn.disabled = true;
-            const fd = newSearchParams(); fd.append('action', 'saveSale'); fd.append('partyName', p); fd.append('items', JSON.stringify(saleCart)); fd.append('grandTotal', gt.toFixed(2));
-            fetchAPI(fd).then(d => { if (!d.success) throw new Error(d.message || 'Sale save failed.'); alert(`Sale Saved!\nInvoice: ${d.invoiceNo}\nAmount: ₹${gt.toFixed(2)}`); btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Sale'; btn.disabled = false; closeSaleEntryModal(); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Sale'; btn.disabled = false; alert(err.message); });
+            const fd = new URLSearchParams(); fd.append('action', 'saveSale'); fd.append('partyName', p); fd.append('items', JSON.stringify(saleCart)); fd.append('grandTotal', gt.toFixed(2));
+            fetchAPI(fd).then(d => { if (!d.success) throw new Error(d.message || 'Sale save failed.'); alert(`Sale Saved!\nInvoice: ${d.invoiceNo}\nAmount: ₹${gt.toFixed(2)}`); btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Sale'; btn.disabled = false; closeSaleEntryModal(); loadDashboardKPIs(); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-check"></i> Save Sale'; btn.disabled = false; alert(err.message); });
         }
 
         function openOrderModal(party) { document.getElementById('o-party').value = party; currentCart = []; renderCart(); document.getElementById('o-item').innerHTML = '<option value="">-- Select Item --</option>' + itemsGlobalList.map(i=>`<option value="${i.name}">${i.name} (₹${i.mrp})</option>`).join(''); document.getElementById('o-qty').value = 1; document.getElementById('order-modal').style.display = 'flex'; }
         function addItemToOrder() { const v = document.getElementById('o-item').value; const q = parseInt(document.getElementById('o-qty').value, 10); if (!v || q < 1) return alert('Select item and qty.'); const iObj = itemsGlobalList.find(i => i.name === v); const mrp = parseFloat(iObj.mrp) || 0; const ex = currentCart.find(c => c.name === v); if (ex) { ex.qty += q; ex.total = ex.qty * ex.mrp; } else currentCart.push({ name: iObj.name, mrp: mrp, qty: q, total: mrp * q }); renderCart(); document.getElementById('o-item').value = ''; document.getElementById('o-qty').value = 1; }
         function removeCartItem(idx) { currentCart.splice(idx, 1); renderCart(); }
-        function renderCart() { const tb = document.getElementById('cart-list'); let gt = 0; if (!currentCart.length) tb.innerHTML = '<tr><td colspan="5" style="text-align:center;">Cart is empty</td></tr>'; else tb.innerHTML = currentCart.map((c, idx) => { gt += c.total; return `<tr><td>${escapeHtml(c.name)}</td><td>₹${c.mrp.toFixed(2)}</td><td>${c.qty}</td><td>₹${c.total.toFixed(2)}</td><td><button class="remove-item" onclick="removeCartItem(${idx})"><i class="fa-solid fa-trash"></i></button></td></tr>`; }).join(''); document.getElementById('cart-grand-total').innerText = gt.toFixed(2); }
+        function renderCart() { const tb = document.getElementById('cart-list'); let gt = 0; if (!currentCart.length) tb.innerHTML = '<tr><td colspan="5" style="text-align:center;">Cart is empty</td></tr>'; else tb.innerHTML = currentCart.map((c, idx) => { gt += c.total; return `<tr><td>${escapeHtml(c.name)}</td><td>₹${c.mrp.toFixed(2)}</td><td>${c.qty}</td><td>₹${c.total.toFixed(2)}</td><td><button class="remove-item" onclick="removeCartItem(${idx})"><i class="fa-solid fa-trash"></i></button></td></tr>`; }).join(''); document.getElementById('cart-grand-total').innerText = formatCurrency(gt); }
         function submitOrder() {
             if (!currentCart.length) return alert('Add item.'); const p = document.getElementById('o-party').value; const gt = currentCart.reduce((s, i) => s + i.total, 0);
             const btn = document.getElementById('orderSubmitBtn'); btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...'; btn.disabled = true;
             const fd = new URLSearchParams(); fd.append('action', 'placeOrder'); fd.append('partyName', p); fd.append('items', JSON.stringify(currentCart)); fd.append('grandTotal', gt.toFixed(2));
-            fetchAPI(fd).then(d => { if (!d.success) throw new Error(d.message || 'Order failed.'); btn.innerHTML = '<i class="fa-solid fa-check"></i> Confirm Order'; btn.disabled = false; alert(`Order Saved!\nInvoice: ${d.invoiceNo}`); closeModal('order-modal'); loadAdvances(); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-check"></i> Confirm Order'; btn.disabled = false; alert(err.message); });
+            fetchAPI(fd).then(d => { if (!d.success) throw new Error(d.message || 'Order failed.'); btn.innerHTML = '<i class="fa-solid fa-check"></i> Confirm Order'; btn.disabled = false; alert(`Order Saved!\nInvoice: ${d.invoiceNo}`); closeModal('order-modal'); loadAdvances(); loadDashboardKPIs(); }).catch(err => { btn.innerHTML = '<i class="fa-solid fa-check"></i> Confirm Order'; btn.disabled = false; alert(err.message); });
         }
 
         /* --- EXPORT TO EXCEL --- */
@@ -484,45 +630,132 @@
         }
         function exportPartyExcel() { if (!partiesGlobalList.length) return alert('No data.'); createExcelFile(partiesGlobalList.map((p, i) => ({ 'S.No': i+1, 'Party': p.name, 'Mobile': p.mobile, 'State': p.state, 'Address': p.address, 'Pin': p.pin })), 'Parties', `Party_Master_${new Date().toISOString().slice(0,10)}.xlsx`); }
         function exportItemExcel() { if (!itemsGlobalList.length) return alert('No data.'); createExcelFile(itemsGlobalList.map((it, i) => ({ 'S.No': i+1, 'Item': it.name, 'MRP': Number(it.mrp) })), 'Items', `Item_Master_${new Date().toISOString().slice(0,10)}.xlsx`); }
-        function exportSalesExcel() { if (!salesGlobalList.length) return alert('No data.'); createExcelFile(salesGlobalList.map((s, i) => { let arr = []; try { arr = typeof s.items==='string'?JSON.parse(s.items):s.items; } catch(e){} return { 'S.No': i+1, 'Invoice': s.invoiceNo, 'Date': s.date, 'Party': s.partyName, 'Items': Array.isArray(arr)?arr.map(x=>`${x.name}(x${x.qty})`).join(', '):'', 'Total': Number(s.grandTotal) }; }), 'Sales', `Total_Sales_${new Date().toISOString().slice(0,10)}.xlsx`); }
+        
+        function exportSalesExcel() { 
+            if (!salesGlobalList.length) return alert('No data.'); 
+            
+            const exportData = [];
+            let serialNo = 1;
+
+            salesGlobalList.forEach(s => {
+                let itemsArr = []; 
+                try { itemsArr = typeof s.items === 'string' ? JSON.parse(s.items) : s.items; } catch(e){} 
+                
+                if (Array.isArray(itemsArr) && itemsArr.length > 0) {
+                    itemsArr.forEach(item => {
+                        exportData.push({
+                            'S.No': serialNo++,
+                            'Invoice No': s.invoiceNo,
+                            'Date': s.date,
+                            'Party Name': s.partyName,
+                            'Item Name': item.name || '',
+                            'MRP': Number(item.mrp) || 0,
+                            'Qty': Number(item.qty) || 0,
+                            'Total Amount': Number(item.total) || 0,
+                            'Grand Total': Number(s.grandTotal) || 0
+                        });
+                    });
+                } else {
+                    exportData.push({
+                        'S.No': serialNo++,
+                        'Invoice No': s.invoiceNo,
+                        'Date': s.date,
+                        'Party Name': s.partyName,
+                        'Item Name': 'N/A',
+                        'MRP': 0,
+                        'Qty': 0,
+                        'Total Amount': 0,
+                        'Grand Total': Number(s.grandTotal) || 0
+                    });
+                }
+            });
+
+            createExcelFile(exportData, 'Sales', `Total_Sales_${new Date().toISOString().slice(0,10)}.xlsx`); 
+        }
+
+        function exportLedgerExcel() { 
+            if (!ledgerGlobalList || !ledgerGlobalList.length) return alert('No data to export.'); 
+            const exportData = ledgerGlobalList.map((l, i) => ({
+                'S.No': i + 1,
+                'Party Name': l.partyName,
+                'Total Qty': l.totalQty,
+                'Total Sale': Number(l.totalSaleAmount) || 0,
+                'Total Advance': Number(l.totalAdvanceAmount) || 0,
+                'Total Collection': Number(l.totalCollectionAmount) || 0,
+                'Outstanding': Number(l.outstanding) || 0
+            }));
+            createExcelFile(exportData, 'Outstanding_Ledger', `Ledger_Outstanding_${new Date().toISOString().slice(0,10)}.xlsx`); 
+        }
 
         /* --- PDF GENERATION --- */
         function loadScriptOnce(src, id) { return new Promise((res, rej) => { if (id && document.getElementById(id)) return res(); const s = document.createElement('script'); if (id) s.id = id; s.src = src; s.async = true; s.onload = res; s.onerror = rej; document.head.appendChild(s); }); }
         async function ensurePDFLibraries() { if (!window.jspdf || !window.jspdf.jsPDF) await loadScriptOnce('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', 'jspdf-fallback'); const jsPDF = window.jspdf && window.jspdf.jsPDF; if (!jsPDF) throw new Error('jsPDF not found.'); return jsPDF; }
+        
         async function generateInvoicePDF(index) {
             try {
                 const sRec = salesGlobalList[index]; if (!sRec) return alert('Invoice not found!');
                 const jsPDF = await ensurePDFLibraries(); const doc = new jsPDF();
                 const invNo = String(sRec.invoiceNo || ''); const date = String(sRec.date || ''); const pName = String(sRec.partyName || ''); const gt = parseFloat(sRec.grandTotal) || 0;
-                let pInfo = partiesGlobalList.find(p => String(p.name).trim() === pName.trim()) || { address: 'Surajkund Road, Meerut', mobile: 'N/A', pin: '250004' };
+                let pInfo = partiesGlobalList.find(p => String(p.name).trim().toLowerCase() === pName.trim().toLowerCase()) || { address: 'Surajkund Road, Meerut', mobile: 'N/A', pin: '250004' };
                 let pAddr = pInfo.address || 'Surajkund Road, Meerut'; const pMob = pInfo.mobile || 'N/A'; if (pInfo.pin) pAddr += `, Pin: ${pInfo.pin}`;
                 let iArr = []; try { iArr = typeof sRec.items === 'string' ? JSON.parse(sRec.items) : sRec.items; } catch(e){} if (!Array.isArray(iArr) || !iArr.length) iArr = [{ name: 'Sports Item', mrp: gt, qty: 1, total: gt }];
-                if (logoBase64) { try { doc.addImage(logoBase64, 'PNG', 15, 13, 25, 25); } catch(e){} }
-                doc.setFont('times', 'bolditalic'); doc.setFontSize(25); doc.setTextColor(20, 150, 110); doc.text('YDV SPORTS MRT', 105, 20, null, null, 'center');
-                doc.setDrawColor(20, 150, 110); doc.setLineWidth(1.2); doc.line(65, 24, 145, 24);
-                doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(90, 90, 90); doc.text('SPORTS • EQUIPMENT • MART', 105, 29, null, null, 'center');
-                doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(80, 80, 80); doc.text('Surajkund Road, Meerut, Uttar Pradesh - 250004, India', 105, 35, null, null, 'center');
-                try { doc.addImage(callIconBase64, 'PNG', 66, 38, 4.5, 4.5); doc.text('+91 76184 35453', 73, 42); doc.addImage(waIconBase64, 'PNG', 111, 38, 4.5, 4.5); doc.text('+91 7599 920 630', 118, 42); } catch(e) { doc.text('Call: +91 76184 35453', 65, 42); doc.text('WhatsApp: +91 7599 920 630', 112, 42); }
-                doc.setFont('times', 'bolditalic'); doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('SALE INVOICE', 105, 52, null, null, 'center');
-                doc.setDrawColor(180, 180, 180); doc.setLineWidth(0.5); doc.line(15, 57, 195, 57);
-                doc.setFont('helvetica', 'normal'); doc.setFontSize(10); doc.setTextColor(0, 0, 0); doc.setFont('helvetica', 'bold'); doc.text('Invoice No:', 15, 67); doc.setFont('helvetica', 'normal'); doc.text(invNo, 39, 67);
-                doc.setFont('helvetica', 'bold'); doc.text('Date:', 15, 73); doc.setFont('helvetica', 'normal'); doc.text(date, 29, 73);
-                doc.setFont('helvetica', 'bold'); doc.text('Billed To:', 130, 67); doc.setFont('helvetica', 'normal'); doc.text(pName, 130, 73); doc.text(`Mobile: ${pMob}`, 130, 79);
-                const sAddr = doc.splitTextToSize(`Address: ${pAddr}`, 60); doc.text(sAddr, 130, 85);
-                const tBody = iArr.map(i => [String(i.name), `Rs. ${parseFloat(i.mrp)||0}`, parseInt(i.qty)||1, `Rs. ${parseFloat(i.total)||0}`]); const tStartY = 85 + (sAddr.length * 5) + 7;
-                if (typeof doc.autoTable === 'function') { doc.autoTable({ startY: tStartY, head: [['Item Name', 'MRP', 'Qty', 'Total Amount']], body: tBody, theme: 'striped', headStyles: { fillColor: [20, 150, 110], textColor: [255, 255, 255], fontStyle: 'bold' }, styles: { fontSize: 9, cellPadding: 3 }, margin: { left: 15, right: 15 } }); } else { drawInvoiceTableFallback(doc, tBody, tStartY); }
-                const fY = doc.lastAutoTable && doc.lastAutoTable.finalY ? doc.lastAutoTable.finalY : (tStartY + 9 + tBody.length * 8);
-                doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.text(`Grand Total: Rs. ${gt.toFixed(2)}`, 140, fY + 15);
+                
+                const drawHeader = () => {
+                    if (logoBase64) { try { doc.addImage(logoBase64, 'PNG', 15, 13, 25, 25); } catch(e){} }
+                    doc.setFont('times', 'bolditalic'); doc.setFontSize(25); doc.setTextColor(20, 150, 110); doc.text('YDV SPORTS MRT', 105, 20, null, null, 'center');
+                    doc.setDrawColor(20, 150, 110); doc.setLineWidth(1.2); doc.line(65, 24, 145, 24);
+                    doc.setFont('helvetica', 'bold'); doc.setFontSize(8); doc.setTextColor(90, 90, 90); doc.text('SPORTS • EQUIPMENT • MART', 105, 29, null, null, 'center');
+                    doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(80, 80, 80); doc.text('Surajkund Road, Meerut, Uttar Pradesh - 250004, India', 105, 35, null, null, 'center');
+                    try { doc.addImage(callIconBase64, 'PNG', 66, 38, 4.5, 4.5); doc.text('+91 76184 35453', 73, 42); doc.addImage(waIconBase64, 'PNG', 111, 38, 4.5, 4.5); doc.text('+91 7599 920 630', 118, 42); } catch(e) { doc.text('Call: +91 76184 35453', 65, 42); doc.text('WhatsApp: +91 7599 920 630', 112, 42); }
+                    doc.setFont('times', 'bolditalic'); doc.setFontSize(16); doc.setTextColor(0, 0, 0); doc.text('SALE INVOICE', 105, 52, null, null, 'center');
+                    doc.setDrawColor(180, 180, 180); doc.setLineWidth(0.5); doc.line(15, 57, 195, 57);
+                    doc.setFont('helvetica', 'bold'); doc.setFontSize(10); doc.setTextColor(0, 0, 0); doc.text('Invoice No:', 15, 67); doc.setFont('helvetica', 'normal'); doc.text(invNo, 39, 67);
+                    doc.setFont('helvetica', 'bold'); doc.text('Date:', 15, 73); doc.setFont('helvetica', 'normal'); doc.text(date, 29, 73);
+                    doc.setFont('helvetica', 'bold'); doc.text('Billed To:', 130, 67); doc.setFont('helvetica', 'normal'); doc.text(pName, 130, 73); doc.text(`Mobile: ${pMob}`, 130, 79);
+                    const sAddr = doc.splitTextToSize(`Address: ${pAddr}`, 60); doc.text(sAddr, 130, 85);
+                    return 85 + (sAddr.length * 5) + 7;
+                };
+
+                let tStartY = drawHeader();
+                const tBody = iArr.map(i => [String(i.name), `Rs. ${parseFloat(i.mrp)||0}`, parseInt(i.qty)||1, `Rs. ${parseFloat(i.total)||0}`]);
+                
+                if (typeof doc.autoTable === 'function') { 
+                    doc.autoTable({ 
+                        startY: tStartY, 
+                        head: [['Item Name', 'MRP', 'Qty', 'Total Amount']], 
+                        body: tBody, 
+                        theme: 'striped', 
+                        headStyles: { fillColor: [20, 150, 110], textColor: [255, 255, 255], fontStyle: 'bold' }, 
+                        styles: { fontSize: 9, cellPadding: 3 }, 
+                        margin: { top: 90, left: 15, right: 15, bottom: 25 },
+                        didDrawPage: function (data) {
+                            if (data.pageNumber > 1) {
+                                doc.setFont('times', 'bolditalic'); doc.setFontSize(12); doc.setTextColor(20, 150, 110); 
+                                doc.text('YDV SPORTS MRT - INVOICE (Cont.)', 105, 15, null, null, 'center');
+                            }
+                            doc.setFontSize(9); doc.setTextColor(100, 100, 100); 
+                            doc.text(`Page ${data.pageNumber}`, 105, doc.internal.pageSize.height - 10, null, null, 'center');
+                        }
+                    }); 
+                }
+
+                let fY = doc.lastAutoTable && doc.lastAutoTable.finalY ? doc.lastAutoTable.finalY : tStartY + 20;
+                
+                if (fY > 220) {
+                    doc.addPage();
+                    fY = 30;
+                }
+
+                doc.setFont('helvetica', 'bold'); doc.setFontSize(12); doc.setTextColor(0, 0, 0); doc.text(`Grand Total: Rs. ${gt.toFixed(2)}`, 140, fY + 15);
                 doc.setFontSize(10); doc.setFont('helvetica', 'normal'); doc.text('For YDV SPORTS MRT', 140, fY + 40); doc.line(140, fY + 55, 185, fY + 55); doc.text('Authorized Signatory', 142, fY + 60);
-                doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.text('Thank you for your business!', 105, 280, null, null, 'center');
+                doc.setFontSize(9); doc.setTextColor(100, 100, 100); doc.text('Thank you for your business!', 105, doc.internal.pageSize.height - 15, null, null, 'center');
+                
                 doc.save(`Invoice_${invNo.replace(/[^a-zA-Z0-9-]/g, '_')}.pdf`);
             } catch (e) { alert(e.message); }
         }
-        function drawInvoiceTableFallback(doc, rows, startY) { const l = 15, r = 195, cX = [l, 105, 140, 160, r], hH = 9, rH = 8; let y = startY; doc.setFontSize(9); doc.setFont('helvetica', 'bold'); doc.setFillColor(20, 150, 110); doc.setTextColor(255, 255, 255); doc.rect(l, y, r - l, hH, 'F'); doc.text('Item Name', cX[0] + 2, y + 6); doc.text('MRP', cX[1] + 2, y + 6); doc.text('Qty', cX[2] + 2, y + 6); doc.text('Total Amount', cX[3] + 2, y + 6); y += hH; doc.setFont('helvetica', 'normal'); doc.setTextColor(0, 0, 0); rows.forEach((row, i) => { if (i % 2 === 0) { doc.setFillColor(245, 245, 245); doc.rect(l, y, r - l, rH, 'F'); } doc.rect(l, y, r - l, rH); doc.line(cX[1], y, cX[1], y + rH); doc.line(cX[2], y, cX[2], y + rH); doc.line(cX[3], y, cX[3], y + rH); doc.text(doc.splitTextToSize(String(row[0]), 85)[0], cX[0] + 2, y + 5.5); doc.text(String(row[1]), cX[1] + 2, y + 5.5); doc.text(String(row[2]), cX[2] + 2, y + 5.5); doc.text(String(row[3]), cX[3] + 2, y + 5.5); y += rH; }); doc.setDrawColor(150, 150, 150); doc.rect(l, startY, r - l, y - startY); }
 
         document.addEventListener('keydown', e => { if (e.key === 'Escape') closeAllModals(); });
         document.querySelectorAll('.modal').forEach(m => m.addEventListener('click', e => { if (e.target === m) { if (m.id === 'sale-entry-modal') closeSaleEntryModal(); else m.style.display = 'none'; } }));
-        function newSearchParams() { return new URLSearchParams(); }
     </script>
 </body>
 </html>
